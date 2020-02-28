@@ -1,0 +1,30 @@
+.card-small {
+    width: 80%;
+    margin-top: 20px;
+    position: relative;
+    z-index: 1000;
+
+    .card-body {
+        padding: .5rem 1rem .5rem 1rem;
+        font-size: .8rem;
+    }
+
+    .card-title {
+        font-size: 1.15rem;
+        margin-bottom: .2rem;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .card-small {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    .card-small {
+        max-width: 300px;
+        margin-left: 50px;
+    }
+}
