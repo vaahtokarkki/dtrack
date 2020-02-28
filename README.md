@@ -1,4 +1,4 @@
-Full stack course project
+Full stack course project [Tuntikirjanpito](./docs/workinghours.md)
 
 # Dog tracker
 
