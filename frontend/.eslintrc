@@ -1,0 +1,32 @@
+{
+    plugins: [
+      "react",
+      "import",
+      "flowtype",
+      "flowtype-errors",
+      "block-padding",
+    ],
+
+    globals: {
+      __APP__: true,
+      is: true
+    },
+
+    rules: {
+      "block-padding/functions": [ 1, 2, { strategy: 'at-most' } ],
+      "indent": 0,
+      "template-curly-spacing": 0
+    },
+
+    settings: {
+
+      'import/ignore': [
+        '\.(sc|le|c)ss$'
+      ],
+
+      'import/external-module-folders': {
+        'node_modules',
+      },
+    }
+
+  }

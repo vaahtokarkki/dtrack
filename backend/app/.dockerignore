@@ -1,0 +1,10 @@
+.gitignore
+.coveragerc
+.dockerignore
+Dockerfile
+local/
+**/__pycache__/
+.pytest_cache
+static/
+.coverage
+htmlcov/

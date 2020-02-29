@@ -1,13 +1,26 @@
-version: '3'
+version: '3.7'
 
 services:
-  web:
+  db:
+    image: postgres
+    volumes:
+        - postgres_data:/var/lib/postgresql/data/
+  backend:
+    build: ./backend/app
+    command: python /code/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend/app:/code
+    environment:
+        DJANGO_SETTINGS_MODULE: conf.settings
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+  frontend:
     build: ./frontend
+    volumes:
+      - ./frontend:/code
     ports:
       - "3000:3000"
-    volumes:
-      - ./frontend:/frontend
-
-
 volumes:
-  db-data:
+  postgres_data:
