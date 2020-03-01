@@ -22,5 +22,12 @@ services:
       - ./frontend:/code
     ports:
       - "3000:3000"
+  adminer:
+    image: adminer
+    depends_on:
+      - db
+    ports:
+      - 8080:8080
+
 volumes:
   postgres_data:
