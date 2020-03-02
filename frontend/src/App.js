@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
+import axios from 'axios'
 import { connect } from 'react-redux'
 
 import MapComponent from './components/Map'
@@ -16,6 +17,16 @@ import './styles/Card.scss'
 
 
 const App = props => {
+  useEffect(() => {
+    //Will mount
+    async function fetchLocations() {
+      const resp = await axios.get("http://localhost:8000/locations/")
+    }
+    fetchLocations()
+
+    //reutrn () => unmount()
+  }, [])
+
 
   const handlePositionChange = position => {
     const isInitialLocation = !getLocationByDevice(props.locationState, "user")
