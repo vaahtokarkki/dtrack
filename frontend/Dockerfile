@@ -6,6 +6,6 @@ ENV PATH /frontend/node_modules/.bin:$PATH
 COPY package.json /frontend/package.json
 RUN npm install --silent
 
-COPY . .
+COPY . ./frontend
 
 CMD ["npm", "start"]

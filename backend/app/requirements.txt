@@ -1,5 +1,6 @@
 asgiref==3.2.3
 Django==3.0.3
+django-cors-headers==3.2.1
 djangorestframework==3.11.0
 djangorestframework-gis==0.15
 entrypoints==0.3
