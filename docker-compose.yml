@@ -2,11 +2,16 @@ version: '3.7'
 
 services:
   db:
-    image: postgres
+    image: kartoza/postgis
     volumes:
-        - postgres_data:/var/lib/postgresql/data/
+        - postgres_data:/var/lib/postgresql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASS: postgres
+      POSTGRES_DBNAME: postgres
+      ALLOW_IP_RANGE: 0.0.0.0/0
   backend:
-    build: ./backend/app
+    build: ./backend
     command: python /code/manage.py runserver 0.0.0.0:8000
     volumes:
       - ./backend/app:/code
