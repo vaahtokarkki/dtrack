@@ -42,8 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tracking.apps.TrackingConfig',
+    'django.contrib.gis',
     'rest_framework',
+    'rest_framework_gis',
+    'tracking.apps.TrackingConfig',
 ]
 
 MIDDLEWARE = [
@@ -82,8 +84,9 @@ WSGI_APPLICATION = 'conf.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'postgres',
+        'PASSWORD': 'postgres',
         'USER': 'postgres',
         'HOST': 'db',
         'PORT': 5432,

@@ -1,4 +1,4 @@
-from django.db import models
+from django.contrib.gis.db import models
 
 
 class Device(models.Model):
@@ -23,8 +23,7 @@ class Track(models.Model):
 
 
 class Location(models.Model):
-    latitude = models.DecimalField(max_digits=10, decimal_places=7)
-    longitude = models.DecimalField(max_digits=10, decimal_places=7)
+    point = models.PointField(null=True)
     speed = models.FloatField(null=True)
     timestamp = models.DateTimeField(auto_now=True)
     track = models.ForeignKey(Track, related_name='locations', on_delete=models.SET_NULL,

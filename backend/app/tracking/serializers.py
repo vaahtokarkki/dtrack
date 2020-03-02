@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
 from .models import Device, Location
 
@@ -14,10 +15,12 @@ class LocationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Location
-        fields = ['id', 'latitude', 'longitude', 'speed', 'timestamp', 'device']
+        geo_field = "point"
+        fields = ['id', 'speed', 'timestamp', 'device', 'point']
 
 
 class LocationCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
-        fields = ['latitude', 'longitude', 'speed', 'device']
+        geo_field = "point"
+        fields = ['speed', 'device', 'point']
