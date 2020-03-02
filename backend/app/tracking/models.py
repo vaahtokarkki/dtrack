@@ -22,7 +22,7 @@ class Track(models.Model):
 class Location(models.Model):
     latitude = models.DecimalField(max_digits=10, decimal_places=7)
     longitude = models.DecimalField(max_digits=10, decimal_places=7)
-    speed = models.FloatField()
+    speed = models.FloatField(null=True)
     timestamp = models.DateTimeField(auto_now=True)
     track = models.ForeignKey(Track, related_name='locations', on_delete=models.SET_NULL,
                               null=True)
