@@ -14,7 +14,8 @@
 | 2.3. | 1    |Backendiin perus endpointtien luonti|
 | 2.3. | 2    |Api-yhteyden ja cors kanssa säätäminen|
 | 3.3. | 2    |Sijaintien haku fronttiin ja esittäminen kartalla|
-| **yht.**| 5    | |
+| 3.3. | 3    |Traefiker reverse proxyn opiskelu ja setup|
+| **yht.**| 8    | |
 
 
 ### Yhteensä kaikki: 8h
