@@ -1,12 +1,13 @@
 import React, { Fragment } from 'react'
 import { connect } from "react-redux"
-import { geolocated } from "react-geolocated"
 
+import L from 'leaflet'
+import { geolocated } from "react-geolocated"
+import { Map, Marker, TileLayer, Circle, CircleMarker } from 'react-leaflet'
 
 import { getMapState, getLocationState, getLocationByDevice } from '../store/selectors'
 import { setZoom , setPosition} from '../store/actions'
 
-import { Map, Marker, Popup, TileLayer, Circle, CircleMarker } from 'react-leaflet'
 
 const MapComponent = props => {
     let mapElement
@@ -42,6 +43,16 @@ const MapComponent = props => {
       </Fragment>
     }
 
+    const renderMarkers = () => {
+      const icon = new L.Icon({
+        iconUrl: require('../assets/dog.png'),
+        className: 'leaflet-div-icon',
+      })
+
+      const devices = props.locationState.locations.filter(device => device.device !== "user")
+      return devices.map(device => <Marker icon={ icon } position={ device.position } key={ device.id } />)
+    }
+
     let { position, zoom } = props.mapSate
     //let { trackedPositions } = props.trackedState <-- array of positions
     // if (props.settingsState.trackUserLocation)
@@ -61,6 +72,7 @@ const MapComponent = props => {
           url=' http://tiles.kartat.kapsi.fi/peruskartta/{z}/{x}/{y}.jpg'
         />
         { getUserLocation() }
+        { renderMarkers() }
     </Map>
   </div>
 }
