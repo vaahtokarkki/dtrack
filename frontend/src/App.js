@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import axios from 'axios'
+import api from './utils/api'
 import { connect } from 'react-redux'
 
 import MapComponent from './components/Map'
@@ -18,15 +18,21 @@ import './styles/Card.scss'
 
 const App = props => {
   useEffect(() => {
-    //Will mount
     async function fetchLocations() {
-      const resp = await axios.get("http://localhost:8000/locations/")
+      const resp = await api.get("/locations/latest/")
+      resp.data.map(location => props.updateLocation({
+        id: location.device.id,
+        device: location.device.name,
+        position: location.point.coordinates,
+        speed: location.speed
+      }))
     }
+
     fetchLocations()
+    const id = setInterval(fetchLocations, 60000)
 
-    //reutrn () => unmount()
+    return () => clearInterval(id)
   }, [])
-
 
   const handlePositionChange = position => {
     const isInitialLocation = !getLocationByDevice(props.locationState, "user")
