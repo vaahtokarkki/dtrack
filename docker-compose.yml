@@ -23,7 +23,6 @@ services:
   backend:
     build: ./backend
     command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; python /code/manage.py runserver 0.0.0.0:8000'
-
     volumes:
       - ./backend/app:/code
     environment:
@@ -33,7 +32,7 @@ services:
     expose:
       - 8000
     labels:
-      - "traefik.http.routers.backend.rule=Host(`localhost`) && Path(`/api`)"
+      - "traefik.http.routers.backend.rule=Host(`api.localhost`)"
   frontend:
     build: ./frontend
     volumes:
@@ -52,7 +51,7 @@ services:
     expose:
       - 8080
     labels:
-      - "traefik.http.routers.adminer.rule=Host(`localhost`) && Path(`/adminer`)"
+      - "traefik.http.routers.adminer.rule=Host(`adminer.localhost`)"
 
 volumes:
   postgres_data:
