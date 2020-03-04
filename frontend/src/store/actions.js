@@ -1,4 +1,4 @@
-import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, UPDATE_LOCATION, SET_TRACKING, ADD_DEVICES } from "./actiontypes"
+import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, UPDATE_LOCATION, SET_TRACKING, ADD_DEVICES, TOGGLE_OVERLAY } from "./actiontypes"
 
 
 // Map actions
@@ -50,5 +50,10 @@ export const setTracking = device => ({
 
 export const clearTracking = () => ({
   type: SET_TRACKING,
+  payload: null
+})
+
+export const toggleOverlay = () => ({
+  type: TOGGLE_OVERLAY,
   payload: null
 })

@@ -12,3 +12,4 @@ export const ADD_DEVICES = "ADD_DEVICES"
 
 // Settings
 export const SET_TRACKING = "SET_TRACKING"
+export const TOGGLE_OVERLAY = "TOGGLE_OVERLAY"

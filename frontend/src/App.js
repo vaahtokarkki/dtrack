@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Fragment } from 'react';
 
 import api from './utils/api'
 import { connect } from 'react-redux'
@@ -65,11 +65,19 @@ const App = props => {
       props.setPosition([ coords.latitude, coords.longitude ])
   }
 
-  return <div className="app-container">
-    <LocationCards />
-    <MapControls />
-    <MapComponent onError={e => console.log(e)} onSuccess={ handlePositionChange } />
-  </div>
+  const renderOverlay = () =>
+    props.settingsState.displayOverlay ?
+      <div className='dropdown-overlay'></div> :
+      null
+
+  return <Fragment>
+    <div className="app-container">
+      <LocationCards />
+      <MapControls />
+      <MapComponent onError={e => console.log(e)} onSuccess={ handlePositionChange } />
+    </div>
+    { renderOverlay() }
+  </Fragment>
 }
 
 const mapStateToProps = state => {
