@@ -5,8 +5,12 @@
     z-index: 1000;
 
     .card-body {
-        padding: .5rem 1rem .5rem 1rem;
+        padding: .5rem 1rem 0 1rem;
         font-size: .8rem;
+
+        .card-text {
+            margin-bottom: .5rem;
+        }
     }
 
     .card-title {

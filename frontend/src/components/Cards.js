@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import { connect } from 'react-redux'
+
 import geodist from 'geodist'
 import moment from 'moment'
 
-import { getUserLocation } from '../store/selectors'
-
+import { getLocationState, getDevicesState, getUserLocation, getDevices, getLocationByDeviceId } from '../store/selectors'
 
 import Card from 'react-bootstrap/Card'
 import Row from 'react-bootstrap/Row'
@@ -12,16 +13,19 @@ import Col from 'react-bootstrap/Col'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle, faBatteryFull } from '@fortawesome/free-solid-svg-icons'
 
-export const LocationCards = ({ locationState }) => {
-  const userLocation = getUserLocation(locationState)
-  return locationState.locations ? locationState.locations
-    .filter(device => device.name !== "user")
-    .map(device => <LocationCard { ...device } userLocation={ userLocation.position || [] } key={ device.id }  />) :
-    null
+const LocationCardsComponent = props => {
+  const userLocation = getUserLocation(props.locationState)
+  return getDevices(props.devicesState)
+    .map(device => {
+      const location = getLocationByDeviceId(props.locationState, device.id)
+      return <LocationCard { ...location }
+        name={ device.name }
+        userLocation={ userLocation ? userLocation.position : [] }
+        key={ device.id }  />
+    })
 }
 
-const LocationCard = ({ name, position, speed, timestamp, userLocation }) => {
-
+const LocationCard = ({ name, position = [], speed, timestamp, userLocation }) => {
   const resolveTimeStamp = () => {
     const deviceTime = moment(timestamp)
     const diff = moment().diff(deviceTime, 'seconds')
@@ -47,26 +51,42 @@ const LocationCard = ({ name, position, speed, timestamp, userLocation }) => {
     return `${distance}m`
   }
 
+  const renderStatus = () =>
+    <Col>
+      { isOnline() ? 'Online' : 'Offline' } <FontAwesomeIcon icon={ faCircle } style={{ color: isOnline() ? 'green' : 'red' }}/>
+    </Col>
+
+  const isOnline = () =>
+    Boolean(position.length)
+
   return <Card className='card-small'>
     <Card.Body>
       <Row>
         <Col xs={8}>
           <Card.Title>{ name }</Card.Title>
         </Col>
-        <Col>
-          Online <FontAwesomeIcon icon={ faCircle } style={{ color: 'green' }}/>
-        </Col>
+        { renderStatus() }
       </Row>
-      <div className='card-text'>
-        <Row>
-          <Col xs={8}>
-            { time } ago, { renderDistance() } {speed}km/h
-          </Col>
-          <Col>
-            Battery <FontAwesomeIcon icon={ faBatteryFull } style={{ color: 'green' }}/><br/>
-          </Col>
-        </Row>
-      </div>
+      { isOnline() ?
+        <div className='card-text'>
+          <Row>
+            <Col xs={8}>
+              { time } ago, { renderDistance() } {speed}km/h
+            </Col>
+            <Col>
+              Battery <FontAwesomeIcon icon={ faBatteryFull } style={{ color: 'green' }}/><br/>
+            </Col>
+          </Row>
+        </div> : null
+    }
     </Card.Body>
   </Card>
 }
+
+const mapStateToProps = state => {
+  const devicesState = getDevicesState(state)
+  const locationState = getLocationState(state)
+  return { locationState, devicesState }
+}
+
+export const LocationCards = connect(mapStateToProps, {})(LocationCardsComponent)
