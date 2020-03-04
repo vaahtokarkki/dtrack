@@ -4,7 +4,7 @@ import api from './utils/api'
 import { connect } from 'react-redux'
 
 import MapComponent from './components/Map'
-import { SmallCard } from './components/Card'
+import { LocationCards } from './components/Cards'
 import MapControls from './components/MapControls'
 
 import { updateLocation, setPosition } from './store/actions'
@@ -22,9 +22,10 @@ const App = props => {
       const resp = await api.get("/locations/latest/")
       resp.data.map(location => props.updateLocation({
         id: location.device.id,
-        device: location.device.name,
+        name: location.device.name,
         position: location.point.coordinates,
-        speed: location.speed
+        speed: location.speed,
+        timestamp: location.timestamp,
       }))
     }
 
@@ -39,7 +40,7 @@ const App = props => {
 
     const { coords } = position
     props.updateLocation({
-      device: "user",
+      name: "user",
       position: [ coords.latitude, coords.longitude ],
       accuracy: coords.accuracy,
       speed: coords.speed
@@ -52,8 +53,8 @@ const App = props => {
       props.setPosition([ coords.latitude, coords.longitude ])
   }
 
-  return <div style={{ width: '100%', height: '100%' }}>
-    <SmallCard />
+  return <div className="app-container">
+    <LocationCards locationState={ props.locationState } />
     <MapControls />
     <MapComponent onError={e => console.log(e)} onSuccess={ handlePositionChange } />
   </div>
