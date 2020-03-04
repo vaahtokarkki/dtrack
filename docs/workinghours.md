@@ -15,7 +15,10 @@
 | 2.3. | 2    |Api-yhteyden ja cors kanssa säätäminen|
 | 3.3. | 2    |Sijaintien haku fronttiin ja esittäminen kartalla|
 | 3.3. | 3    |Traefiker reverse proxyn opiskelu ja setup|
-| **yht.**| 8    | |
+| 4.3. | 4    |Seurattavien laitteiden (koirien) tietojen esittäminen|
+| 4.3. | 1    |Seurattavien laitteiden (koirien) listaus seurantavalikossa|
+| 4.3. | 2    |Traefik SSL opettelu ja toteutus sovelluksen kännykällä testaamista varten|
+| **yht.**| 15    | |
 
 
-### Yhteensä kaikki: 8h
+### Yhteensä kaikki: 18h
