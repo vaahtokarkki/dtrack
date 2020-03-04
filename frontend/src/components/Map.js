@@ -5,7 +5,7 @@ import L from 'leaflet'
 import { geolocated } from "react-geolocated"
 import { Map, Marker, TileLayer, Circle, CircleMarker } from 'react-leaflet'
 
-import { getMapState, getLocationState, getLocationByDevice } from '../store/selectors'
+import { getMapState, getLocationState, getUserLocation } from '../store/selectors'
 import { setZoom , setPosition} from '../store/actions'
 
 
@@ -21,8 +21,8 @@ const MapComponent = props => {
       props.setPosition([ lat, lng ])
     }
 
-    const getUserLocation = () => {
-      const userLocation = getLocationByDevice(props.locationState, "user")
+    const renderUserLocation = () => {
+      const userLocation = getUserLocation(props.locationState)
       if (!userLocation)
         return null
 
@@ -46,10 +46,11 @@ const MapComponent = props => {
     const renderMarkers = () => {
       const icon = new L.Icon({
         iconUrl: require('../assets/dog.png'),
-        className: 'leaflet-div-icon',
+        className: 'dog-icon',
+        iconAnchor: [25, 25]
       })
 
-      const devices = props.locationState.locations.filter(device => device.device !== "user")
+      const devices = props.locationState.locations.filter(device => device.name !== "user")
       return devices.map(device => <Marker icon={ icon } position={ device.position } key={ device.id } />)
     }
 
@@ -68,10 +69,8 @@ const MapComponent = props => {
         onZoomEnd={ handleMapMove }
         onMoveend= { handleMapMove } >
         <TileLayer
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url=' http://tiles.kartat.kapsi.fi/peruskartta/{z}/{x}/{y}.jpg'
-        />
-        { getUserLocation() }
+          url=' http://tiles.kartat.kapsi.fi/peruskartta/{z}/{x}/{y}.jpg' />
+        { renderUserLocation() }
         { renderMarkers() }
     </Map>
   </div>
@@ -83,7 +82,7 @@ const mapStateToProps = state => {
   return { mapSate, locationState }
 }
 
-export default connect(mapStateToProps, { setZoom , setPosition, getLocationByDevice})(geolocated({
+export default connect(mapStateToProps, { setZoom , setPosition })(geolocated({
   watchPosition: true,
   userDecisionTimeout: 10000,
 })(MapComponent))
