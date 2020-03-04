@@ -7,5 +7,8 @@ export const SET_ZOOM = "SET_ZOOM"
 // Object locations
 export const UPDATE_LOCATION = "UPDATE_LOCATION"
 
+// Devices
+export const ADD_DEVICES = "ADD_DEVICES"
+
 // Settings
 export const SET_TRACKING = "SET_TRACKING"

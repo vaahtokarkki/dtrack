@@ -1,4 +1,4 @@
-import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, UPDATE_LOCATION, SET_TRACKING } from "./actiontypes"
+import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, UPDATE_LOCATION, SET_TRACKING, ADD_DEVICES } from "./actiontypes"
 
 
 // Map actions
@@ -32,6 +32,13 @@ export const setPosition = content => ({
 export const updateLocation = content => ({
   type: UPDATE_LOCATION,
   payload: content
+})
+
+// Device actions
+
+export const addDevices = devices => ({
+  type: ADD_DEVICES,
+  payload: devices,
 })
 
 // Settings actions
