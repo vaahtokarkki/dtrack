@@ -1,6 +1,6 @@
 FROM python:3.7.4-slim-buster
 ENV PYTHONUNBUFFERED 1
-WORKDIR /code/app
+WORKDIR /code
 
 COPY app/requirements.txt .
 RUN apt-get update \
