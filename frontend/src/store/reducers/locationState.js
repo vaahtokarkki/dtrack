@@ -1,6 +1,6 @@
 import { UPDATE_LOCATION } from '../actiontypes'
 
-//{locations: [{device, position:{lat, lon}, accuracy, speed}]}
+//{locations: [{name, position:{lat, lon}, accuracy, speed}]}
 const initialState = {
     locations: []
 }
@@ -9,10 +9,10 @@ export default function(state = initialState, action) {
     switch (action.type) {
       case UPDATE_LOCATION: {
         const { locations } = state
-        const { device, position, accuracy, speed, id } = action.payload
+        const { name, position, accuracy, speed, id, timestamp } = action.payload
         let filteredByDevide = locations.filter(location => location.id === id)
         if (filteredByDevide.length) {
-            const updatedDevice = { device, position, accuracy, speed, id }
+            const updatedDevice = { name, position, accuracy, speed, id, timestamp }
             const notChangedDevices = locations.filter(location => location.id !== id)
             return {
                 ...state,
@@ -20,7 +20,7 @@ export default function(state = initialState, action) {
             }
         }
         const oldLocations = [ ...state.locations ]
-        const newLocation = { device, position, accuracy, speed, id }
+        const newLocation = { name, position, accuracy, speed, id, timestamp }
         return {
             ...state,
             locations: oldLocations.concat(newLocation)
