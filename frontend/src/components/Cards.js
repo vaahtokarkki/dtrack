@@ -27,6 +27,9 @@ const LocationCardsComponent = props => {
 
 const LocationCard = ({ name, position = [], speed, timestamp, userLocation }) => {
   const resolveTimeStamp = () => {
+    if (!timestamp)
+      return null
+
     const deviceTime = moment(timestamp)
     const diff = moment().diff(deviceTime, 'seconds')
     if (diff > 60)
@@ -34,8 +37,9 @@ const LocationCard = ({ name, position = [], speed, timestamp, userLocation }) =
     return `${diff}s`
   }
 
-  const [time, setTime] = useState(resolveTimeStamp())
+  const [time, setTime] = useState("")
   useEffect(() => {
+    setTime(resolveTimeStamp())
     const time = setInterval(() => setTime(resolveTimeStamp()), 1000)
     return () => clearInterval(time)
   }, [resolveTimeStamp, setTime])
