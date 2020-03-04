@@ -7,8 +7,8 @@ import MapComponent from './components/Map'
 import { LocationCards } from './components/Cards'
 import MapControls from './components/MapControls'
 
-import { updateLocation, setPosition } from './store/actions'
-import { getLocationByDevice, getLocationState, getTrackedDevice, getSettingsState } from './store/selectors'
+import { updateLocation, setPosition, addDevices } from './store/actions'
+import { getLocationByDeviceName, getLocationState, getTrackedDevice, getSettingsState } from './store/selectors'
 
 import './App.css';
 import './styles/Map.scss'
@@ -29,14 +29,26 @@ const App = props => {
       }))
     }
 
+    async function fetchDevices() {
+      const resp = await api.get("/devices/")
+      if (resp.status !== 200)
+        return
+
+      props.addDevices(
+        resp.data.map(device => ({ id: device.id, name: device.name }))
+      )
+    }
+
+    // Fetch devices only one time
+    fetchDevices()
+
     fetchLocations()
     const id = setInterval(fetchLocations, 60000)
-
     return () => clearInterval(id)
   }, [])
 
   const handlePositionChange = position => {
-    const isInitialLocation = !getLocationByDevice(props.locationState, "user")
+    const isInitialLocation = !getLocationByDeviceName(props.locationState, "user")
 
     const { coords } = position
     props.updateLocation({
@@ -54,7 +66,7 @@ const App = props => {
   }
 
   return <div className="app-container">
-    <LocationCards locationState={ props.locationState } />
+    <LocationCards />
     <MapControls />
     <MapComponent onError={e => console.log(e)} onSuccess={ handlePositionChange } />
   </div>
@@ -66,4 +78,4 @@ const mapStateToProps = state => {
   return { locationState, settingsState }
 }
 
-export default connect(mapStateToProps, { setPosition, updateLocation })(App)
+export default connect(mapStateToProps, { setPosition, updateLocation, addDevices })(App)
