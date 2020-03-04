@@ -17,4 +17,4 @@ export const getDevicesState = store => store.devicesState
 export const getDevices = devicesState => devicesState.devices
 
 export const getSettingsState = store => store.settingsState
-export const getTrackedDevice = store => store.trackedDevice || null
+export const getTrackedDevice = settingsState => settingsState.trackedDevice || null
