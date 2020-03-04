@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
+
 import os
 
 from dotenv import load_dotenv
@@ -30,7 +31,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['backend', 'localhost']
+ALLOWED_HOSTS = ['localhost', '192.168.11.9']
 
 
 # Application definition
