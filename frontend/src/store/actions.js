@@ -1,4 +1,5 @@
 import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, SET_TRACKING, ADD_DEVICE, ADD_LOCATION, TOGGLE_OVERLAY } from "./actiontypes"
+import { getLatestLocationByDevice } from './selectors'
 import api from '../utils/api'
 
 // Map actions
@@ -48,11 +49,12 @@ export const addLocation = (deviceId, location) =>
 
 export const fetchLocations = () => {
   return async (dispatch, getState) => {
-    const requestData = getState().devicesState.devices
-      .filter(device => device.locations && device.locations.length)
-      .map(device => ({device: device.id, location: device.locations[0] }))
+    const { devicesState } = getState()
+    const requestData = devicesState.devices
+      .filter(device => device.locations && device.locations.length && device.id !== "user")
+      .map(device => ({device: device.id, location: getLatestLocationByDevice(devicesState, device.id).id }))
 
-    const resp = await api.post("/locations/latest/", { requestData })
+    const resp = await api.post("/locations/latest/", [ ...requestData ])
 
     resp.data.forEach(device => {
       const locations = device.locations.map(location => {
