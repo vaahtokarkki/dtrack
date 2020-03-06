@@ -1,20 +1,16 @@
 export const getMapState = store => store.mapState
 
-export const getLocationState = store => store.locationState
-
-export const getLocationByDeviceName = ( store, name ) => {
-    const { locations } = store
-    return locations.filter(location => location.name === name)[0] || null
-}
-
-export const getLocationByDeviceId = ( store, id ) =>
-    store.locations.filter(location => location.id === id)[0] || null
-
-export const getUserLocation = store =>
-    store.locations.filter(device => device.name === "user")[0] || null
-
 export const getDevicesState = store => store.devicesState
 export const getDevices = devicesState => devicesState.devices
+export const getDeviceById = ( devicesState, id ) =>
+    devicesState.devices.filter(device => device.id === id)[0] || null
+export const getLatestLocationByDevice = ( devicesState, deviceId ) => {
+    const device = getDeviceById(devicesState, deviceId)
+    return device && device.locations ? device.locations.sort((a,b) => a.id < b.id)[0] || null : null
+}
+
+export const getUserLocation = devicesState =>
+    getLatestLocationByDevice(devicesState, "user")
 
 export const getSettingsState = store => store.settingsState
 export const getTrackedDevice = settingsState => settingsState.trackedDevice || null

@@ -23,7 +23,7 @@ export default function(state = initialState, action) {
       }
     }
     case SET_POSITION: {
-        const { position } = action.payload
+      const { position } = action.payload
         return {
             ...state,
             position

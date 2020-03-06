@@ -1,4 +1,4 @@
-import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, UPDATE_LOCATION, SET_TRACKING, ADD_DEVICES, TOGGLE_OVERLAY } from "./actiontypes"
+import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, SET_TRACKING, ADD_DEVICE, ADD_LOCATION, TOGGLE_OVERLAY } from "./actiontypes"
 import api from '../utils/api'
 
 // Map actions
@@ -20,63 +20,71 @@ export const setZoom = zoom => ({
   payload: { zoom }
 })
 
-export const setPosition = content => ({
+export const setPosition = position => ({
     type: SET_POSITION,
-    payload: {
-      position: content
-    }
+    payload: { position }
 })
-
-// Location actions
-
-export const updateLocation = content => ({
-  type: UPDATE_LOCATION,
-  payload: content
-})
-
-export const updateLocationTracking = location =>
-  (dispatch, getState) => {
-    dispatch(updateLocation(location))
-    const currentState = getState()
-    if (currentState.settingsState.trackedDevice === location.id)
-      dispatch(setPosition(location.position))
-  }
-
-export const fetchLocations = () =>
-  async (dispatch, getState) => {
-    const resp = await api.get("/locations/latest/")
-    resp.data.map(location => {
-      dispatch(updateLocation({
-        id: location.device.id,
-        name: location.device.name,
-        position: location.point.coordinates,
-        speed: location.speed,
-        timestamp: location.timestamp,
-      }))
-
-      const currentState = getState()
-      if (currentState.settingsState.trackedDevice === location.device.id)
-        dispatch(setPosition(location.point.coordinates))
-      return null
-    })
-  }
 
 // Device actions
 
-export const addDevices = devices => ({
-  type: ADD_DEVICES,
-  payload: devices,
+export const addDevice = device => ({
+  type: ADD_DEVICE,
+  payload: device,
 })
 
 
-export const fetchDevices = () => {
-  return async dispatch => {
-    const resp = await api.get("/devices/")
-    dispatch(addDevices(
-      resp.data.map(device => ({ id: device.id, name: device.name }))
-    ))
+export const addLocation = (deviceId, location) =>
+  (dispatch, getState) => {
+    dispatch(({
+      type: ADD_LOCATION,
+      payload: { deviceId, location }
+    }))
+
+    const currentState = getState()
+    if (currentState.settingsState.trackedDevice === deviceId)
+      dispatch(setPosition(location[0].position))
+  }
+
+
+export const fetchLocations = () => {
+  return async (dispatch, getState) => {
+    const requestData = getState().devicesState.devices
+      .filter(device => device.locations && device.locations.length)
+      .map(device => ({device: device.id, location: device.locations[0] }))
+
+    const resp = await api.post("/locations/latest/", { requestData })
+
+    resp.data.forEach(device => {
+      const locations = device.locations.map(location => {
+        return {
+          id: location.id,
+          position: location.point.coordinates,
+          speed: location.speed,
+          timestamp: location.timestamp,
+        }
+      })
+      dispatch(addLocation(device.id, [ ...locations ]))
+    })
   }
 }
+
+export const initDevices = () =>
+  async dispatch => {
+    const resp = await api.get("/devices/")
+    resp.data.map(device => {
+      const deviceLocations = device.locations.map(location => {
+        return {
+          id: location.id,
+          position: location.point.coordinates,
+          speed: location.speed,
+          timestamp: location.timestamp,
+        }
+      })
+      dispatch(addDevice({
+        ...device, locations: deviceLocations
+      }))
+    })
+  }
 
 
 // Settings actions
