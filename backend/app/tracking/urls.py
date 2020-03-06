@@ -1,10 +1,10 @@
 from django.urls import path
 
-from .views import LatestLocation, ListDevices, ListLocations
+from .views import ListDevices, ListDevicesActiveTrack, ListLocations
 
 
 urlpatterns = [
     path('locations/', ListLocations.as_view()),
-    path('locations/latest/', LatestLocation.as_view()),
+    path('locations/latest/', ListDevicesActiveTrack.as_view()),
     path('devices/', ListDevices.as_view()),
 ]
