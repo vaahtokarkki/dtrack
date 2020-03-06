@@ -18,7 +18,6 @@ const FollowDropdown = props => {
       onClick={e => {
         e.preventDefault()
         onClick(e)
-        props.toggleOverlay()
       }} >
         <MyLocation className='map-control' style={{ opacity: 1 }} />Follow
     </div>
@@ -41,7 +40,6 @@ const FollowDropdown = props => {
     getTrackedDevice(props.settingsState) === device ?
       props.clearTracking() :
       props.setTracking(device)
-    props.toggleOverlay()
   }
 
   const renderDevices = () =>
@@ -58,7 +56,7 @@ const FollowDropdown = props => {
   const resolveClass = deviceId =>
     getTrackedDevice(props.settingsState) === deviceId ? 'dropdown-item active' : 'dropdown-item'
 
-  return <Dropdown>
+  return <Dropdown onToggle={ props.toggleOverlay }>
     <Dropdown.Toggle as={ CustomToggle } id="dropdown-custom-components" />
     <Dropdown.Menu as={ CustomMenu }>
         { renderDevices() }
