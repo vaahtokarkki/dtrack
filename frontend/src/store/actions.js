@@ -36,6 +36,8 @@ export const addDevice = device => ({
 
 export const addLocation = (deviceId, location) =>
   (dispatch, getState) => {
+    if (!Array.isArray(location) || !location.length)
+      return
     dispatch(({
       type: ADD_LOCATION,
       payload: { deviceId, location }
@@ -52,7 +54,7 @@ export const fetchLocations = () => {
     const { devicesState } = getState()
     const requestData = devicesState.devices
       .filter(device => device.locations && device.locations.length && device.id !== "user")
-      .map(device => ({device: device.id, location: getLatestLocationByDevice(devicesState, device.id).id }))
+      .map(device => ({ device: device.id, location: getLatestLocationByDevice(devicesState, device.id).id }))
 
     const resp = await api.post("/locations/latest/", [ ...requestData ])
 
@@ -74,14 +76,16 @@ export const initDevices = () =>
   async dispatch => {
     const resp = await api.get("/devices/")
     resp.data.map(device => {
-      const deviceLocations = device.locations.map(location => {
-        return {
-          id: location.id,
-          position: location.point.coordinates,
-          speed: location.speed,
-          timestamp: location.timestamp,
-        }
-      })
+      const deviceLocations = device.locations
+        .map(location => {
+          return {
+            id: location.id,
+            position: location.point.coordinates,
+            speed: location.speed,
+            timestamp: location.timestamp,
+          }
+        })
+        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
       dispatch(addDevice({
         ...device, locations: deviceLocations
       }))
@@ -91,10 +95,20 @@ export const initDevices = () =>
 
 // Settings actions
 
-export const setTracking = device => ({
+const updateTracking = device => ({
   type: SET_TRACKING,
   payload: device
 })
+
+
+export const setTracking = deviceId =>
+  (dispatch, getState) => {
+    const { devicesState } = getState()
+    dispatch(updateTracking(deviceId))
+
+    const latestLocation = getLatestLocationByDevice(devicesState, deviceId)
+    dispatch(setPosition(latestLocation.position))
+  }
 
 export const clearTracking = () => ({
   type: SET_TRACKING,
