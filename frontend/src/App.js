@@ -5,8 +5,8 @@ import MapComponent from './components/Map'
 import { LocationCards } from './components/Cards'
 import MapControls from './components/MapControls'
 
-import { updateLocationTracking, setPosition, addDevices, fetchLocations, fetchDevices } from './store/actions'
-import { getLocationByDeviceName, getLocationState, getSettingsState } from './store/selectors'
+import { setPosition, fetchLocations, initDevices, addLocation, addDevice } from './store/actions'
+import { getUserLocation, getDevicesState, getSettingsState } from './store/selectors'
 
 import './App.css';
 import './styles/Map.scss'
@@ -18,30 +18,40 @@ const App = props => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(fetchLocations())
-    dispatch(fetchDevices())
+    dispatch(initDevices())
 
-    const id = setInterval(() => dispatch(fetchLocations()), 3000)
+    const id = setInterval(() => dispatch(fetchLocations()), 30000)
     return () => clearInterval(id)
   }, [dispatch])
 
 
-
   const handleUserLocationChange = position => {
-    const isInitialLocation = !getLocationByDeviceName(props.locationState, "user")
+    const currentLocation = getUserLocation(props.devicesState)
 
     const { coords } = position
-    dispatch(updateLocationTracking({
-      id: "user",
-      name: "user",
+    if (!coords.latitude || !coords.longitude)
+      return
+
+
+    const location = {
       position: [ coords.latitude, coords.longitude ],
-      accuracy: coords.accuracy,
+      id: currentLocation ? currentLocation.id + 1 : 0,
       speed: coords.speed,
       timestamp: new Date().toISOString(),
-    }))
+      accuracy: coords.accuracy,
+    }
 
-    if (isInitialLocation)
-      props.setPosition([ coords.latitude, coords.longitude ])
+    const device = {
+      id: "user",
+      name: "user",
+    }
+
+    if (!currentLocation) {
+      dispatch(addDevice({ ...device, locations: [location] }))
+      return props.setPosition([ coords.latitude, coords.longitude ])
+    }
+
+    dispatch(addLocation(device.id, [location]))
   }
 
   const renderOverlay = () => {
@@ -61,9 +71,9 @@ const App = props => {
 }
 
 const mapStateToProps = state => {
-  const locationState = getLocationState(state)
+  const devicesState = getDevicesState(state)
   const settingsState = getSettingsState(state)
-  return { locationState, settingsState }
+  return { devicesState, settingsState }
 }
 
-export default connect(mapStateToProps, { setPosition, updateLocationTracking, addDevices })(App)
+export default connect(mapStateToProps, { setPosition })(App)

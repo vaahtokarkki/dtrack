@@ -43,14 +43,16 @@ const FollowDropdown = props => {
   }
 
   const renderDevices = () =>
-    props.devicesState.devices.map(device => {
-      return <Dropdown.Item
-        eventKey={device.id}
-        key={device.id}
-        className={ resolveClass(device.id) }
-        onClick={ () => handleSetTracking(device.id) }>
-        <Pets className='dropdown-item-icon' />{ device.name }
-      </Dropdown.Item>
+    props.devicesState.devices
+      .filter(device => device.id !== "user")
+      .map(device => {
+        return <Dropdown.Item
+          eventKey={device.id}
+          key={device.id}
+          className={ resolveClass(device.id) }
+          onClick={ () => handleSetTracking(device.id) }>
+          <Pets className='dropdown-item-icon' />{ device.name }
+        </Dropdown.Item>
     })
 
   const resolveClass = deviceId =>

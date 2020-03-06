@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import geodist from 'geodist'
 import moment from 'moment'
 
-import { getLocationState, getDevicesState, getUserLocation, getDevices, getLocationByDeviceId } from '../store/selectors'
+import { getDevicesState, getDevices, getLatestLocationByDevice, getUserLocation } from '../store/selectors'
 
 import Card from 'react-bootstrap/Card'
 import Row from 'react-bootstrap/Row'
@@ -14,10 +14,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle, faBatteryFull } from '@fortawesome/free-solid-svg-icons'
 
 const LocationCardsComponent = props => {
-  const userLocation = getUserLocation(props.locationState)
+  const userLocation = getUserLocation(props.devicesState)
   return getDevices(props.devicesState)
+    .filter(device => device.id !== "user")
     .map(device => {
-      const location = getLocationByDeviceId(props.locationState, device.id)
+      const location = getLatestLocationByDevice(props.devicesState, device.id)
       return <LocationCard { ...location }
         name={ device.name }
         userLocation={ userLocation ? userLocation.position : [] }
@@ -89,8 +90,7 @@ const LocationCard = ({ name, position = [], speed, timestamp, userLocation }) =
 
 const mapStateToProps = state => {
   const devicesState = getDevicesState(state)
-  const locationState = getLocationState(state)
-  return { locationState, devicesState }
+  return { devicesState }
 }
 
 export const LocationCards = connect(mapStateToProps, {})(LocationCardsComponent)

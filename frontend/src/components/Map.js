@@ -5,7 +5,7 @@ import L from 'leaflet'
 import { geolocated } from "react-geolocated"
 import { Map, Marker, TileLayer, Circle, CircleMarker } from 'react-leaflet'
 
-import { getMapState, getLocationState, getUserLocation } from '../store/selectors'
+import { getMapState, getUserLocation, getDevices, getDevicesState } from '../store/selectors'
 import { setZoom , setPosition} from '../store/actions'
 
 
@@ -22,7 +22,7 @@ const MapComponent = props => {
     }
 
     const renderUserLocation = () => {
-      const userLocation = getUserLocation(props.locationState)
+      const userLocation = getUserLocation(props.devicesState)
       if (!userLocation)
         return null
 
@@ -71,15 +71,14 @@ const MapComponent = props => {
         <TileLayer
           url=' http://tiles.kartat.kapsi.fi/peruskartta/{z}/{x}/{y}.jpg' />
         { renderUserLocation() }
-        { renderMarkers() }
     </Map>
   </div>
 }
 
 const mapStateToProps = state => {
   const mapSate = getMapState(state)
-  const locationState = getLocationState(state)
-  return { mapSate, locationState }
+  const devicesState = getDevicesState(state)
+  return { mapSate, devicesState }
 }
 
 export default connect(mapStateToProps, { setZoom , setPosition })(geolocated({
