@@ -18,7 +18,8 @@
 | 4.3. | 4    |Seurattavien laitteiden (koirien) tietojen esittäminen|
 | 4.3. | 1    |Seurattavien laitteiden (koirien) listaus seurantavalikossa|
 | 4.3. | 2    |Traefik SSL opettelu ja toteutus sovelluksen kännykällä testaamista varten|
-| **yht.**| 15    | |
+| 6.3. | 5    |Redux storen refaktorointia, laitteen jäljen loggikan toteutusards|
+| **yht.**| 20    | |
 
 
-### Yhteensä kaikki: 18h
+### Yhteensä kaikki: 22h
