@@ -29,10 +29,12 @@ export default function(state = initialState, action) {
 
             const currentLocationIds = deviceToUpdate.locations.map(location => location.id)
             const newLocations = payload.location.filter(location => !currentLocationIds.includes(location.id))
+            const locations = deviceToUpdate.locations
+                .concat(newLocations)
+                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
 
             const updatedDevice = {
-                ...deviceToUpdate,
-                locations: deviceToUpdate.locations.concat(newLocations)
+                ...deviceToUpdate, locations
             }
             const devices = state.devices
                 .filter(device => device.id !== payload.deviceId)

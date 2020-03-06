@@ -6,7 +6,7 @@ export const getDeviceById = ( devicesState, id ) =>
     devicesState.devices.filter(device => device.id === id)[0] || null
 export const getLatestLocationByDevice = ( devicesState, deviceId ) => {
     const device = getDeviceById(devicesState, deviceId)
-    return device && device.locations ? device.locations.sort((a,b) => a.id < b.id)[0] || null : null
+    return device && device.locations ? device.locations[0] || null : null
 }
 
 export const getUserLocation = devicesState =>
