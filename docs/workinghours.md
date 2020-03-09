@@ -21,5 +21,10 @@
 | 6.3. | 5    |Redux storen refaktorointia, laitteen jäljen loggikan toteutusards|
 | **yht.**| 20    | |
 
+### Viikko 2
+| Päivä | Aika | Mitä tein  |
+| :----:|:-----| :-----|
+| 9.3. | 5    |GPS tracking palvelimen pystytys ja testaus|
+| x.3. | 0    |GPS tracking palvelimen yhditäminen backendiin|
 
-### Yhteensä kaikki: 22h
+### Yhteensä kaikki: 28h
