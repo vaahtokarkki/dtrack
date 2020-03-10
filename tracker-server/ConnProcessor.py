@@ -13,10 +13,11 @@ class ConnProcessor(threading.Thread):
     """ A Thread is created with every incoming connection """
     id = None
 
-    def __init__(self, client, addr):
+    def __init__(self, client, addr, backend_url):
         threading.Thread.__init__(self)
         self.client = client
         self.addr = addr
+        self.backend_url = backend_url
         self.should_terminate = False
 
     def run(self):
@@ -39,25 +40,24 @@ class ConnProcessor(threading.Thread):
                     print("no msg!")
                     break
 
-        log.debug(">>>finished", flush=True)
+        log.debug(">>>finished")
         self.client.close()
 
     def process_message(self, msg):
         location = self.parse_location(msg)
         if not location:
-            pass
+            return
 
         tracker_id, longitude, latitude, speed = location
-        response = requests.post('backend:8000/api/locations/', {
+        response = requests.post(f'{self.backend_url}/api/locations/', {
             'tracker_id': tracker_id,
             'speed': speed,
             'point': f'POINT({latitude} {longitude})'
-        })
+        }, verify=False)
 
         if not response.status_code == 201:
             log.error(f"Location post failed on backend, err {response.status_code}")
-            log.error(response.data)
-            pass
+            log.error(response.json())
 
     def send_message(self, msg):
         log.debug("[{}] sending: {}".format(datetime.datetime.now(), msg))
