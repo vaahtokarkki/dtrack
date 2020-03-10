@@ -25,6 +25,6 @@
 | Päivä | Aika | Mitä tein  |
 | :----:|:-----| :-----|
 | 9.3. | 5    |GPS tracking palvelimen pystytys ja testaus|
-| x.3. | 0    |GPS tracking palvelimen yhditäminen backendiin|
+| 10.3. | 4    |GPS tracking palvelimen yhditäminen backendiin|
 
 ### Yhteensä kaikki: 28h
