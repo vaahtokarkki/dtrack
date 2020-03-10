@@ -5,17 +5,12 @@ from rest_framework.response import Response
 
 from .models import Device, Location
 from .serializers import DeviceSerializer, DeviceTrackSerializer, \
-    LocationCreateSerializer, LocationSerializer
+    LocationCreateSerializer
 
 
-class ListLocations(generics.ListCreateAPIView):
+class CreateLocation(generics.CreateAPIView):
     queryset = Location.objects.all()
-    serializer_class = LocationSerializer
-
-    def get_serializer_class(self):
-        if self.request.method == "POST":
-            return LocationCreateSerializer
-        return super().get_serializer_class()
+    serializer_class = LocationCreateSerializer
 
 
 class ListDevices(generics.ListCreateAPIView):

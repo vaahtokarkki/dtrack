@@ -15,7 +15,7 @@ class DeviceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Device
-        fields = ['id', 'name', 'locations']
+        fields = ['id', 'name', 'locations', 'tracker_id']
 
 
 class DeviceTrackSerializer(serializers.ModelSerializer):
@@ -31,20 +31,26 @@ class DeviceTrackSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Device
-        fields = ['id', 'name', 'locations']
-
-
-class LocationSerializer(serializers.ModelSerializer):
-    device = DeviceSerializer()
-
-    class Meta:
-        model = Location
-        geo_field = "point"
-        fields = ['id', 'speed', 'timestamp', 'device', 'point']
+        fields = ['id', 'name', 'locations', 'tracker_id']
 
 
 class LocationCreateSerializer(serializers.ModelSerializer):
+    tracker_id = serializers.CharField(required=False)
+
+    def validate_tracker_id(self, value):
+        try:
+            return Device.objects.get(tracker_id=value)
+        except (ValueError, Device.DoesNotExist):
+            raise serializers.ValidationError("Inavalid tracker id")
+        return value
+
+    def create(self, validated_data):
+        if "tracker_id" in validated_data:
+            validated_data["device"] = validated_data.pop("tracker_id")
+        return super().create(validated_data)
+
     class Meta:
         model = Location
         geo_field = "point"
-        fields = ['speed', 'device', 'point']
+        fields = ['speed', 'device', 'point', 'tracker_id']
+        extra_kwargs = {'device': {'required': False}}
