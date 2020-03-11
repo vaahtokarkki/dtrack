@@ -3,9 +3,9 @@ import { connect } from "react-redux"
 
 import L from 'leaflet'
 import { geolocated } from "react-geolocated"
-import { Map, Marker, TileLayer, Circle, CircleMarker } from 'react-leaflet'
+import { Map, Marker, TileLayer, Circle, CircleMarker, Polyline } from 'react-leaflet'
 
-import { getMapState, getUserLocation, getDevices, getDevicesState } from '../store/selectors'
+import { getMapState, getUserLocation, getDevices, getDevicesState, getLatestLocationByDevice } from '../store/selectors'
 import { setZoom , setPosition} from '../store/actions'
 
 
@@ -50,8 +50,21 @@ const MapComponent = props => {
         iconAnchor: [25, 25]
       })
 
-      const devices = props.locationState.locations.filter(device => device.name !== "user")
-      return devices.map(device => <Marker icon={ icon } position={ device.position } key={ device.id } />)
+      const devices = getDevices(props.devicesState).filter(device => device.name !== "user")
+      return devices.map(device => {
+        const location = getLatestLocationByDevice(props.devicesState, device.id)
+        if (!location)
+          return null
+        return <Marker icon={ icon } position={ location.position } key={ device.id } />
+      })
+    }
+
+    const renderTracks = () => {
+      const devices = getDevices(props.devicesState).filter(device => device.name !== "user")
+      return devices.map(device => {
+        const locations = device.locations.map(location => location.position)
+        return <Polyline key={ device.id } positions={ locations } color={ 'red' } />
+      })
     }
 
     let { position, zoom } = props.mapSate
@@ -71,6 +84,8 @@ const MapComponent = props => {
         <TileLayer
           url=' http://tiles.kartat.kapsi.fi/peruskartta/{z}/{x}/{y}.jpg' />
         { renderUserLocation() }
+        { renderMarkers() }
+        { renderTracks() }
     </Map>
   </div>
 }
