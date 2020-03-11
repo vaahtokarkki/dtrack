@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 
 import geodist from 'geodist'
 import moment from 'moment'
 
+import { setPosition } from '../store/actions'
 import { getDevicesState, getDevices, getLatestLocationByDevice, getUserLocation } from '../store/selectors'
 
 import Card from 'react-bootstrap/Card'
@@ -27,6 +28,8 @@ const LocationCardsComponent = props => {
 }
 
 const LocationCard = ({ name, position = [], speed, timestamp, userLocation }) => {
+  const dispatch = useDispatch()
+
   const resolveTimeStamp = () => {
     if (!timestamp)
       return null
@@ -45,6 +48,8 @@ const LocationCard = ({ name, position = [], speed, timestamp, userLocation }) =
     return () => clearInterval(time)
   }, [resolveTimeStamp, setTime])
 
+  const handleOnClick = () =>
+    position.length && dispatch(setPosition(position))
 
   const renderDistance = () => {
     if (!position.length || !userLocation.length)
@@ -64,7 +69,7 @@ const LocationCard = ({ name, position = [], speed, timestamp, userLocation }) =
   const isOnline = () =>
     Boolean(position.length)
 
-  return <Card className='card-small'>
+  return <Card className='card-small' onClick={ handleOnClick }>
     <Card.Body>
       <Row>
         <Col xs={8}>
