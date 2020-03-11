@@ -20,7 +20,7 @@ const App = props => {
   useEffect(() => {
     dispatch(initDevices())
 
-    const id = setInterval(() => dispatch(fetchLocations()), 30000)
+    const id = setInterval(() => dispatch(fetchLocations()), 60000)
     return () => clearInterval(id)
   }, [dispatch])
 
