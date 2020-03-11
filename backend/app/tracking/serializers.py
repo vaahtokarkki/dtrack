@@ -11,7 +11,7 @@ class SimpleLocationSerializer(serializers.ModelSerializer):
 
 
 class DeviceSerializer(serializers.ModelSerializer):
-    locations = SimpleLocationSerializer(many=True)
+    locations = SimpleLocationSerializer(many=True, required=False)
 
     class Meta:
         model = Device
