@@ -26,5 +26,10 @@
 | :----:|:-----| :-----|
 | 9.3. | 5    |GPS tracking palvelimen pystytys ja testaus|
 | 10.3. | 4    |GPS tracking palvelimen yhditäminen backendiin|
+| 11.3. | 2    |Testipalvelimen pystytys Digitaloceaniin, gps panta lähettää onnistuneesti sijaintia ja se saadaan talteen backendiin|
+| 12.3. | 2    |Testipalvelimen säätö npm-pakettien ja dockerin kanssa|
+| 12.3. | 4    |Mahdollisuus sovittaa kartan näkymä oman ja koirien sijainnin mukaan|
 
-### Yhteensä kaikki: 28h
+| **yht.**| 17    | |
+
+### Yhteensä kaikki: 40h
