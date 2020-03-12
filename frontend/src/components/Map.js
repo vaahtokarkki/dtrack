@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { connect } from "react-redux"
 
 import L from 'leaflet'
@@ -8,12 +8,32 @@ import { Map, Marker, TileLayer, Circle, CircleMarker, Polyline } from 'react-le
 import { getMapState, getUserLocation, getDevices, getDevicesState, getLatestLocationByDevice } from '../store/selectors'
 import { setZoom , setPosition} from '../store/actions'
 
+const ICON = new L.Icon({
+  iconUrl: require('../assets/dog.png'),
+  className: 'dog-icon',
+  iconAnchor: [25, 25]
+})
 
 const MapComponent = props => {
-    let mapElement
+    const renderMarkers = () => {
+      const devices = getDevices(props.devicesState).filter(device => device.name !== "user")
+      return devices.map(device => {
+        const location = getLatestLocationByDevice(props.devicesState, device.id)
+        if (!location)
+          return null
+        return <Marker icon={ ICON } position={ location.position } key={ device.id } />
+      })
+    }
+
+    const [markers, setMarkers] = useState("")
+    const [mapElement, setMapElement] = useState(null)
+
+    useEffect(() => {
+      setMarkers(renderMarkers())
+    }, [props.devicesState])
 
     const handleMapMove = () => {
-      if (!mapElement)
+      if (!mapElement || !props.mapSate.position || !props.mapSatezoom)
         return
       const zoom = mapElement.leafletElement.getZoom()
       const { lat, lng } = mapElement.leafletElement.getCenter()
@@ -43,22 +63,6 @@ const MapComponent = props => {
       </Fragment>
     }
 
-    const renderMarkers = () => {
-      const icon = new L.Icon({
-        iconUrl: require('../assets/dog.png'),
-        className: 'dog-icon',
-        iconAnchor: [25, 25]
-      })
-
-      const devices = getDevices(props.devicesState).filter(device => device.name !== "user")
-      return devices.map(device => {
-        const location = getLatestLocationByDevice(props.devicesState, device.id)
-        if (!location)
-          return null
-        return <Marker icon={ icon } position={ location.position } key={ device.id } />
-      })
-    }
-
     const renderTracks = () => {
       const devices = getDevices(props.devicesState).filter(device => device.name !== "user")
       return devices.map(device => {
@@ -68,6 +72,13 @@ const MapComponent = props => {
     }
 
     let { position, zoom } = props.mapSate
+    if (!position && !zoom) {
+      const markers = getDevices(props.devicesState)
+        .map(device => L.marker(getLatestLocationByDevice(props.devicesState, device.id).position))
+      console.log('vvvv', markers);
+      mapElement.leafletElement.fitBounds(L.featureGroup(markers).getBounds())
+    }
+
     //let { trackedPositions } = props.trackedState <-- array of positions
     // if (props.settingsState.trackUserLocation)
       // position = ...
@@ -75,8 +86,8 @@ const MapComponent = props => {
       //
     return <div className='map-wrapper'>
       <Map
-        ref={(ref) => { mapElement = ref }}
-        center={position}
+        ref={(ref) => { setMapElement(ref) }}
+        center={ position }
         zoom={zoom}
         zoomControl={false}
         onZoomEnd={ handleMapMove }
@@ -84,7 +95,7 @@ const MapComponent = props => {
         <TileLayer
           url=' http://tiles.kartat.kapsi.fi/peruskartta/{z}/{x}/{y}.jpg' />
         { renderUserLocation() }
-        { renderMarkers() }
+        { markers }
         { renderTracks() }
     </Map>
   </div>
