@@ -33,7 +33,7 @@ const MapComponent = props => {
     }, [props.devicesState])
 
     const handleMapMove = () => {
-      if (!mapElement || !props.mapSate.position || !props.mapSatezoom)
+      if (!mapElement)
         return
       const zoom = mapElement.leafletElement.getZoom()
       const { lat, lng } = mapElement.leafletElement.getCenter()
@@ -71,13 +71,13 @@ const MapComponent = props => {
       })
     }
 
-    let { position, zoom } = props.mapSate
-    if (!position && !zoom) {
+    if (props.mapSate && props.mapSate.fitBounds) {
       const markers = getDevices(props.devicesState)
         .map(device => L.marker(getLatestLocationByDevice(props.devicesState, device.id).position))
-      console.log('vvvv', markers);
       mapElement.leafletElement.fitBounds(L.featureGroup(markers).getBounds())
     }
+
+    let { position, zoom } = props.mapSate
 
     //let { trackedPositions } = props.trackedState <-- array of positions
     // if (props.settingsState.trackUserLocation)
