@@ -1,4 +1,4 @@
-import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM } from '../actiontypes'
+import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, FIT_MAP } from '../actiontypes'
 
 const initialState = {
     position: [ 60.2, 25 ],
@@ -28,6 +28,12 @@ export default function(state = initialState, action) {
             ...state,
             position
         }
+    }
+    case FIT_MAP: {
+      return {
+        ...state,
+        position: null, zoom: null
+      }
     }
     default:
       return state

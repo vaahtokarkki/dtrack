@@ -1,4 +1,4 @@
-import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, SET_TRACKING, ADD_DEVICE, ADD_LOCATION, TOGGLE_OVERLAY } from "./actiontypes"
+import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, SET_TRACKING, ADD_DEVICE, ADD_LOCATION, TOGGLE_OVERLAY, FIT_MAP } from "./actiontypes"
 import { getLatestLocationByDevice } from './selectors'
 import api from '../utils/api'
 
@@ -24,6 +24,11 @@ export const setZoom = zoom => ({
 export const setPosition = position => ({
     type: SET_POSITION,
     payload: { position }
+})
+
+export const fitMap = () => ({
+  type: FIT_MAP,
+  payload: null,
 })
 
 // Device actions
@@ -89,6 +94,7 @@ export const initDevices = () =>
       dispatch(addDevice({
         ...device, locations: deviceLocations
       }))
+      return null
     })
   }
 
