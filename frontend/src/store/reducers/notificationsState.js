@@ -7,7 +7,8 @@ const initialState = {
 export default function(state = initialState, action) {
     switch (action.type) {
         case ADD_NOTIFICATION: {
-            console.log('sadas', state.notifications, action.payload);
+            if (!action.payload.color || !action.payload.content)
+                return state
             const notifications = state.notifications.concat([action.payload])
             return {...state, notifications }
         }

@@ -8,7 +8,7 @@ import { removeNotification } from '../store/actions'
 
 
 const AllNotifications = props =>
-    props.notifications.map(notification => <Notification { ...notification } />)
+    props.notifications.map((index, notification) => <Notification { ...notification } key={ index } />)
 
 const Notification = ({ content, color }) => {
     const dispatch = useDispatch()
