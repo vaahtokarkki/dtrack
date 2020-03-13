@@ -1,5 +1,6 @@
 from django.utils import timezone
 from datetime import timedelta
+from .models import Location
 
 
 def get_active_track(device):
@@ -13,7 +14,7 @@ def get_active_track(device):
     """
     now = timezone.now()
     # TODO: Get this limit from user settings
-    max_start_age = now - timedelta(hours=24)
+    max_start_age = now - timedelta(hours=2400)
     locations = device.locations.order_by("-timestamp")
 
     if not locations or locations[0].timestamp < max_start_age:
@@ -26,10 +27,10 @@ def get_active_track(device):
         diff = (current.timestamp - next.timestamp).total_seconds()
 
         # TODO: Get this limit from user settings
-        if diff / 3600 > 24:
+        if diff / 3600 > 2400:
             break
 
-        filtered_locations.append(current)
+        filtered_locations.append(current.pk)
         if index + 1 == len(locations) - 1:
-            filtered_locations.append(next)
-    return filtered_locations
+            filtered_locations.append(next.pk)
+    return Location.objects.filter(pk__in=filtered_locations)
