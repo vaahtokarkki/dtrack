@@ -30,7 +30,9 @@
 | 12.3. | 2    |Testipalvelimen säätö npm-pakettien ja dockerin kanssa|
 | 12.3. | 4    |Mahdollisuus sovittaa kartan näkymä oman ja koirien sijainnin mukaan|
 | 13.3. | 1    |Docker ja Reactista buildaaminen tuotantoon|
+| 13.3. | 2    |Sijaintipisteiden filtteröinti|
+| 13.3. | 2    |Notifikaatioiden luonti ja yhdistäminen Reduxiin|
 
-| **yht.**| 17    | |
+| **yht.**| 22    | |
 
-### Yhteensä kaikki: 40h
+### Yhteensä kaikki: 45h
