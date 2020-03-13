@@ -1,0 +1,6 @@
+@import "Card.scss";
+
+.notification {
+    @extend .card-small;
+    padding: .4rem 3rem .4rem 1rem;
+}

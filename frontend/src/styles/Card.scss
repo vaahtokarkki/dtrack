@@ -1,8 +1,11 @@
+@import "Colors.scss";
+
 .card-small {
     width: 80%;
     margin-top: 20px;
     position: relative;
     z-index: 1000;
+    box-shadow: 0 4px 12px 0px $shadow-color;
 
     .card-body {
         padding: .5rem 1rem 0 1rem;
