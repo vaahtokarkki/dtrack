@@ -42,6 +42,12 @@ class DeviceTrackSerializer(serializers.ModelSerializer):
 class LocationCreateSerializer(serializers.ModelSerializer):
     tracker_id = serializers.CharField(required=False)
 
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
+        if "device" not in attrs and "tracker_id" not in attrs:
+            raise serializers.ValidationError("Device or tracker id is required")
+        return attrs
+
     def validate_tracker_id(self, value):
         try:
             return Device.objects.get(tracker_id=value)
