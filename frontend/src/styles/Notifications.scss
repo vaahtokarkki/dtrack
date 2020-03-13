@@ -2,5 +2,9 @@
 
 .notification {
     @extend .card-small;
-    padding: .4rem 3rem .4rem 1rem;
+    padding: .6rem 3rem .6rem 1rem;
+
+    button {
+        padding: .6rem;
+    }
 }
