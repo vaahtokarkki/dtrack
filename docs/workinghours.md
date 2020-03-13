@@ -29,6 +29,7 @@
 | 11.3. | 2    |Testipalvelimen pystytys Digitaloceaniin, gps panta lähettää onnistuneesti sijaintia ja se saadaan talteen backendiin|
 | 12.3. | 2    |Testipalvelimen säätö npm-pakettien ja dockerin kanssa|
 | 12.3. | 4    |Mahdollisuus sovittaa kartan näkymä oman ja koirien sijainnin mukaan|
+| 13.3. | 1    |Docker ja Reactista buildaaminen tuotantoon|
 
 | **yht.**| 17    | |
 
