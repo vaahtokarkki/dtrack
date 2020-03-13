@@ -66,6 +66,9 @@ const LocationCard = ({ name, position = [], speed, timestamp, userLocation }) =
       { isOnline() ? 'Online' : 'Offline' } <FontAwesomeIcon icon={ faCircle } style={{ color: isOnline() ? 'green' : 'red' }}/>
     </Col>
 
+  const getSpeed = () =>
+    Math.round(speed)
+
   const isOnline = () =>
     Boolean(position.length)
 
@@ -81,7 +84,7 @@ const LocationCard = ({ name, position = [], speed, timestamp, userLocation }) =
         <div className='card-text'>
           <Row>
             <Col xs={8}>
-              { time } ago, { renderDistance() } {speed}km/h
+              { time } ago, { renderDistance() } { getSpeed() }km/h
             </Col>
             <Col>
               Battery <FontAwesomeIcon icon={ faBatteryFull } style={{ color: 'green' }}/><br/>
