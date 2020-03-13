@@ -21,7 +21,6 @@ const App = props => {
 
   useEffect(() => {
     dispatch(initDevices())
-    dispatch(addNotification("danger", "boiiii"))
 
     const id = setInterval(() => dispatch(fetchLocations()), 60000)
     return () => clearInterval(id)
