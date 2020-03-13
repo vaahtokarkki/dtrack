@@ -2,14 +2,16 @@ import React, { useEffect, Fragment } from 'react';
 import { connect, useDispatch } from 'react-redux'
 
 import MapComponent from './components/Map'
-import { LocationCards } from './components/Cards'
+import Notifications from './components/Notifications'
 import MapControls from './components/MapControls'
+import { LocationCards } from './components/Cards'
 
-import { setPosition, fetchLocations, initDevices, addLocation, addDevice } from './store/actions'
+import { setPosition, fetchLocations, initDevices, addLocation, addDevice, addNotification } from './store/actions'
 import { getUserLocation, getDevicesState, getSettingsState } from './store/selectors'
 
 import './App.css';
 import './styles/Map.scss'
+import './styles/Notifications.scss'
 import './styles/MapControls.scss'
 import './styles/Card.scss'
 
@@ -19,6 +21,7 @@ const App = props => {
 
   useEffect(() => {
     dispatch(initDevices())
+    dispatch(addNotification("danger", "boiiii"))
 
     const id = setInterval(() => dispatch(fetchLocations()), 60000)
     return () => clearInterval(id)
@@ -63,8 +66,9 @@ const App = props => {
   return <Fragment>
     <div className="app-container">
       <LocationCards />
+      <Notifications />
       <MapControls />
-      <MapComponent onError={e => console.log("error", e)} onSuccess={ handleUserLocationChange } />
+      <MapComponent onError={ e => dispatch(addNotification("danger", e)) } onSuccess={ handleUserLocationChange } />
     </div>
     { renderOverlay() }
   </Fragment>
