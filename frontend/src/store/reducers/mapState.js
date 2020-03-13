@@ -1,6 +1,7 @@
 import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, FIT_MAP } from '../actiontypes'
 
 const initialState = {
+    fitBounds: false,
     position: [ 60.2, 25 ],
     zoom: 15,
 }
@@ -19,20 +20,21 @@ export default function(state = initialState, action) {
       const { zoom } = action.payload
       return {
         ...state,
-        zoom
+        zoom,
+        fitBounds: false
       }
     }
     case SET_POSITION: {
       const { position } = action.payload
         return {
             ...state,
-            position
+            position,
+            fitBounds: false
         }
     }
     case FIT_MAP: {
       return {
-        ...state,
-        position: null, zoom: null
+        ...state, fitBounds: true,
       }
     }
     default:
