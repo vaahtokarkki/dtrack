@@ -19,10 +19,10 @@ formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s',
                               datefmt='%d.%m.%y %H:%M')
 console = logging.StreamHandler()
 console.setFormatter(formatter)
-file_handler_error = logging.FileHandler('./logs/tracker.error.log', mode="w")
+file_handler_error = logging.FileHandler('./logs/tracker.error.log', mode="w+")
 file_handler_error.setFormatter(formatter)
 file_handler_error.setLevel(logging.ERROR)
-file_handler_debug = logging.FileHandler('./logs/tracker.debug.log', mode="w")
+file_handler_debug = logging.FileHandler('./logs/tracker.debug.log', mode="w+")
 file_handler_debug.setFormatter(formatter)
 file_handler_debug.setLevel(logging.DEBUG)
 
