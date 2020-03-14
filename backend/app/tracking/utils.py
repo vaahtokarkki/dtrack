@@ -3,6 +3,9 @@ from datetime import timedelta
 from .models import Location
 
 
+TRACK_MAX_AGE = 1  # Time after device goes offline from latest location
+
+
 def get_active_track(device):
     """
     Get active track for given device. That is all locations starting from now until
@@ -14,7 +17,7 @@ def get_active_track(device):
     """
     now = timezone.now()
     # TODO: Get this limit from user settings
-    max_start_age = now - timedelta(hours=2400)
+    max_start_age = now - timedelta(hours=TRACK_MAX_AGE)
     locations = device.locations.order_by("-timestamp")
 
     if not locations or locations[0].timestamp < max_start_age:
@@ -27,7 +30,7 @@ def get_active_track(device):
         diff = (current.timestamp - next.timestamp).total_seconds()
 
         # TODO: Get this limit from user settings
-        if diff / 3600 > 2400:
+        if diff / 3600 > TRACK_MAX_AGE:
             break
 
         filtered_locations.append(current.pk)

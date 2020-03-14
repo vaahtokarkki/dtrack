@@ -31,7 +31,8 @@ SECRET_KEY = os.getenv("DJANGO_SECRET")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['backend', 'localhost'] + [item for item in os.getenv("ALLOWED_HOSTS").split(" ")]
+ALLOWED_HOSTS = ['backend', 'localhost'] + \
+    [item for item in os.getenv("ALLOWED_HOSTS").split(" ")]
 
 
 # Application definition
