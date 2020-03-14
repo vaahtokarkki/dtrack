@@ -93,7 +93,7 @@ const MapComponent = props => {
         onZoomEnd={ handleMapMove }
         onMoveend= { handleMapMove } >
         <TileLayer
-          url=' http://tiles.kartat.kapsi.fi/peruskartta/{z}/{x}/{y}.jpg' />
+          url='https://tiles.kartat.kapsi.fi/peruskartta/{z}/{x}/{y}.jpg' />
         { renderUserLocation() }
         { markers }
         { renderTracks() }
