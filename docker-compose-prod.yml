@@ -37,10 +37,10 @@ services:
     expose:
       - 8000
     labels:
-      - traefik.http.routers.backend.rule=(Host(`134.122.68.129`) && PathPrefix(`/api`))
+      - traefik.http.routers.backend.rule=(Host(`134.122.68.129`, `helka.dog`) && PathPrefix(`/api`))
       - traefik.http.routers.backend.entrypoints=http
       - traefik.http.routers.backend.middlewares=redirect@file
-      - traefik.http.routers.backends.rule=(Host(`134.122.68.129`) && PathPrefix(`/api`))
+      - traefik.http.routers.backends.rule=(Host(`134.122.68.129`, `helka.dog`) && PathPrefix(`/api`))
       - traefik.http.routers.backends.entrypoints=https
       - traefik.http.routers.backends.tls=true
   frontend:
@@ -55,10 +55,10 @@ services:
       - backend
       - reverse-proxy
     labels:
-      - traefik.http.routers.frontend.rule=Host(`134.122.68.129`)
+      - traefik.http.routers.frontend.rule=Host(`134.122.68.129`, `helka.dog`)
       - traefik.http.routers.frontend.entrypoints=http
       - traefik.http.routers.frontend.middlewares=redirect@file
-      - traefik.http.routers.frontends.rule=Host(`134.122.68.129`)
+      - traefik.http.routers.frontends.rule=Host(`134.122.68.129`, `helka.dog`)
       - traefik.http.routers.frontends.entrypoints=https
       - traefik.http.routers.frontends.tls=true
   h02-tracker:
