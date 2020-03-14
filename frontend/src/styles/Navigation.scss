@@ -1,0 +1,24 @@
+@import "Colors.scss";
+
+.nav-header {
+    color: white;
+    background-color: $primary-green-dark;
+    padding: 1.5rem 1.5rem .3rem .7rem;
+
+    h2 {
+        margin-top: .5rem;
+        font-size: 1.5rem;
+    }
+}
+
+.nav-list {
+    .MuiListSubheader-root {
+        margin-top: 10px;
+        line-height: 10px;
+    }
+
+    .MuiListItem-dense {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+}

@@ -15,6 +15,7 @@ import './styles/Map.scss'
 import './styles/Notifications.scss'
 import './styles/MapControls.scss'
 import './styles/Card.scss'
+import './styles/Navigation.scss'
 
 
 const App = props => {
