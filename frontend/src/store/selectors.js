@@ -14,6 +14,7 @@ export const getUserLocation = devicesState =>
 
 export const getSettingsState = store => store.settingsState
 export const getTrackedDevice = settingsState => settingsState.trackedDevice || null
+export const getMenuState = settingsState => settingsState.menuOpen
 
 export const getNotificationsState = store => store.notificationsState
 export const getNotifications = notificationsState => notificationsState.notifications

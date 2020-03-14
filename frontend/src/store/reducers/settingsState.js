@@ -1,6 +1,7 @@
-import { SET_TRACKING, TOGGLE_OVERLAY } from '../actiontypes'
+import { SET_TRACKING, TOGGLE_OVERLAY, TOGGLE_MENU } from '../actiontypes'
 
 const initialState = {
+    menuOpen: false,
     trackedDevice: null,
     displayOverlay: false,
 }
@@ -11,6 +12,12 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 trackedDevice: action.payload
+            }
+        }
+        case TOGGLE_MENU: {
+            return {
+                ...state,
+                menuOpen: !state.menuOpen,
             }
         }
         case TOGGLE_OVERLAY: {

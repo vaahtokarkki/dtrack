@@ -12,6 +12,7 @@ export const ADD_LOCATION = "ADD_LOCATION"
 // Settings
 export const SET_TRACKING = "SET_TRACKING"
 export const TOGGLE_OVERLAY = "TOGGLE_OVERLAY"
+export const TOGGLE_MENU = "TOGGLE_MENU"
 
 // Notifications
 export const ADD_NOTIFICATION = "ADD_NOTIFICATION"

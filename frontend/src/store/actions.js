@@ -1,4 +1,4 @@
-import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, SET_TRACKING, ADD_DEVICE, ADD_LOCATION, TOGGLE_OVERLAY, FIT_MAP, ADD_NOTIFICATION, REMOVE_NOTIFICATION } from "./actiontypes"
+import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, SET_TRACKING, ADD_DEVICE, ADD_LOCATION, TOGGLE_OVERLAY, FIT_MAP, ADD_NOTIFICATION, REMOVE_NOTIFICATION, TOGGLE_MENU } from "./actiontypes"
 import { getLatestLocationByDevice } from './selectors'
 import api from '../utils/api'
 
@@ -123,6 +123,11 @@ export const clearTracking = () => ({
 
 export const toggleOverlay = () => ({
   type: TOGGLE_OVERLAY,
+  payload: null
+})
+
+export const toggleMenu = () => ({
+  type: TOGGLE_MENU,
   payload: null
 })
 
