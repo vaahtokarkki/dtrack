@@ -1,6 +1,7 @@
 import React, { useEffect, Fragment } from 'react';
 import { connect, useDispatch } from 'react-redux'
 
+import NavMenu from './components/Navigation'
 import MapComponent from './components/Map'
 import Notifications from './components/Notifications'
 import MapControls from './components/MapControls'
@@ -64,10 +65,12 @@ const App = props => {
 
   const handleLocationError = error => {
     console.log('Location err', error)
-    dispatch(addNotification("danger", error))
+    if (error && error.message)
+    dispatch(addNotification("danger", error.message))
   }
 
   return <Fragment>
+    <NavMenu />
     <div className="app-container">
       <LocationCards />
       <Notifications />

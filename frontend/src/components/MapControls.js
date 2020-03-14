@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from "react-redux";
 
-import { zoomIn, zoomOut, fitMap } from '../store/actions'
+import { zoomIn, zoomOut, fitMap, toggleMenu } from '../store/actions'
 
 import Menu from '@material-ui/icons/Menu'
 import Add from '@material-ui/icons/Add'
@@ -22,8 +22,8 @@ const MapControls = props =>
                 <Remove className='map-control' onClick={ props.zoomOut } />
                 <Add className='map-control' onClick={ props.zoomIn }  style={{ marginLeft: 10 }} />
             </div>
-            <Menu className='map-control' />
+            <Menu className='map-control' onClick={ props.toggleMenu } />
         </div>
     </div>
 
-export default connect(null, { zoomIn, zoomOut, fitMap })(MapControls)
+export default connect(null, { zoomIn, zoomOut, fitMap, toggleMenu })(MapControls)
