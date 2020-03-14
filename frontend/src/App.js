@@ -62,12 +62,17 @@ const App = props => {
       null
   }
 
+  const handleLocationError = error => {
+    console.log('Location err', error)
+    dispatch(addNotification("danger", error))
+  }
+
   return <Fragment>
     <div className="app-container">
       <LocationCards />
       <Notifications />
       <MapControls />
-      <MapComponent onError={ e => dispatch(addNotification("danger", e)) } onSuccess={ handleUserLocationChange } />
+      <MapComponent onError={ e => handleLocationError(e) } onSuccess={ handleUserLocationChange } />
     </div>
     { renderOverlay() }
   </Fragment>
