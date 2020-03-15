@@ -1,13 +1,34 @@
-import axios from 'axios'
-import Qs from 'qs'
+import { create } from 'apisauce'
 
 import config from './settings'
 
-const api = axios.create({
+const tokens = {
+    accessToken: null,
+}
+
+export const updateApiToken = token =>
+    tokens.accessToken = token
+
+const api = create({
     baseURL: config.apiUrl,
-    paramsSerializer: function (params) {
-        return Qs.stringify(params, {arrayFormat: 'repeat'})
+    headers: {
+        'Accept': 'application/json',
+        'Cache-Control': 'no-cache',
     },
+    timeout: 30000
 })
 
-export default api;
+const monitor = (response) => {
+    const { config: { method, url }, status } = response
+    console.group(`Requesting [${method.toUpperCase()}] ${url}:`)
+    console.log('Response Status:', status)
+    console.groupEnd()
+}
+api.addMonitor(monitor)
+
+api.addRequestTransform(request => {
+    if (tokens.accessToken)
+        request.headers['Authorization'] = `Bearer ${tokens.accessToken}`
+})
+
+export default api
