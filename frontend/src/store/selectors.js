@@ -28,3 +28,4 @@ export const getUser = userState => ({
 export const getAccessToken = userState => userState.accessToken
 export const getRefreshToken = userState => userState.refreshToken
 export const getRefreshInterval = userState => userState.refreshInterval
+export const isLoggedIn = userState => Boolean(userState.accessToken)

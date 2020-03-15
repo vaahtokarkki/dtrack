@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import { LoginModal } from './LoginModal'
 import { toggleMenu } from '../store/actions'
-import { getSettingsState, getMenuState } from '../store/selectors'
+import { getSettingsState, getMenuState, getUserState, isLoggedIn } from '../store/selectors'
 
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -106,27 +106,23 @@ const MenuComponent = props => {
     <ListItemText primary={ 'Log in' } secondary={ 'Log in to track dogs and view saved tracks '} />
   </ListItem>
 
-  const getNavigationListItems = () => {
-    const loggedIn = false
-    return loggedIn ? loggedInItems() : logInItem()
-  }
+  const getNavigationListItems = () =>
+    isLoggedIn(props.userState) ? loggedInItems() : logInItem()
 
   const getUserItem = () => {
-    const loggedIn = false
-    return loggedIn &&
+    return isLoggedIn(props.userState) &&
       <ListItem button key={ 1 }>
         <ListItemText primary={ 'Logged in as Roni' } secondary={ 'Log out' } />
       </ListItem>
   }
 
   const navItems = () => (
-    <div
-      className={ classes.list }
+    <div className={ classes.list }
       role="presentation"
       onClick={ handleToggleMenu }
       onKeyDown={ handleToggleMenu } >
       <div className="nav-header">
-        <img src={ logo } />
+        <img src={ logo } alt="logo" />
         <h2>Track Helka the dog</h2>
       </div>
       <Divider />
@@ -150,8 +146,9 @@ const MenuComponent = props => {
 
 const mapStateToProps = state => {
   const settingsState = getSettingsState(state)
+  const userState = getUserState(state)
   const menuState = getMenuState(settingsState)
-  return { menuState }
+  return { menuState, userState }
 }
 
 export default connect(mapStateToProps, { toggleMenu })(MenuComponent)
