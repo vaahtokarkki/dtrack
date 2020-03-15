@@ -18,3 +18,13 @@ export const getMenuState = settingsState => settingsState.menuOpen
 
 export const getNotificationsState = store => store.notificationsState
 export const getNotifications = notificationsState => notificationsState.notifications
+
+export const getUserState = store => store.userState
+export const getUser = userState => ({
+    id: userState.id,
+    email: userState.email,
+    name: userState.name,
+})
+export const getAccessToken = userState => userState.accessToken
+export const getRefreshToken = userState => userState.refreshToken
+export const getRefreshInterval = userState => userState.refreshInterval

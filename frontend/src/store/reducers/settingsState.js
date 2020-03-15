@@ -1,7 +1,7 @@
 import { SET_TRACKING, TOGGLE_OVERLAY, TOGGLE_MENU } from '../actiontypes'
 
 const initialState = {
-    menuOpen: false,
+    menuOpen: true,
     trackedDevice: null,
     displayOverlay: false,
 }

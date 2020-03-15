@@ -1,6 +1,6 @@
-import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, SET_TRACKING, ADD_DEVICE, ADD_LOCATION, TOGGLE_OVERLAY, FIT_MAP, ADD_NOTIFICATION, REMOVE_NOTIFICATION, TOGGLE_MENU } from "./actiontypes"
+import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, SET_TRACKING, ADD_DEVICE, ADD_LOCATION, TOGGLE_OVERLAY, FIT_MAP, ADD_NOTIFICATION, REMOVE_NOTIFICATION, TOGGLE_MENU, UPDATE_ACCESS_TOKEN, UPDATE_REFRESH_TOKEN, UPDATE_DETAILS } from "./actiontypes"
 import { getLatestLocationByDevice } from './selectors'
-import api from '../utils/api'
+import api, { updateApiToken } from '../utils/api'
 
 // Map actions
 
@@ -142,3 +142,40 @@ export const removeNotification = (color, content) => ({
   type: REMOVE_NOTIFICATION,
   payload: { color, content }
 })
+
+// User actions
+
+export const updateAccessToken = token => {
+  updateApiToken(token)
+  return {
+    type: UPDATE_ACCESS_TOKEN,
+    payload: token
+  }
+}
+
+export const updateRefreshToken = token => ({
+  type: UPDATE_REFRESH_TOKEN,
+  payload: token
+})
+
+export const updateUserDetails = details => ({
+  type: UPDATE_DETAILS,
+  payload: details
+})
+
+export const fetchUserDetails = () =>
+  async (dispatch, getState) => {
+    const { userState } = getState()
+    const { accessToken } = userState
+
+    if (!accessToken)
+      return
+
+    try {
+      const resp = await api.get("/user/")
+      const { id, name, email } = resp.data
+      dispatch(updateUserDetails({ id, name, email}))
+    } catch(error) {
+      return
+    }
+  }
