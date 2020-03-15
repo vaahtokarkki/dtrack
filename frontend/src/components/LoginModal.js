@@ -2,7 +2,7 @@ import React, { useState, Fragment } from 'react'
 import { connect } from 'react-redux'
 
 import api from '../utils/api'
-import { fetchUserDetails, updateAccessToken, updateRefreshToken } from '../store/actions'
+import { fetchUserDetails, updateAccessToken, updateRefreshToken, initDevices } from '../store/actions'
 
 import Alert from 'react-bootstrap/Alert'
 import Modal from 'react-bootstrap/Modal'
@@ -37,6 +37,7 @@ const LoginModalComponent = props => {
         props.updateAccessToken(response.data.access)
         props.updateRefreshToken(response.data.refresh)
         props.fetchUserDetails()
+        props.initDevices()
         resetForm()
     }
 
@@ -79,4 +80,4 @@ const LoginModalComponent = props => {
     </Modal>
 }
 
-export const LoginModal = connect(null, { updateAccessToken, updateRefreshToken, fetchUserDetails })(LoginModalComponent)
+export const LoginModal = connect(null, { updateAccessToken, updateRefreshToken, fetchUserDetails, initDevices })(LoginModalComponent)
