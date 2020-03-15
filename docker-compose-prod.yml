@@ -18,6 +18,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik/acme.json:/acme.json
+    restart: unless-stopped
     labels:
       # Redirect all HTTP to HTTPS permanently
       - traefik.http.routers.http_catchall.rule=HostRegexp(`{any:.+}`)
@@ -29,6 +30,7 @@ services:
     image: kartoza/postgis
     volumes:
         - postgres_data:/var/lib/postgresql
+    restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASS: postgres
@@ -41,6 +43,7 @@ services:
     command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; python /code/manage.py runserver 0.0.0.0:8000'
     volumes:
       - ./backend/app:/code
+    restart: unless-stopped
     environment:
         DJANGO_SETTINGS_MODULE: conf.settings
     depends_on:
@@ -57,6 +60,7 @@ services:
       dockerfile: ./Dockerfile-prod
     volumes:
       - ./frontend:/frontend
+    restart: unless-stopped
     expose:
       - 80
     links:
@@ -68,6 +72,7 @@ services:
       - traefik.http.routers.frontend.tls.certresolver=le
   h02-tracker:
     build: ./tracker-server
+    restart: unless-stopped
     ports:
       - "5001:5001"
     volumes:
