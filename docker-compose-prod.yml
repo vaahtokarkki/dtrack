@@ -51,10 +51,9 @@ services:
     expose:
       - 8000
     labels:
-      - traefik.http.routers.backend.rule=(Host(`134.122.68.129`, `helka.dog`) && PathPrefix(`/api`))
+      - traefik.http.routers.backend.rule=(Host(`helka.dog`) && PathPrefix(`/api`))
       - traefik.http.routers.backend.tls=true
       - traefik.http.routers.backend.tls.certresolver=le
-      - traefik.http.routers.backend.middlewares=backend@docker
   frontend:
     build:
       context: ./frontend
@@ -67,10 +66,9 @@ services:
       - backend
       - reverse-proxy
     labels:
-      - traefik.http.routers.frontend.rule=Host(`134.122.68.129`, `helka.dog`)
+      - traefik.http.routers.frontend.rule=Host(`helka.dog`)
       - traefik.http.routers.frontend.tls=true
       - traefik.http.routers.frontend.tls.certresolver=le
-      - traefik.http.routers.frontend.middlewares=frontend@docker
   h02-tracker:
     build: ./tracker-server
     ports:
