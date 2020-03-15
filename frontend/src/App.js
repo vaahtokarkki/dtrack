@@ -7,8 +7,8 @@ import Notifications from './components/Notifications'
 import MapControls from './components/MapControls'
 import { LocationCards } from './components/Cards'
 
-import { setPosition, fetchLocations, initDevices, addLocation, addDevice, addNotification } from './store/actions'
-import { getUserLocation, getDevicesState, getSettingsState } from './store/selectors'
+import { setPosition, fetchLocations, initDevices, addLocation, addDevice, addNotification, removeNotification } from './store/actions'
+import { getUserLocation, getDevicesState, getSettingsState, getUserState } from './store/selectors'
 
 import './App.css';
 import './styles/Map.scss'
@@ -20,6 +20,14 @@ import './styles/Navigation.scss'
 
 const App = props => {
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    const loginInfo = "Login to track dogs and view saved tracks"
+    if (!props.userState.accessToken)
+      dispatch(addNotification("info", loginInfo, false))
+    else
+      dispatch(removeNotification("info", loginInfo))
+  }, [dispatch, props.userState])
 
   useEffect(() => {
     dispatch(initDevices())
@@ -84,8 +92,9 @@ const App = props => {
 
 const mapStateToProps = state => {
   const devicesState = getDevicesState(state)
+  const userState = getUserState(state)
   const settingsState = getSettingsState(state)
-  return { devicesState, settingsState }
+  return { devicesState, settingsState, userState }
 }
 
 export default connect(mapStateToProps, { setPosition })(App)
