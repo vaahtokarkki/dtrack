@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, Fragment } from 'react'
 import { connect } from 'react-redux'
 
+import { LoginModal } from './LoginModal'
 import { toggleMenu } from '../store/actions'
 import { getSettingsState, getMenuState } from '../store/selectors'
 
@@ -21,6 +22,7 @@ import ScheduleIcon from '@material-ui/icons/Schedule'
 import SettingsIcon from '@material-ui/icons/Settings'
 import ArchiveIcon from '@material-ui/icons/Archive'
 import StorageIcon from '@material-ui/icons/Storage'
+import LockOpenIcon from '@material-ui/icons/LockOpen'
 
 import logo from '../assets/dog.png'
 
@@ -42,15 +44,79 @@ const useStyles = makeStyles(theme => ({
 const MenuComponent = props => {
   const classes = useStyles()
 
-  const [open, setOpen] = useState(false);
+  const [recentTracksOpen, setRecentTracksOpen] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false)
 
   const handleClick = () =>
-    setOpen(!open)
+    setRecentTracksOpen(!recentTracksOpen)
 
   const handleToggleMenu = () => event => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift'))
       return
     props.toggleMenu()
+  }
+
+  const openLoginForm = () => {
+    props.toggleMenu()
+    toggleModal()
+  }
+
+  const toggleModal = () =>
+    setModalOpen(!modalOpen)
+
+  const modalComponent = () =>
+    <LoginModal visible={ modalOpen } toggleModal={ toggleModal } />
+
+  const loggedInItems = () => <Fragment>
+    <ListItem button key={ 1 } onClick={ handleClick }>
+      <ListItemIcon><ArchiveIcon /></ListItemIcon>
+      <ListItemText primary={ 'View recent tracks' } />
+      {recentTracksOpen ? <ExpandLess /> : <ExpandMore />}
+    </ListItem>
+    <Collapse in={ recentTracksOpen } timeout="auto" unmountOnExit>
+      <List component="div" disablePadding dense>
+        <ListSubheader>{`April 2020`}</ListSubheader>
+        <ListItem button className={ classes.nested } dense>
+          <ListItemIcon><ScheduleIcon /></ListItemIcon>
+          <ListItemText primary="2.4.2020" secondary="16:44-22:01 (25.2km)" />
+        </ListItem>
+        <ListSubheader>{`March 2020`}</ListSubheader>
+        <ListItem button className={ classes.nested }>
+          <ListItemIcon><ScheduleIcon /></ListItemIcon>
+          <ListItemText primary="13.3.2020" secondary="15:44-20:01 (15km)" />
+        </ListItem>
+        <ListItem button className={ classes.nested }>
+          <ListItemIcon><ScheduleIcon /></ListItemIcon>
+          <ListItemText primary="15.3.2020" secondary="08:44-10:01 (7.5km)" />
+        </ListItem>
+      </List>
+    </Collapse>
+    <ListItem button key={ 2 }>
+      <ListItemIcon><SettingsIcon /></ListItemIcon>
+      <ListItemText primary={ 'Open settings' } />
+    </ListItem>
+    <ListItem button key={ 3 }>
+      <ListItemIcon><StorageIcon /></ListItemIcon>
+      <ListItemText primary={ 'Manage saved tracks' } />
+    </ListItem>
+  </Fragment>
+
+  const logInItem = () => <ListItem button key='login' onClick={ openLoginForm }>
+    <ListItemIcon><LockOpenIcon /></ListItemIcon>
+    <ListItemText primary={ 'Log in' } secondary={ 'Log in to track dogs and view saved tracks '} />
+  </ListItem>
+
+  const getNavigationListItems = () => {
+    const loggedIn = false
+    return loggedIn ? loggedInItems() : logInItem()
+  }
+
+  const getUserItem = () => {
+    const loggedIn = false
+    return loggedIn &&
+      <ListItem button key={ 1 }>
+        <ListItemText primary={ 'Logged in as Roni' } secondary={ 'Log out' } />
+      </ListItem>
   }
 
   const navItems = () => (
@@ -61,54 +127,25 @@ const MenuComponent = props => {
       onKeyDown={ handleToggleMenu } >
       <div className="nav-header">
         <img src={ logo } />
-        <h2>Track the Helka dog</h2>
+        <h2>Track Helka the dog</h2>
       </div>
       <Divider />
       <List className="nav-list">
-        <ListItem button key={ 1 } onClick={ handleClick }>
-          <ListItemIcon><ArchiveIcon /></ListItemIcon>
-          <ListItemText primary={ 'View recent tracks' } />
-          {open ? <ExpandLess /> : <ExpandMore />}
-        </ListItem>
-        <Collapse in={ open } timeout="auto" unmountOnExit>
-          <List component="div" disablePadding dense>
-            <ListSubheader>{`April 2020`}</ListSubheader>
-            <ListItem button className={ classes.nested } dense>
-              <ListItemIcon><ScheduleIcon /></ListItemIcon>
-              <ListItemText primary="2.4.2020" secondary="16:44-22:01 (25.2km)" />
-            </ListItem>
-            <ListSubheader>{`March 2020`}</ListSubheader>
-            <ListItem button className={ classes.nested }>
-              <ListItemIcon><ScheduleIcon /></ListItemIcon>
-              <ListItemText primary="13.3.2020" secondary="15:44-20:01 (15km)" />
-            </ListItem>
-            <ListItem button className={ classes.nested }>
-              <ListItemIcon><ScheduleIcon /></ListItemIcon>
-              <ListItemText primary="15.3.2020" secondary="08:44-10:01 (7.5km)" />
-            </ListItem>
-          </List>
-        </Collapse>
-        <ListItem button key={ 2 }>
-          <ListItemIcon><SettingsIcon /></ListItemIcon>
-          <ListItemText primary={ 'Open settings' } />
-        </ListItem>
-        <ListItem button key={ 3 }>
-          <ListItemIcon><StorageIcon /></ListItemIcon>
-          <ListItemText primary={ 'Manage saved tracks' } />
-        </ListItem>
+        { getNavigationListItems() }
       </List>
       <Divider />
       <List>
-        <ListItem button key={ 1 }>
-          <ListItemText primary={ 'Logged in as Roni' } secondary={ 'Log out' } />
-        </ListItem>
+        { getUserItem() }
       </List>
     </div>
   )
 
-  return <Drawer open={ props.menuState } onClose={ () => props.toggleMenu() }>
-    { navItems() }
-  </Drawer>
+  return <Fragment>
+    { modalComponent() }
+    <Drawer open={ props.menuState } onClose={ () => props.toggleMenu() }>
+      { navItems() }
+    </Drawer>
+  </Fragment>
 }
 
 const mapStateToProps = state => {
