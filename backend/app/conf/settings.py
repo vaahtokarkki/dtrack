@@ -78,7 +78,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'conf.urls'
-AUTH_USER_MODEL = 'auth.User'
+AUTH_USER_MODEL = 'auth_app.User'
 
 TEMPLATES = [
     {
@@ -131,6 +131,12 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
 
 
 # Internationalization

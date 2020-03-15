@@ -4,6 +4,7 @@ Django==3.0.3
 django-cors-headers==3.2.1
 djangorestframework==3.11.0
 djangorestframework-gis==0.15
+djangorestframework-simplejwt==4.4.0
 entrypoints==0.3
 flake8==3.7.9
 isort==4.3.21
@@ -12,6 +13,7 @@ mccabe==0.6.1
 psycopg2-binary==2.8.4
 pycodestyle==2.5.0
 pyflakes==2.1.1
+PyJWT==1.7.1
 python-dotenv==0.12.0
 pytz==2019.3
 sentry-sdk==0.14.2
