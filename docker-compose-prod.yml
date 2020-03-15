@@ -10,10 +10,9 @@ services:
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
-      # Map the certificats into the container
-      - ./certs:/etc/certs:ro
-      - ./traefik/traefik.toml:/traefik.toml # Traefik configuration file
-      - ./traefik/traefik.config.toml:/traefik.config.toml # Traefik configuration file
+      - ./traefik/traefik.toml:/traefik-prod.toml # Traefik configuration file
+      - ./traefik/traefik.config.toml:/traefik-prod.config.toml # Traefik configuration file
+      - ./traefik/acme.json:/acme.json
   db:
     image: kartoza/postgis
     volumes:
