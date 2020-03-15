@@ -8,15 +8,15 @@ import { removeNotification } from '../store/actions'
 
 
 const AllNotifications = props =>
-    props.notifications.map((index, notification) => <Notification { ...notification } key={ index } />)
+    props.notifications.map(notification => <Notification { ...notification } key={ notification.content } />)
 
-const Notification = ({ content, color }) => {
+const Notification = ({ content, color, dismissable }) => {
     const dispatch = useDispatch()
 
     const dismissNotification = () =>
-        dispatch(removeNotification(color, connect))
+        dispatch(removeNotification(color, content))
 
-    return <Alert variant={ color } className="notification" onClose={ dismissNotification } dismissible>
+    return <Alert variant={ color } className="notification" onClose={ dismissNotification } dismissible={ dismissable }>
         { content }
     </Alert>
 }
