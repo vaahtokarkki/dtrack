@@ -9,7 +9,10 @@ export default function(state = initialState, action) {
         case ADD_NOTIFICATION: {
             if (!action.payload.color || !action.payload.content)
                 return state
-            const notifications = state.notifications.concat([action.payload])
+            const { color, content, dismissable } = action.payload
+            const oldNotifications = state.notifications
+                .filter(notification => notification.color !== color && notification.content !== content)
+            const notifications = oldNotifications.concat([{ color, content, dismissable }])
             return {...state, notifications }
         }
         case REMOVE_NOTIFICATION: {

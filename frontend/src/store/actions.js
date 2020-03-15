@@ -56,7 +56,10 @@ export const addLocation = (deviceId, location) =>
 
 export const fetchLocations = () => {
   return async (dispatch, getState) => {
-    const { devicesState } = getState()
+    const { devicesState, userState } = getState()
+    if (!userState.accessToken)
+      return // User is not logged in
+
     const requestData = devicesState.devices
       .filter(device => device.locations && device.locations.length && device.id !== "user")
       .map(device => ({ device: device.id, location: getLatestLocationByDevice(devicesState, device.id).id }))
@@ -78,7 +81,11 @@ export const fetchLocations = () => {
 }
 
 export const initDevices = () =>
-  async dispatch => {
+  async (dispatch, getState) => {
+    const { userState } = getState()
+    if (!userState.accessToken)
+      return // User is not logged in
+
     const resp = await api.get("/devices/")
     resp.data.map(device => {
       const deviceLocations = device.locations
@@ -133,9 +140,9 @@ export const toggleMenu = () => ({
 
 // Notification actions
 
-export const addNotification = (color, content) => ({
+export const addNotification = (color, content, dismissable=true) => ({
   type: ADD_NOTIFICATION,
-  payload: { color, content }
+  payload: { color, content, dismissable }
 })
 
 export const removeNotification = (color, content) => ({
