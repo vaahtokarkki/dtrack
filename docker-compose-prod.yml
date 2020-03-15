@@ -16,10 +16,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
-      # - ./traefik/traefik-prod.toml:/traefik-prod.toml # Traefik configuration file
-      # - ./traefik/traefik-prod.config.toml:/traefik-prod.config.toml # Traefik configuration file
       - ./traefik/acme.json:/acme.json
     labels:
       # Redirect all HTTP to HTTPS permanently
