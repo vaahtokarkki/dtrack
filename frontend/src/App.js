@@ -7,7 +7,7 @@ import Notifications from './components/Notifications'
 import MapControls from './components/MapControls'
 import { LocationCards } from './components/Cards'
 
-import { setPosition, fetchLocations, initDevices, addLocation, addDevice, addNotification, removeNotification } from './store/actions'
+import { setPosition, fetchLocations, initDevices, addLocation, addDevice, addNotification, removeNotification, fetchUserDetails } from './store/actions'
 import { getUserLocation, getDevicesState, getSettingsState, getUserState } from './store/selectors'
 
 import './App.css';
@@ -31,6 +31,7 @@ const App = props => {
 
   useEffect(() => {
     dispatch(initDevices())
+    dispatch(fetchUserDetails())
 
     const id = setInterval(() => dispatch(fetchLocations()), 60000)
     return () => clearInterval(id)

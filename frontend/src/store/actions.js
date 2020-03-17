@@ -152,12 +152,13 @@ export const removeNotification = (color, content) => ({
 
 // User actions
 
-export const updateAccessToken = token => {
-  updateApiToken(token)
-  window.localStorage.setItem("accessToken", token)
+export const updateAccessToken = (accessToken, id) => {
+  updateApiToken(accessToken)
+  window.localStorage.setItem("accessToken", accessToken)
+  window.localStorage.setItem("userId", id)
   return {
     type: UPDATE_ACCESS_TOKEN,
-    payload: token
+    payload: { accessToken, id }
   }
 }
 
@@ -177,15 +178,15 @@ export const updateUserDetails = details => ({
 export const fetchUserDetails = () =>
   async (dispatch, getState) => {
     const { userState } = getState()
-    const { accessToken } = userState
+    const { accessToken, id } = userState
 
     if (!accessToken)
       return
 
     try {
-      const resp = await api.get("/user/")
-      const { id, name, email } = resp.data
-      dispatch(updateUserDetails({ id, name, email}))
+      const resp = await api.get(`/user/${id}/`)
+      const { name, email, first_name, last_name } = resp.data
+      dispatch(updateUserDetails({ id, name, email, firstName: first_name, lastName: last_name}))
     } catch(error) {
       return
     }

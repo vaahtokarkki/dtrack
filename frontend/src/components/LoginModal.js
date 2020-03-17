@@ -34,7 +34,7 @@ const LoginModalComponent = props => {
             return setError("Wrong email or password!")
 
         props.toggleModal()
-        props.updateAccessToken(response.data.access)
+        props.updateAccessToken(response.data.access, response.data.user_id)
         props.updateRefreshToken(response.data.refresh)
         props.fetchUserDetails()
         props.initDevices()

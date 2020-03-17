@@ -5,6 +5,8 @@ const initialState = {
     id: null,
     email: null,
     name: null,
+    firstName: null,
+    lastName: null,
     refreshInterval: 60,  // seconds
     accessToken: localStorage.getItem("accessToken"),
     refreshToken: localStorage.getItem("refreshToken"),
@@ -13,20 +15,14 @@ const initialState = {
 export default function(state = initialState, action) {
     switch (action.type) {
         case UPDATE_DETAILS: {
-            const { details } = action.payload
-            return {
-                ...state, ...details
-            }
+            return { ...state, ...action.payload }
         }
         case UPDATE_ACCESS_TOKEN: {
-            return {
-                ...state, accessToken: action.payload
-            }
+            const { accessToken, id } = action.payload
+            return { ...state, accessToken, id }
         }
         case UPDATE_REFRESH_TOKEN: {
-            return {
-                ...state, refreshToken: action.payload
-            }
+            return { ...state, refreshToken: action.payload }
         }
         default:
             return state
