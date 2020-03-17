@@ -154,16 +154,20 @@ export const removeNotification = (color, content) => ({
 
 export const updateAccessToken = token => {
   updateApiToken(token)
+  window.localStorage.setItem("accessToken", token)
   return {
     type: UPDATE_ACCESS_TOKEN,
     payload: token
   }
 }
 
-export const updateRefreshToken = token => ({
-  type: UPDATE_REFRESH_TOKEN,
-  payload: token
-})
+export const updateRefreshToken = token => {
+  window.localStorage.setItem("refreshToken", token)
+  return {
+    type: UPDATE_REFRESH_TOKEN,
+    payload: token
+  }
+}
 
 export const updateUserDetails = details => ({
   type: UPDATE_DETAILS,

@@ -6,8 +6,8 @@ const initialState = {
     email: null,
     name: null,
     refreshInterval: 60,  // seconds
-    accessToken: null,
-    refreshToken: null,
+    accessToken: localStorage.getItem("accessToken"),
+    refreshToken: localStorage.getItem("refreshToken"),
 }
 
 export default function(state = initialState, action) {
