@@ -155,7 +155,8 @@ export const removeNotification = (color, content) => ({
 export const updateAccessToken = (accessToken, id) => {
   updateApiToken(accessToken)
   window.localStorage.setItem("accessToken", accessToken)
-  window.localStorage.setItem("userId", id)
+  if (id)
+    window.localStorage.setItem("userId", id)
   return {
     type: UPDATE_ACCESS_TOKEN,
     payload: { accessToken, id }
@@ -180,14 +181,27 @@ export const fetchUserDetails = () =>
     const { userState } = getState()
     const { accessToken, id } = userState
 
-    if (!accessToken)
+    if (!accessToken || !id)
       return
 
-    try {
-      const resp = await api.get(`/user/${id}/`)
-      const { name, email, first_name, last_name } = resp.data
-      dispatch(updateUserDetails({ id, name, email, firstName: first_name, lastName: last_name}))
-    } catch(error) {
-      return
-    }
+    const resp = await api.get(`/user/${id}/`)
+    if (!resp.ok)
+      return // TODO: logout
+    const { name, email, first_name, last_name } = resp.data
+    dispatch(updateUserDetails({ id, name, email, firstName: first_name, lastName: last_name}))
+  }
+
+export const fetchAccessToken = () =>
+  async (dispatch, getState) => {
+    const { refreshToken } = getState().userState
+    const resp = await api.post('/token/refresh/', { refresh: refreshToken })
+    if (!resp.ok)
+      return // TODO: perform logout
+    dispatch(updateAccessToken(resp.data.access))
+  }
+
+export const initUser = () =>
+  async dispatch => {
+    await dispatch(fetchAccessToken())
+    await dispatch(fetchUserDetails())
   }

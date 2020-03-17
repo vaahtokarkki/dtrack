@@ -2,7 +2,7 @@ import { UPDATE_DETAILS, UPDATE_ACCESS_TOKEN, UPDATE_REFRESH_TOKEN } from '../ac
 
 
 const initialState = {
-    id: null,
+    id: localStorage.getItem("userId"),
     email: null,
     name: null,
     firstName: null,
@@ -18,7 +18,8 @@ export default function(state = initialState, action) {
             return { ...state, ...action.payload }
         }
         case UPDATE_ACCESS_TOKEN: {
-            const { accessToken, id } = action.payload
+            const { accessToken } = action.payload
+            const id = action.payload.id ? action.payload.id : state.id
             return { ...state, accessToken, id }
         }
         case UPDATE_REFRESH_TOKEN: {

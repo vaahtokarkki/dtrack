@@ -112,7 +112,7 @@ const MenuComponent = props => {
   const getUserItem = () => {
     return isLoggedIn(props.userState) &&
       <ListItem button key={ 1 }>
-        <ListItemText primary={ 'Logged in as Roni' } secondary={ 'Log out' } />
+        <ListItemText primary={ `Logged in as ${props.userState.firstName}` } secondary={ 'Log out' } />
       </ListItem>
   }
 

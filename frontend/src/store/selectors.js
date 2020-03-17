@@ -24,8 +24,10 @@ export const getUser = userState => ({
     id: userState.id,
     email: userState.email,
     name: userState.name,
+    firstName: userState.firstName,
+    lastName: userState.lastName,
 })
 export const getAccessToken = userState => userState.accessToken
 export const getRefreshToken = userState => userState.refreshToken
 export const getRefreshInterval = userState => userState.refreshInterval
-export const isLoggedIn = userState => Boolean(userState.accessToken)
+export const isLoggedIn = userState => userState.accessToken && userState.refreshToken && userState.id
