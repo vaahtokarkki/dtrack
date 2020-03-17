@@ -32,7 +32,16 @@
 | 13.3. | 1    |Docker ja Reactista buildaaminen tuotantoon|
 | 13.3. | 2    |Sijaintipisteiden filtteröinti|
 | 13.3. | 2    |Notifikaatioiden luonti ja yhdistäminen Reduxiin|
+| 14.3. | 3    |Navigointivalikon pystytys, WIP|
+| 14.3. | 1    |Sentry virheraportointipalvelun setup tuotantoon|
+| 15.3. | 1    |SSL sertificaatin säätö tuotantoon|
+| 15.3. | 3    |Kijautumisnäkymä fronttiin|
+| 15.3. | 2    |Kijautumisnäkymä ja tokenit backendiin|
+| **yht.**| 32    | |
 
-| **yht.**| 22    | |
+### Viikko 3
+| Päivä | Aika | Mitä tein  |
+| :----:|:-----| :-----|
+| **yht.**| 0    | |
 
-### Yhteensä kaikki: 45h
+### Yhteensä kaikki: 55h
