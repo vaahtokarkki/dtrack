@@ -8,6 +8,7 @@ export const FIT_MAP = "FIT_MAP"
 // Devices
 export const ADD_DEVICE = "ADD_DEVICE"
 export const ADD_LOCATION = "ADD_LOCATION"
+export const CLEAR_DEVICES = "CLEAR_DEVICES"
 
 // Settings
 export const SET_TRACKING = "SET_TRACKING"
@@ -23,3 +24,4 @@ export const REMOVE_NOTIFICATION = "REMOVE_NOTIFICATION"
 export const UPDATE_ACCESS_TOKEN = "UPDATE_ACCESS_TOKEN"
 export const UPDATE_REFRESH_TOKEN = "UPDATE_REFRESH_TOKEN"
 export const UPDATE_DETAILS = "UPDATE_DETAILS"
+export const LOG_OUT = "LOG_OUT"

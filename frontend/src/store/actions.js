@@ -1,4 +1,4 @@
-import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, SET_TRACKING, ADD_DEVICE, ADD_LOCATION, TOGGLE_OVERLAY, FIT_MAP, ADD_NOTIFICATION, REMOVE_NOTIFICATION, TOGGLE_MENU, UPDATE_ACCESS_TOKEN, UPDATE_REFRESH_TOKEN, UPDATE_DETAILS } from "./actiontypes"
+import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, SET_TRACKING, ADD_DEVICE, ADD_LOCATION, TOGGLE_OVERLAY, FIT_MAP, ADD_NOTIFICATION, REMOVE_NOTIFICATION, TOGGLE_MENU, UPDATE_ACCESS_TOKEN, UPDATE_REFRESH_TOKEN, UPDATE_DETAILS, LOG_OUT, CLEAR_DEVICES } from "./actiontypes"
 import { getLatestLocationByDevice } from './selectors'
 import api, { updateApiToken } from '../utils/api'
 
@@ -38,6 +38,10 @@ export const addDevice = device => ({
   payload: device,
 })
 
+export const clearDevices = () => ({
+  type: CLEAR_DEVICES,
+  payload: null,
+})
 
 export const addLocation = (deviceId, location) =>
   (dispatch, getState) => {
@@ -182,11 +186,11 @@ export const fetchUserDetails = () =>
     const { accessToken, id } = userState
 
     if (!accessToken || !id)
-      return
+      return dispatch(logOut())
 
     const resp = await api.get(`/user/${id}/`)
     if (!resp.ok)
-      return // TODO: logout
+      return dispatch(logOut())
     const { name, email, first_name, last_name } = resp.data
     dispatch(updateUserDetails({ id, name, email, firstName: first_name, lastName: last_name}))
   }
@@ -194,14 +198,35 @@ export const fetchUserDetails = () =>
 export const fetchAccessToken = () =>
   async (dispatch, getState) => {
     const { refreshToken } = getState().userState
+    if (!refreshToken)
+      return dispatch(logOut())
     const resp = await api.post('/token/refresh/', { refresh: refreshToken })
     if (!resp.ok)
-      return // TODO: perform logout
+      return dispatch(logOut())
     dispatch(updateAccessToken(resp.data.access))
   }
 
-export const initUser = () =>
+export const initApp = () =>
   async dispatch => {
     await dispatch(fetchAccessToken())
     await dispatch(fetchUserDetails())
+    await dispatch(initDevices())
   }
+
+export const clearUser = () => {
+  window.localStorage.removeItem("accessToken")
+  window.localStorage.removeItem("refreshToken")
+  window.localStorage.removeItem("userId")
+  updateApiToken(null)
+  return {
+    type: LOG_OUT,
+    payload: null
+  }
+}
+
+export const logOut = () =>
+  dispatch => {
+    dispatch(clearUser())
+    dispatch(clearDevices())
+  }
+

@@ -1,4 +1,4 @@
-import { ADD_DEVICE, ADD_LOCATION } from '../actiontypes'
+import { ADD_DEVICE, ADD_LOCATION, CLEAR_DEVICES } from '../actiontypes'
 
 /*
 devices: [{
@@ -21,6 +21,10 @@ export default function(state = initialState, action) {
         case ADD_DEVICE: {
             const devices = state.devices.filter(device => device.id !== action.payload.id)
             return { ...state, devices: devices.concat(action.payload) }
+        }
+        case CLEAR_DEVICES: {
+            const devices = state.devices.filter(device => device.id === "user")
+            return { ...state, devices }
         }
         case ADD_LOCATION: {
             const { payload } = action

@@ -1,4 +1,4 @@
-import { UPDATE_DETAILS, UPDATE_ACCESS_TOKEN, UPDATE_REFRESH_TOKEN } from '../actiontypes'
+import { UPDATE_DETAILS, UPDATE_ACCESS_TOKEN, UPDATE_REFRESH_TOKEN, LOG_OUT } from '../actiontypes'
 
 
 const initialState = {
@@ -8,7 +8,7 @@ const initialState = {
     firstName: null,
     lastName: null,
     refreshInterval: 60,  // seconds
-    accessToken: localStorage.getItem("accessToken"),
+    refreshToken: localStorage.getItem("accessToken"),
     refreshToken: localStorage.getItem("refreshToken"),
 }
 
@@ -24,6 +24,9 @@ export default function(state = initialState, action) {
         }
         case UPDATE_REFRESH_TOKEN: {
             return { ...state, refreshToken: action.payload }
+        }
+        case LOG_OUT: {
+            return { initialState, refreshToken: null, accessToken: null, id: null }
         }
         default:
             return state

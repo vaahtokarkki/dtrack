@@ -2,7 +2,7 @@ import React, { useState, Fragment } from 'react'
 import { connect } from 'react-redux'
 
 import { LoginModal } from './LoginModal'
-import { toggleMenu } from '../store/actions'
+import { toggleMenu, logOut } from '../store/actions'
 import { getSettingsState, getMenuState, getUserState, isLoggedIn } from '../store/selectors'
 
 import { makeStyles } from '@material-ui/core/styles'
@@ -109,10 +109,15 @@ const MenuComponent = props => {
   const getNavigationListItems = () =>
     isLoggedIn(props.userState) ? loggedInItems() : logInItem()
 
+  const handleLogOut = () => {
+    props.logOut()
+    props.toggleMenu()
+  }
+
   const getUserItem = () => {
     return isLoggedIn(props.userState) &&
       <ListItem button key={ 1 }>
-        <ListItemText primary={ `Logged in as ${props.userState.firstName}` } secondary={ 'Log out' } />
+        <ListItemText primary={ `Logged in as ${props.userState.firstName}` } secondary={ 'Log out' } onClick={ handleLogOut } />
       </ListItem>
   }
 
@@ -151,4 +156,4 @@ const mapStateToProps = state => {
   return { menuState, userState }
 }
 
-export default connect(mapStateToProps, { toggleMenu })(MenuComponent)
+export default connect(mapStateToProps, { toggleMenu, logOut })(MenuComponent)

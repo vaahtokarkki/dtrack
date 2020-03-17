@@ -7,7 +7,7 @@ import Notifications from './components/Notifications'
 import MapControls from './components/MapControls'
 import { LocationCards } from './components/Cards'
 
-import { setPosition, fetchLocations, initDevices, addLocation, addDevice, addNotification, removeNotification, initUser, fetchAccessToken } from './store/actions'
+import { setPosition, fetchLocations, addLocation, addDevice, addNotification, removeNotification, initApp, fetchAccessToken } from './store/actions'
 import { getUserLocation, getDevicesState, getSettingsState, getUserState } from './store/selectors'
 
 import './App.css';
@@ -30,8 +30,7 @@ const App = props => {
   }, [dispatch, props.userState])
 
   useEffect(() => {
-    dispatch(initDevices())
-    dispatch(initUser())
+    dispatch(initApp())
 
     const fetchLocationsInterval = setInterval(() => dispatch(fetchLocations()), 60000)
     const updateTokenInterval = setInterval(() => dispatch(fetchAccessToken()), 240000) // 4min
