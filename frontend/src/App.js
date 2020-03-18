@@ -44,7 +44,7 @@ const App = props => {
   const handleUserLocationChange = position => {
     const currentLocation = getUserLocation(props.devicesState)
     const { coords } = position
-    if (Number.isNaN(coords.latitude) || Number.isNaN(coords.longitude))
+    if (Number.isNaN(coords.latitude) || coords.latitude === -1 || Number.isNaN(coords.longitude) || coords.longitude === -1)
       return
 
 
@@ -65,6 +65,7 @@ const App = props => {
       dispatch(addDevice({ ...device, locations: [location] }))
       return props.setPosition([ coords.latitude, coords.longitude ])
     }
+    console.log('pos', location);
 
     dispatch(addLocation(device.id, [location]))
   }
