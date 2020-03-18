@@ -9,6 +9,8 @@ from .serializers import DeviceSerializer, DeviceTrackSerializer, \
 
 
 class CreateLocation(generics.CreateAPIView):
+    permission_classes = ()
+    authentication_classes = ()
     queryset = Location.objects.all()
     serializer_class = LocationCreateSerializer
 
