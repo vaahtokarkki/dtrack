@@ -8,7 +8,7 @@ const initialState = {
     firstName: null,
     lastName: null,
     refreshInterval: 60,  // seconds
-    refreshToken: localStorage.getItem("accessToken"),
+    accessToken: localStorage.getItem("accessToken"),
     refreshToken: localStorage.getItem("refreshToken"),
 }
 
