@@ -71,12 +71,10 @@ const MapComponent = props => {
       })
     }
 
-    if (props.mapState && props.mapState.fitBounds && props.devicesState.devices.length > 1) {
+    if (props.mapState && props.mapState.fitBounds) {
       const markers = getDevices(props.devicesState)
-        .filter(device => device.locations.length )
         .map(device => L.marker(getLatestLocationByDevice(props.devicesState, device.id).position))
-      if (markers.length > 1)
-        mapElement.leafletElement.fitBounds(L.featureGroup(markers).getBounds())
+      mapElement.leafletElement.fitBounds(L.featureGroup(markers).getBounds())
     }
 
     let { position, zoom } = props.mapState

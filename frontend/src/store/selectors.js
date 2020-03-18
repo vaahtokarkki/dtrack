@@ -8,6 +8,10 @@ export const getLatestLocationByDevice = ( devicesState, deviceId ) => {
     const device = getDeviceById(devicesState, deviceId)
     return device && device.locations ? device.locations[0] || null : null
 }
+export const isDevicesOnline = devicesState =>
+    devicesState.devices
+        .filter(device => device.id !== "user")
+        .some(device => device.locations.length)
 
 export const getUserLocation = devicesState =>
     getLatestLocationByDevice(devicesState, "user")
