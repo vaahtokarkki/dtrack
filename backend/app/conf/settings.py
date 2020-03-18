@@ -177,7 +177,6 @@ LOGGING = {
             'filename': LOG_DIR / 'generic.log',
             'maxBytes': LOGFILE_SIZE,
             'backupCount': LOGFILE_COUNT,
-            'filters': ['require_debug_true'],
         },
         'file_error': {
             'class': 'logging.handlers.RotatingFileHandler',
@@ -186,7 +185,6 @@ LOGGING = {
             'filename': LOG_DIR / 'error.log',
             'maxBytes': LOGFILE_SIZE,
             'backupCount': LOGFILE_COUNT,
-            'filters': ['require_debug_true'],
         },
     },
     'formatters': {
