@@ -19,8 +19,8 @@ const MapControls = props =>
         <div className="map-controls-row">
             <FollowDropdown />
             <div>
-                <Remove className='map-control' onClick={ props.zoomOut } />
-                <Add className='map-control' onClick={ props.zoomIn }  style={{ marginLeft: 10 }} />
+                <Remove className='map-control zoom-control' onClick={ props.zoomOut } />
+                <Add className='map-control zoom-control' onClick={ props.zoomIn }  style={{ marginLeft: 10 }} />
             </div>
             <Menu className='map-control' onClick={ props.toggleMenu } />
         </div>

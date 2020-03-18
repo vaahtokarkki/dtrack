@@ -30,11 +30,14 @@
 
         .map-control {
             background-color: $primary-green;
-            opacity: .8;
             border-radius: 50%;
             width: 45px;
             height: 45px;
             padding: 9px;
+        }
+
+        .zoom-control {
+            opacity: .7;
         }
 
         .align-right {
