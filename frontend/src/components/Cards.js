@@ -89,7 +89,7 @@ const LocationCard = ({ name, position = [], speed, timestamp, lastSeen, userLoc
 
   const renderTitle = () =>
     <Row>
-      <Col xs={ isOnline() ? 8 : 5 }>
+      <Col xs={ isOnline() ? 8 : 4 }>
         <Card.Title>{ name }</Card.Title>
       </Col>
       { renderStatus() }
