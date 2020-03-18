@@ -9,6 +9,10 @@ class Device(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='devices',
                              null=True)
 
+    @property
+    def last_seen(self):
+        return self.locations.latest('timestamp').timestamp
+
     def __str__(self):
         return self.name
 

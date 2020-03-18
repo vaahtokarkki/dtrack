@@ -19,8 +19,11 @@ class DeviceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Device
-        fields = ['id', 'name', 'locations', 'tracker_id']
-        extra_kwargs = {'locations': {'required': False}}
+        fields = ['id', 'name', 'locations', 'tracker_id', 'last_seen']
+        extra_kwargs = {
+            'locations': {'required': False},
+            'last_seen': {'required': False}
+        }
 
 
 class DeviceTrackSerializer(serializers.ModelSerializer):
@@ -36,7 +39,7 @@ class DeviceTrackSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Device
-        fields = ['id', 'name', 'locations', 'tracker_id']
+        fields = ['id', 'name', 'locations', 'tracker_id', 'last_seen']
 
 
 class LocationCreateSerializer(serializers.ModelSerializer):
