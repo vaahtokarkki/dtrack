@@ -14,7 +14,7 @@ devices: [{
 const initialState = {
     devices: [],
     id: null,
-    lastSeen: null,
+    last_seen: null,
     name: null,
 }
 

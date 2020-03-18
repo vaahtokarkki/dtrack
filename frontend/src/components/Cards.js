@@ -22,12 +22,13 @@ const LocationCardsComponent = props => {
       const location = getLatestLocationByDevice(props.devicesState, device.id)
       return <LocationCard { ...location }
         name={ device.name }
+        lastSeen={ device.last_seen }
         userLocation={ userLocation ? userLocation.position : [] }
         key={ device.id }  />
     })
 }
 
-const LocationCard = ({ name, position = [], speed, timestamp, userLocation }) => {
+const LocationCard = ({ name, position = [], speed, timestamp, lastSeen, userLocation }) => {
   const dispatch = useDispatch()
 
   const resolveTimeStamp = () => {
@@ -62,14 +63,26 @@ const LocationCard = ({ name, position = [], speed, timestamp, userLocation }) =
   }
 
   const statusIcon = ()  =>
-    <FontAwesomeIcon icon={ faCircle } style={{ color: isOnline() ? 'green' : 'red' }}/>
+    <FontAwesomeIcon icon={ faCircle } style={{ color: isOnline() ? 'green' : 'red', marginLeft: '5px' }}/>
+
+  const getLastSeen = () => {
+    const lastSeenDate = moment(lastSeen)
+    const diff = moment().diff(lastSeenDate, 'seconds')
+    if (diff >= 86400)
+      return `${Math.floor(diff/86400)} days ago`
+    else if(diff >= 3600)
+      return `${Math.floor(diff/3600)} hours ago`
+    else if(diff >= 60)
+      return `${Math.floor(diff/60)} minutes ago`
+    return `${diff} seconds ago`
+  }
 
   const renderStatus = () =>
     <Col className={ !isOnline() && 'col-offline' }>
       <Fragment>
       { isOnline() ?
         <span>Online{ statusIcon() }</span> :
-        <Fragment><span className="last-seen">Seen 2 days ago</span><span>Offline { statusIcon() }</span></Fragment>
+        <Fragment><span className="last-seen">Seen { getLastSeen() }</span><span>Offline { statusIcon() }</span></Fragment>
       }
       </Fragment>
     </Col>
