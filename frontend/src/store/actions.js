@@ -70,6 +70,9 @@ export const fetchLocations = () => {
 
     const resp = await api.post("/locations/latest/", [ ...requestData ])
 
+    if (!resp.ok)
+      return
+
     resp.data.forEach(device => {
       const locations = device.locations.map(location => {
         return {

@@ -44,7 +44,7 @@ const FollowDropdown = props => {
 
   const renderDevices = () =>
     props.devicesState.devices
-      .filter(device => device.id !== "user")
+      .filter(device => device.id !== "user" && device.locations.length)
       .map(device => {
         return <Dropdown.Item
           eventKey={device.id}
