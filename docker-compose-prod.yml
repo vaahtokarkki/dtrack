@@ -43,6 +43,7 @@ services:
     command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; python /code/manage.py runserver 0.0.0.0:8000'
     volumes:
       - ./backend/app:/code
+      - ./backend/logs:/code/logs
     restart: unless-stopped
     environment:
         DJANGO_SETTINGS_MODULE: conf.settings
