@@ -127,6 +127,8 @@ export const setTracking = deviceId =>
     dispatch(updateTracking(deviceId))
 
     const latestLocation = getLatestLocationByDevice(devicesState, deviceId)
+    if (!latestLocation)
+      return
     dispatch(setPosition(latestLocation.position))
   }
 
