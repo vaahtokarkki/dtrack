@@ -2,8 +2,7 @@ import { ADD_DEVICE, ADD_LOCATION, CLEAR_DEVICES } from '../actiontypes'
 
 /*
 devices: [{
-    name,
-    id,
+    ...
     locations: [{
         position: { lat, lon },
         accuracy,
@@ -14,6 +13,9 @@ devices: [{
 */
 const initialState = {
     devices: [],
+    id: null,
+    lastSeen: null,
+    name: null,
 }
 
 export default function(state = initialState, action) {

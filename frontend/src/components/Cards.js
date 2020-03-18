@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Fragment } from 'react'
 import { connect, useDispatch } from 'react-redux'
 
 import geodist from 'geodist'
@@ -61,10 +61,26 @@ const LocationCard = ({ name, position = [], speed, timestamp, userLocation }) =
     return `${distance}m`
   }
 
+  const statusIcon = ()  =>
+    <FontAwesomeIcon icon={ faCircle } style={{ color: isOnline() ? 'green' : 'red' }}/>
+
   const renderStatus = () =>
-    <Col>
-      { isOnline() ? 'Online' : 'Offline' } <FontAwesomeIcon icon={ faCircle } style={{ color: isOnline() ? 'green' : 'red' }}/>
+    <Col className={ !isOnline() && 'col-offline' }>
+      <Fragment>
+      { isOnline() ?
+        <span>Online{ statusIcon() }</span> :
+        <Fragment><span className="last-seen">Seen 2 days ago</span><span>Offline { statusIcon() }</span></Fragment>
+      }
+      </Fragment>
     </Col>
+
+  const renderTitle = () =>
+    <Row>
+      <Col xs={ isOnline() ? 8 : 5 }>
+        <Card.Title>{ name }</Card.Title>
+      </Col>
+      { renderStatus() }
+    </Row>
 
   const getSpeed = () =>
     Math.round(speed)
@@ -74,12 +90,7 @@ const LocationCard = ({ name, position = [], speed, timestamp, userLocation }) =
 
   return <Card className='card-small' onClick={ handleOnClick }>
     <Card.Body>
-      <Row>
-        <Col xs={8}>
-          <Card.Title>{ name }</Card.Title>
-        </Col>
-        { renderStatus() }
-      </Row>
+      { renderTitle() }
       { isOnline() ?
         <div className='card-text'>
           <Row>
