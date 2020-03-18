@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 
 import os
+from pathlib import Path
 
 from dotenv import load_dotenv
 import sentry_sdk
@@ -141,6 +142,70 @@ REST_FRAMEWORK = {
     ),
 
 }
+
+LOGFILE_SIZE = 5 * 1024 * 1024
+LOGFILE_COUNT = 5
+LOG_DIR = Path("/code/logs/")
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'loggers': {
+        '': {
+            'level': 'INFO',
+            'handlers': ['console', 'console_warning', 'file_generic', 'file_error'],
+            'propagate': True,
+        },
+        'django': {
+            'level': 'WARNING',
+            'handlers': ['console_warning', 'file_generic', 'file_error'],
+            'propagate': False,
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'console_warning': {
+            'class': 'logging.StreamHandler',
+            'level': 'WARNING',
+            'formatter': 'standard',
+        },
+        'file_generic': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'level': 'DEBUG',
+            'formatter': 'standard',
+            'filename': LOG_DIR / 'generic.log',
+            'maxBytes': LOGFILE_SIZE,
+            'backupCount': LOGFILE_COUNT,
+            'filters': ['require_debug_true'],
+        },
+        'file_error': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'level': 'ERROR',
+            'formatter': 'standard',
+            'filename': LOG_DIR / 'error.log',
+            'maxBytes': LOGFILE_SIZE,
+            'backupCount': LOGFILE_COUNT,
+            'filters': ['require_debug_true'],
+        },
+    },
+    'formatters': {
+        'standard': {
+            'format': (
+                "[%(asctime)s] %(levelname)s: %(message)s"
+            ),
+        },
+    },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    }
+}
+
 
 
 # Internationalization
