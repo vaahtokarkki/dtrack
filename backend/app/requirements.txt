@@ -16,6 +16,7 @@ pyflakes==2.1.1
 PyJWT==1.7.1
 python-dotenv==0.12.0
 pytz==2019.3
+raven==6.10.0
 sentry-sdk==0.14.2
 sqlparse==0.3.0
 urllib3==1.25.8
