@@ -28,7 +28,7 @@ class Track(models.Model):
 
 
 class Location(models.Model):
-    point = models.PointField(null=True)
+    point = models.PointField()
     speed = models.FloatField(null=True)
     timestamp = models.DateTimeField(auto_now=True)
     track = models.ForeignKey(Track, related_name='locations', on_delete=models.SET_NULL,
