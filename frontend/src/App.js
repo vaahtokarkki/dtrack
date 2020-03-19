@@ -8,7 +8,7 @@ import MapControls from './components/MapControls'
 import { LocationCards } from './components/Cards'
 
 import { setPosition, fetchLocations, addLocation, addDevice, addNotification, removeNotification, initApp, fetchAccessToken } from './store/actions'
-import { getUserLocation, getDevicesState, getSettingsState, getUserState } from './store/selectors'
+import { getUserLocation, getDevicesState, getSettingsState, getUserState, getDeviceById } from './store/selectors'
 
 import './App.css';
 import './styles/Map.scss'
@@ -66,8 +66,10 @@ const App = props => {
       dispatch(addDevice({ ...device, locations: [location] }))
       return props.setPosition([ coords.latitude, coords.longitude ])
     }
-    console.log('pos', location);
 
+    console.log('pos', location.position);
+    console.log('all:');
+    getDeviceById(props.devicesState, "user").locations.map(l => l.position).forEach(l => console.log(l))
     dispatch(addLocation(device.id, [location]))
   }
 
