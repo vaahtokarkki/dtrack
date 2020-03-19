@@ -1,5 +1,6 @@
 import React, { useEffect, Fragment } from 'react';
 import { connect, useDispatch } from 'react-redux'
+import PageVisibility from 'react-page-visibility'
 
 import NavMenu from './components/Navigation'
 import MapComponent from './components/Map'
@@ -8,7 +9,7 @@ import MapControls from './components/MapControls'
 import { LocationCards } from './components/Cards'
 
 import { setPosition, fetchLocations, addLocation, addDevice, addNotification, removeNotification, initApp, fetchAccessToken } from './store/actions'
-import { getUserLocation, getDevicesState, getSettingsState, getUserState, getDeviceById } from './store/selectors'
+import { getUserLocation, getDevicesState, getSettingsState, getUserState, getDeviceById, isLoggedIn } from './store/selectors'
 
 import './App.css';
 import './styles/Map.scss'
@@ -23,7 +24,7 @@ const App = props => {
 
   useEffect(() => {
     const loginInfo = "Login to track dogs and view saved tracks"
-    if (!props.userState.accessToken)
+    if (!isLoggedIn(props.userState))
       dispatch(addNotification("info", loginInfo, false))
     else
       dispatch(removeNotification("info", loginInfo))
@@ -82,16 +83,25 @@ const App = props => {
     dispatch(addNotification("danger", error.message))
   }
 
-  return <Fragment>
-    <NavMenu />
-    <div className="app-container">
-      <LocationCards />
-      <Notifications />
-      <MapControls />
-      <MapComponent onError={ e => handleLocationError(e) } onSuccess={ handleUserLocationChange } />
-    </div>
-    { renderOverlay() }
-  </Fragment>
+  const handleVisibilityChange = visible => {
+    if (visible && isLoggedIn(props.userState)) {
+      dispatch(fetchAccessToken())
+      dispatch(fetchLocations())
+    }
+  }
+
+  return <PageVisibility onChange={ handleVisibilityChange }>
+    <Fragment>
+      <NavMenu />
+      <div className="app-container">
+        <LocationCards />
+        <Notifications />
+        <MapControls />
+        <MapComponent onError={ e => handleLocationError(e) } onSuccess={ handleUserLocationChange } />
+      </div>
+      { renderOverlay() }
+    </Fragment>
+  </PageVisibility>
 }
 
 const mapStateToProps = state => {
