@@ -44,7 +44,7 @@ const App = props => {
   const handleUserLocationChange = position => {
     const currentLocation = getUserLocation(props.devicesState)
     const { coords } = position
-    console.log(coords)
+    console.log(coords, coords.latitude, coords.longitude)
     if (!coords || Number.isNaN(coords.latitude) || Number.isNaN(coords.longitude))
       return
 

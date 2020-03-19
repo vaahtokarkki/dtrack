@@ -48,7 +48,7 @@ const MapComponent = props => {
 
       const { position, accuracy } = userLocation
       console.log('pos', position);
-      let radius
+      let radius = 100
       if (accuracy < 40)
         radius = 40
       else if (accuracy > 500)
