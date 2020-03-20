@@ -3,9 +3,9 @@ import json
 from rest_framework import generics
 from rest_framework.response import Response
 
-from .models import Device, Location
+from .models import Device, Location, Track
 from .serializers import DeviceSerializer, DeviceTrackSerializer, \
-    LocationCreateSerializer
+    LocationCreateSerializer, TrackSerializer
 
 
 class CreateLocation(generics.CreateAPIView):
@@ -41,3 +41,16 @@ class ListDevicesActiveTrack(generics.GenericAPIView):
         context["request"] = self.request
         context["data"] = json.loads(self.request.body.decode('utf-8'))
         return context
+
+
+class ListTracks(generics.ListAPIView):
+    serializer_class = TrackSerializer
+    permission_classes = ()
+    authentication_classes = ()
+
+    def get_queryset(self):
+        queryset = Track.objects.order_by("-created")
+        limit = self.request.query_params.get("limit", 0)
+        if limit > 0:
+            return queryset[:limit]
+        return queryset
