@@ -1,10 +1,10 @@
 from rest_framework import serializers
 
-from .models import Device, Location
-from .utils import get_active_track
+from .models import Device, Location, Track
+from .utils import get_track
 
 
-class SimpleLocationSerializer(serializers.ModelSerializer):
+class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
         geo_field = "point"
@@ -15,7 +15,7 @@ class DeviceSerializer(serializers.ModelSerializer):
     locations = serializers.SerializerMethodField()
 
     def get_locations(self, instance):
-        return SimpleLocationSerializer(get_active_track(instance), many=True).data
+        return LocationSerializer(get_track(instance), many=True).data
 
     class Meta:
         model = Device
@@ -36,12 +36,12 @@ class DeviceTrackSerializer(serializers.ModelSerializer):
     locations = serializers.SerializerMethodField()
 
     def get_locations(self, instance):
-        locations = get_active_track(instance)
+        locations = get_track(instance)
         for row in self.context["data"]:
             if row["device"] == instance.pk:
                 latest_location = Location.objects.get(pk=row["location"])
                 locations = locations.filter(timestamp__gt=latest_location.timestamp)
-        return SimpleLocationSerializer(locations, many=True).data
+        return LocationSerializer(locations, many=True).data
 
     class Meta:
         model = Device
@@ -74,3 +74,12 @@ class LocationCreateSerializer(serializers.ModelSerializer):
         geo_field = "point"
         fields = ['speed', 'device', 'point', 'tracker_id']
         extra_kwargs = {'device': {'required': False}}
+
+
+class TrackSerializer(serializers.ModelSerializer):
+    device = SimpleDeviceSerializer()
+
+    class Meta:
+        model = Track
+        geo_field = "track"
+        fields = ['id', 'start', 'end', 'length', 'track', 'device']
