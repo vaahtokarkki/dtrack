@@ -67,7 +67,6 @@ const App = props => {
       return props.setPosition([ coords.latitude, coords.longitude ])
     }
 
-    getDeviceById(props.devicesState, "user").locations.map(l => l.position).forEach(l => console.log(l))
     dispatch(addLocation(device.id, [location]))
   }
 
@@ -78,7 +77,7 @@ const App = props => {
   }
 
   const handleLocationError = error => {
-    console.log('Location err', error)
+    console.log('Location err', error, error.message)
     if (error && error.message)
     dispatch(addNotification("danger", error.message))
   }
