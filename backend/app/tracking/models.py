@@ -14,17 +14,27 @@ class Device(models.Model):
 
 
 class Track(models.Model):
-    name = models.CharField(max_length=2000)
+    track = models.LineStringField(null=True)
+    created = models.DateTimeField(auto_now=True)
+    device = models.ForeignKey(Device, related_name='tracks', on_delete=models.CASCADE)
 
     @property
     def start(self):
-        # TODO Get timestamp of first location in self.locations
-        return None
+        try:
+            return self.locations.earliest('timestamp').timestamp
+        except Location.DoesNotExist:
+            return None
 
     @property
     def end(self):
-        # TODO Get timestamp of last location in self.locations
-        return None
+        try:
+            return self.locations.latest('timestamp').timestamp
+        except Location.DoesNotExist:
+            return None
+
+    @property
+    def length(self):
+        return self.track.length
 
 
 class Location(models.Model):
