@@ -1,13 +1,9 @@
 from django.contrib.gis.db import models
 
-from auth_app.models import User
-
 
 class Device(models.Model):
     name = models.CharField(max_length=500)
     tracker_id = models.CharField(max_length=500, unique=True)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='devices',
-                             null=True)
 
     @property
     def last_seen(self):

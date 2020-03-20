@@ -26,6 +26,12 @@ class DeviceSerializer(serializers.ModelSerializer):
         }
 
 
+class SimpleDeviceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Device
+        fields = ['id', 'name', 'tracker_id', 'last_seen']
+
+
 class DeviceTrackSerializer(serializers.ModelSerializer):
     locations = serializers.SerializerMethodField()
 

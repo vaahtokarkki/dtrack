@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import UserManager
 
+from tracking.models import Device
+
 
 class CustomUserManager(UserManager):
     def create_user(self, email=None, password=None, **extra_fields):
@@ -21,6 +23,7 @@ class User(AbstractBaseUser):
     email = models.EmailField(blank=True, unique=True)
     first_name = models.CharField('first name', max_length=30, blank=True)
     last_name = models.CharField('last name', max_length=30, blank=True)
+    devices = models.ManyToManyField(Device, related_name='users')
 
     objects = CustomUserManager()
 

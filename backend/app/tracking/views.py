@@ -16,8 +16,11 @@ class CreateLocation(generics.CreateAPIView):
 
 
 class ListDevices(generics.ListCreateAPIView):
-    queryset = Device.objects.all()
     serializer_class = DeviceSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Device.objects.filter(pk__in=user.devices.values_list("pk", flat=True))
 
 
 class ListDevicesActiveTrack(generics.GenericAPIView):
