@@ -25,3 +25,7 @@ export const UPDATE_ACCESS_TOKEN = "UPDATE_ACCESS_TOKEN"
 export const UPDATE_REFRESH_TOKEN = "UPDATE_REFRESH_TOKEN"
 export const UPDATE_DETAILS = "UPDATE_DETAILS"
 export const LOG_OUT = "LOG_OUT"
+
+
+// Tracks
+export const ADD_TRACK = "ADD_TRACK"

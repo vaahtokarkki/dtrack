@@ -1,5 +1,5 @@
-import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, SET_TRACKING, ADD_DEVICE, ADD_LOCATION, TOGGLE_OVERLAY, FIT_MAP, ADD_NOTIFICATION, REMOVE_NOTIFICATION, TOGGLE_MENU, UPDATE_ACCESS_TOKEN, UPDATE_REFRESH_TOKEN, UPDATE_DETAILS, LOG_OUT, CLEAR_DEVICES } from "./actiontypes"
-import { getLatestLocationByDevice } from './selectors'
+import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, SET_TRACKING, ADD_DEVICE, ADD_LOCATION, TOGGLE_OVERLAY, FIT_MAP, ADD_NOTIFICATION, REMOVE_NOTIFICATION, TOGGLE_MENU, UPDATE_ACCESS_TOKEN, UPDATE_REFRESH_TOKEN, UPDATE_DETAILS, LOG_OUT, CLEAR_DEVICES, ADD_TRACK } from "./actiontypes"
+import { getLatestLocationByDevice, isLoggedIn } from './selectors'
 import api, { updateApiToken } from '../utils/api'
 
 // Map actions
@@ -212,10 +212,14 @@ export const fetchAccessToken = () =>
   }
 
 export const initApp = () =>
-  async dispatch => {
+  async (dispatch, getState) => {
+    const { userState } = getState()
+    if (!isLoggedIn(userState))
+      return
     await dispatch(fetchAccessToken())
-    await dispatch(fetchUserDetails())
-    await dispatch(initDevices())
+    dispatch(fetchUserDetails())
+    dispatch(initDevices())
+    dispatch(fetchTracks())
   }
 
 export const clearUser = () => {
@@ -235,3 +239,17 @@ export const logOut = () =>
     dispatch(clearDevices())
   }
 
+// Tracks
+
+export const addTrack = track => ({
+  type: ADD_TRACK,
+  payload: track
+})
+
+export const fetchTracks = () =>
+  async dispatch => {
+    const resp = await api.get('/tracks/')
+    if (!resp.ok)
+      return
+    resp.data.forEach(track => dispatch(addTrack(track)))
+  }

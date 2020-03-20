@@ -35,3 +35,6 @@ export const getAccessToken = userState => userState.accessToken
 export const getRefreshToken = userState => userState.refreshToken
 export const getRefreshInterval = userState => userState.refreshInterval
 export const isLoggedIn = userState => userState.accessToken && userState.refreshToken && userState.id
+
+export const getTracksState = store => store.tracksState
+export const getTracks = tracksState => tracksState.tracks
