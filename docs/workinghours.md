@@ -42,6 +42,12 @@
 ### Viikko 3
 | Päivä | Aika | Mitä tein  |
 | :----:|:-----| :-----|
+| 17.3. | 2    |Käyttäjän tietojen lataus fronttiin ja tokenien automaattinen päivitys|
+| 18.3. | 1    |Backendin lokitus|
+| 18.3. | 3    |Trackerin last seen ominaisuus ja lokituksen säätöä|
+| 19.3. | 1    |Käyttäjän sijainnin debugausta, satunnaisia kaatumisia|
+| 20.3. | 2    |Device modelin liittäminen käyttäjiin|
+| 20.3. | 4    |Kuljettujen jälkien tallennus kantaa ja niiden selaus, WIP!|
 | **yht.**| 0    | |
 
 ### Yhteensä kaikki: 55h
