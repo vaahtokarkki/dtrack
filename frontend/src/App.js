@@ -9,7 +9,7 @@ import MapControls from './components/MapControls'
 import { LocationCards } from './components/Cards'
 
 import { setPosition, fetchLocations, addLocation, addDevice, addNotification, removeNotification, initApp, fetchAccessToken } from './store/actions'
-import { getUserLocation, getDevicesState, getSettingsState, getUserState, getDeviceById, isLoggedIn } from './store/selectors'
+import { getUserLocation, getDevicesState, getSettingsState, getUserState, isLoggedIn } from './store/selectors'
 
 import './App.css';
 import './styles/Map.scss'
@@ -77,7 +77,7 @@ const App = props => {
   }
 
   const handleLocationError = error => {
-    console.log('Location err', error, error.message)
+    console.log('Location err', error)
     if (error && error.message)
     dispatch(addNotification("danger", error.message))
   }

@@ -1,9 +1,11 @@
 import React, { useState, Fragment } from 'react'
 import { connect } from 'react-redux'
 
+import moment from 'moment'
+
 import { LoginModal } from './LoginModal'
 import { toggleMenu, logOut } from '../store/actions'
-import { getSettingsState, getMenuState, getUserState, isLoggedIn } from '../store/selectors'
+import { getSettingsState, getMenuState, getUserState, isLoggedIn, getTracks, getTracksState } from '../store/selectors'
 
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -76,19 +78,7 @@ const MenuComponent = props => {
     <Collapse in={ recentTracksOpen } timeout="auto" unmountOnExit>
       <List component="div" disablePadding dense>
         <ListSubheader>{`April 2020`}</ListSubheader>
-        <ListItem button className={ classes.nested } dense>
-          <ListItemIcon><ScheduleIcon /></ListItemIcon>
-          <ListItemText primary="2.4.2020" secondary="16:44-22:01 (25.2km)" />
-        </ListItem>
-        <ListSubheader>{`March 2020`}</ListSubheader>
-        <ListItem button className={ classes.nested }>
-          <ListItemIcon><ScheduleIcon /></ListItemIcon>
-          <ListItemText primary="13.3.2020" secondary="15:44-20:01 (15km)" />
-        </ListItem>
-        <ListItem button className={ classes.nested }>
-          <ListItemIcon><ScheduleIcon /></ListItemIcon>
-          <ListItemText primary="15.3.2020" secondary="08:44-10:01 (7.5km)" />
-        </ListItem>
+        { renderTracks() }
       </List>
     </Collapse>
     <ListItem button key={ 2 }>
@@ -100,6 +90,21 @@ const MenuComponent = props => {
       <ListItemText primary={ 'Manage saved tracks' } />
     </ListItem>
   </Fragment>
+
+  const renderTracks = () => {
+    return props.tracks.map(track =>  {
+      const { id, device } = track
+      const start = moment(track.start)
+      const end = moment(track.end)
+      const length = Math.round((track.length + Number.EPSILON) * 100) / 100
+      return <ListItem button className={ classes.nested } key={ id }>
+        <ListItemIcon><ScheduleIcon /></ListItemIcon>
+        <ListItemText
+          primary={ `${device.name} ${start.format("D.M.YYYY")}` }
+          secondary={`${start.format("hh:mm")}-${end.format("hh:mm")} (${length}km)`} />
+      </ListItem>
+    })
+  }
 
   const logInItem = () => <ListItem button key='login' onClick={ openLoginForm }>
     <ListItemIcon><LockOpenIcon /></ListItemIcon>
@@ -136,6 +141,7 @@ const MenuComponent = props => {
       </List>
       <Divider />
       <List>
+        {renderTracks()}
         { getUserItem() }
       </List>
     </div>
@@ -153,7 +159,9 @@ const mapStateToProps = state => {
   const settingsState = getSettingsState(state)
   const userState = getUserState(state)
   const menuState = getMenuState(settingsState)
-  return { menuState, userState }
+  const tracksState = getTracksState(state)
+  const tracks = getTracks(tracksState)
+  return { menuState, userState, tracks }
 }
 
 export default connect(mapStateToProps, { toggleMenu, logOut })(MenuComponent)
