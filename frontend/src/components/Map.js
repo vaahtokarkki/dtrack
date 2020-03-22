@@ -5,7 +5,7 @@ import L from 'leaflet'
 import { geolocated } from "react-geolocated"
 import { Map, Marker, TileLayer, Circle, CircleMarker, Polyline } from 'react-leaflet'
 
-import { getMapState, getUserLocation, getDevices, getDevicesState, getLatestLocationByDevice } from '../store/selectors'
+import { getMapState, getUserLocation, getDevices, getDevicesState, getLatestLocationByDevice, getTracksOnMap, getTracksState } from '../store/selectors'
 import { setZoom , setPosition} from '../store/actions'
 
 const ICON = new L.Icon({
@@ -65,10 +65,15 @@ const MapComponent = props => {
 
     const renderTracks = () => {
       const devices = getDevices(props.devicesState).filter(device => device.name !== "user")
-      return devices.map(device => {
+      const activeTracks = devices.map(device => {
         const locations = device.locations.map(location => location.position)
         return <Polyline key={ device.id } positions={ locations } color={ 'red' } />
       })
+      const savedTracksOnMap = props.visibleTracksOnMap.map(track => {
+        const locations = track.track.coordinates
+        return <Polyline key={ track.id } positions={ locations } color={ 'blue' } />
+      })
+      return activeTracks.concat(savedTracksOnMap)
     }
 
     if (props.mapState && props.mapState.fitBounds) {
@@ -104,7 +109,9 @@ const MapComponent = props => {
 const mapStateToProps = state => {
   const mapState = getMapState(state)
   const devicesState = getDevicesState(state)
-  return { mapState, devicesState }
+  const tracksState = getTracksState(state)
+  const visibleTracksOnMap = getTracksOnMap(tracksState)
+  return { mapState, devicesState, visibleTracksOnMap }
 }
 
 export default connect(mapStateToProps, { setZoom , setPosition })(geolocated({
