@@ -4,8 +4,8 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 
 import { LoginModal } from './LoginModal'
-import { toggleMenu, logOut } from '../store/actions'
-import { getSettingsState, getMenuState, getUserState, isLoggedIn, getTracks, getTracksState } from '../store/selectors'
+import { toggleMenu, logOut, toggleTrack } from '../store/actions'
+import { getSettingsState, getMenuState, getUserState, isLoggedIn, getTracks, getTracksState, getTracksOnMap } from '../store/selectors'
 
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -20,11 +20,12 @@ import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
 import ListSubheader from '@material-ui/core/ListSubheader'
 
-import ScheduleIcon from '@material-ui/icons/Schedule'
 import SettingsIcon from '@material-ui/icons/Settings'
 import ArchiveIcon from '@material-ui/icons/Archive'
 import StorageIcon from '@material-ui/icons/Storage'
 import LockOpenIcon from '@material-ui/icons/LockOpen'
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
+import CheckBoxIcon from '@material-ui/icons/CheckBox'
 
 import logo from '../assets/dog.png'
 
@@ -97,8 +98,10 @@ const MenuComponent = props => {
       const start = moment(track.start)
       const end = moment(track.end)
       const length = Math.round((track.length + Number.EPSILON) * 100) / 100
-      return <ListItem button className={ classes.nested } key={ id }>
-        <ListItemIcon><ScheduleIcon /></ListItemIcon>
+      return <ListItem button className={ classes.nested } key={ id } onClick={ () => props.toggleTrack(id) }>
+        <ListItemIcon>
+          { props.visibleTracksOnMap.some(t => t.id === id) ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />  }
+        </ListItemIcon>
         <ListItemText
           primary={ `${device.name} ${start.format("D.M.YYYY")}` }
           secondary={`${start.format("hh:mm")}-${end.format("hh:mm")} (${length}km)`} />
@@ -141,7 +144,6 @@ const MenuComponent = props => {
       </List>
       <Divider />
       <List>
-        {renderTracks()}
         { getUserItem() }
       </List>
     </div>
@@ -161,7 +163,8 @@ const mapStateToProps = state => {
   const menuState = getMenuState(settingsState)
   const tracksState = getTracksState(state)
   const tracks = getTracks(tracksState)
-  return { menuState, userState, tracks }
+  const visibleTracksOnMap = getTracksOnMap(tracksState)
+  return { menuState, userState, tracks, visibleTracksOnMap }
 }
 
-export default connect(mapStateToProps, { toggleMenu, logOut })(MenuComponent)
+export default connect(mapStateToProps, { toggleMenu, logOut, toggleTrack })(MenuComponent)
