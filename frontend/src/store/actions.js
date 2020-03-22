@@ -1,4 +1,4 @@
-import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, SET_TRACKING, ADD_DEVICE, ADD_LOCATION, TOGGLE_OVERLAY, FIT_MAP, ADD_NOTIFICATION, REMOVE_NOTIFICATION, TOGGLE_MENU, UPDATE_ACCESS_TOKEN, UPDATE_REFRESH_TOKEN, UPDATE_DETAILS, LOG_OUT, CLEAR_DEVICES, ADD_TRACK } from "./actiontypes"
+import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, SET_TRACKING, ADD_DEVICE, ADD_LOCATION, TOGGLE_OVERLAY, FIT_MAP, ADD_NOTIFICATION, REMOVE_NOTIFICATION, TOGGLE_MENU, UPDATE_ACCESS_TOKEN, UPDATE_REFRESH_TOKEN, UPDATE_DETAILS, LOG_OUT, CLEAR_DEVICES, ADD_TRACK, TOGGLE_TRACK } from "./actiontypes"
 import { getLatestLocationByDevice, isLoggedIn } from './selectors'
 import api, { updateApiToken } from '../utils/api'
 
@@ -244,6 +244,11 @@ export const logOut = () =>
 export const addTrack = track => ({
   type: ADD_TRACK,
   payload: track
+})
+
+export const toggleTrack = id => ({
+  type: TOGGLE_TRACK,
+  payload: id
 })
 
 export const fetchTracks = () =>

@@ -38,3 +38,4 @@ export const isLoggedIn = userState => userState.accessToken && userState.refres
 
 export const getTracksState = store => store.tracksState
 export const getTracks = tracksState => tracksState.tracks
+export const getTracksOnMap = tracksState => tracksState.tracks.filter(track => track.displayOnMap)
