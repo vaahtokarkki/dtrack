@@ -45,6 +45,13 @@ SECRET_KEY = os.getenv("DJANGO_SECRET")
 ALLOWED_HOSTS = ['backend', 'localhost'] + \
     [item for item in os.getenv("ALLOWED_HOSTS").split(" ")]
 
+CELERY_IGNORE_RESULT = True
+BROKER_TRANSPORT = "redis"
+BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+CELERY_DEFAULT_QUEUE = 'dtrack'
+CELERY_ACCEPT_CONTENT = ['json', ]
+CELERY_TASK_SERIALIZER = 'json'
 
 # Application definition
 
