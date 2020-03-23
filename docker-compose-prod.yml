@@ -82,5 +82,21 @@ services:
       - backend
     links:
       - backend
+  redis:
+    image: redis:5.0-alpine
+    volumes:
+        - redis_data:/data
+    expose:
+      - 6379
+  celery:
+    build: ./backend
+    command: ["celery", "worker", "-A", "conf.celery"]
+    volumes:
+      - ./backend/app:/code
+    depends_on:
+      - redis
+      - db
+      - backend
 volumes:
   postgres_data:
+  redis_data:
