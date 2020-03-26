@@ -48,6 +48,15 @@
 | 19.3. | 1    |Käyttäjän sijainnin debugausta, satunnaisia kaatumisia|
 | 20.3. | 2    |Device modelin liittäminen käyttäjiin|
 | 20.3. | 4    |Kuljettujen jälkien tallennus kantaa ja niiden selaus, WIP!|
-| **yht.**| 0    | |
+| 22.3. | 2    |Kuljettujen jälkien esittäminen kartalla|
+| **yht.**| 15    | |
 
-### Yhteensä kaikki: 55h
+### Viikko 4
+| Päivä | Aika | Mitä tein  |
+| :----:|:-----| :-----|
+| 23.3. | 2    |Celeryn ja rediksen asentaminen (jälkien tallennus job queue)|
+| 26.3. | 6    |Celeryn taskien luonti ja säätö|
+| **yht.**| 8    | |
+
+
+### Yhteensä kaikki: 72h
