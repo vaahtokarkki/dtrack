@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import ListDevices, ListDevicesActiveTrack, CreateLocation, ListTracks
+from .views import CreateLocation, ListDevices, ListDevicesActiveTrack, ListTracks
 
 
 urlpatterns = [
