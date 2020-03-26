@@ -1,8 +1,18 @@
-from django.utils import timezone
-from django.contrib.gis.geos import LineString
+import logging
 from datetime import timedelta
-from .models import Location, Track
+from time import sleep
 
+from celery.decorators import task
+from celery.task.control import revoke
+from django.contrib.gis.geos import LineString
+from django.utils import timezone
+
+from conf.celery import app as celery_app
+
+from .models import Device, Location, Track
+
+
+logger = logging.getLogger(__name__)
 
 TRACK_MAX_AGE = 1  # Time after device goes offline from latest location
 
@@ -58,3 +68,29 @@ def create_track(device):
     Location.objects.filter(pk__in=locations.values_list("pk", flat=True)) \
         .update(track=track)
     return track
+
+
+def queue_create_track(device_pk):
+    """
+    Add task to Celery for generationg track. If save track task with given arguments
+    alredy running, revoke and setup new task to reset the timer on task.
+    Args:
+        device_pk (int): Primary key of device to create track for
+    """
+    active_tasks = celery_app.control.inspect().active()
+    if active_tasks:
+        for queue, tasks in active_tasks.items():
+            for active_task in tasks:
+                if active_task["name"] == "save_track" and \
+                        active_task["args"] == [device_pk]:
+                    revoke(active_task["id"], terminate=True)
+    print("kj", device_pk)
+    save_track.apply_async(args=(device_pk,))
+
+
+@task(name="save_track")
+def save_track(device_pk):
+    sleep(TRACK_MAX_AGE * 60 * 60 + 60)
+    device = Device.objects.get(pk=device_pk)
+    print(f"Creating track for {device}")
+    create_track(device)

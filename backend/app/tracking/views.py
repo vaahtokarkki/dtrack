@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from .models import Device, Location, Track
 from .serializers import DeviceSerializer, DeviceTrackSerializer, \
     LocationCreateSerializer, TrackSerializer
+from .utils import queue_create_track
 
 
 class CreateLocation(generics.CreateAPIView):
@@ -13,6 +14,11 @@ class CreateLocation(generics.CreateAPIView):
     authentication_classes = ()
     queryset = Location.objects.all()
     serializer_class = LocationCreateSerializer
+
+    def perform_create(self, serializer):
+        location = super().perform_create(serializer)
+        queue_create_track(location.device)
+        return location
 
 
 class ListDevices(generics.ListCreateAPIView):
