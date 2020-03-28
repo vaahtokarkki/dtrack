@@ -16,10 +16,9 @@ class CreateLocation(generics.CreateAPIView):
     serializer_class = LocationCreateSerializer
 
     def perform_create(self, serializer):
-        location = super().perform_create(serializer)
-        print(vars(location))
-        queue_create_track(location.device.pk)
-        return location
+        super().perform_create(serializer)
+        queue_create_track(serializer.instance.device.pk)
+        return serializer.instance
 
 
 class ListDevices(generics.ListCreateAPIView):
