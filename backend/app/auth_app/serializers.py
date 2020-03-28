@@ -7,11 +7,13 @@ from .models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    devices = SimpleDeviceSerializer(many=True)
+    devices = SimpleDeviceSerializer(many=True, required=False)
 
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'name', 'devices']
+        fields = ['id', 'first_name', 'last_name', 'name', 'devices', 'refresh_interval',
+                  'email']
+        read_only_fields = ("devices", "name", "email")
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
