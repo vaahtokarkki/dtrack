@@ -33,7 +33,7 @@ def get_track(device, active=True):
     locations = device.locations.order_by("-timestamp")
 
     if not locations or locations[0].timestamp < max_start_age and active:
-        return []
+        return Location.objects.none()
 
     filtered_locations = []
     for index in range(len(locations) - 1):
