@@ -30,7 +30,6 @@ const SettingsComponent = props => {
     useEffect(() => {
         setFirstName(props.user.firstName)
         setLastName(props.user.lastName)
-        console.log(props.user);
         setRefreshInterval(props.user.refreshInterval)
     }, [props.user])
 

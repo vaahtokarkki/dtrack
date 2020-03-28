@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 
 import { LoginModal } from './LoginModal'
+import SettingsModal from './SettingsModal'
 import { toggleMenu, logOut, toggleTrack } from '../store/actions'
 import { getSettingsState, getMenuState, getUserState, isLoggedIn, getTracks, getTracksState, getTracksOnMap } from '../store/selectors'
 
@@ -18,7 +19,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Collapse from '@material-ui/core/Collapse'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
-import ListSubheader from '@material-ui/core/ListSubheader'
+//import ListSubheader from '@material-ui/core/ListSubheader'
 
 import SettingsIcon from '@material-ui/icons/Settings'
 import ArchiveIcon from '@material-ui/icons/Archive'
@@ -48,7 +49,8 @@ const MenuComponent = props => {
   const classes = useStyles()
 
   const [recentTracksOpen, setRecentTracksOpen] = useState(false)
-  const [modalOpen, setModalOpen] = useState(false)
+  const [loginModal, setLoginModal] = useState(false)
+  const [settingsModal, setSettingsModal] = useState(false)
 
   const handleClick = () =>
     setRecentTracksOpen(!recentTracksOpen)
@@ -59,16 +61,23 @@ const MenuComponent = props => {
     props.toggleMenu()
   }
 
-  const openLoginForm = () => {
-    props.toggleMenu()
-    toggleModal()
+  const toggleModal = (modal, toggleMenu = true) => {
+    if (toggleMenu)
+      props.toggleMenu()
+    if (modal === setLoginModal)
+      setLoginModal(!loginModal)
+    else if (modal === setSettingsModal)
+      setSettingsModal(!settingsModal)
   }
 
-  const toggleModal = () =>
-    setModalOpen(!modalOpen)
-
-  const modalComponent = () =>
-    <LoginModal visible={ modalOpen } toggleModal={ toggleModal } />
+  const modalComponents = () =>
+    <Fragment>
+      <LoginModal visible={ loginModal } toggleModal={ () => toggleModal(setLoginModal, false) } />
+      <SettingsModal
+        visible={ settingsModal }
+        toggleModal={ () => toggleModal(setSettingsModal) }
+        closeModal={ () => toggleModal(setSettingsModal, false) } />
+    </Fragment>
 
   const loggedInItems = () => <Fragment>
     <ListItem button key={ 1 } onClick={ handleClick }>
@@ -78,11 +87,10 @@ const MenuComponent = props => {
     </ListItem>
     <Collapse in={ recentTracksOpen } timeout="auto" unmountOnExit>
       <List component="div" disablePadding dense>
-        <ListSubheader>{`April 2020`}</ListSubheader>
-        { renderTracks() }
+        { renderTracItems() }
       </List>
     </Collapse>
-    <ListItem button key={ 2 }>
+    <ListItem button key={ 2 } onClick={ () => toggleModal(setSettingsModal) }>
       <ListItemIcon><SettingsIcon /></ListItemIcon>
       <ListItemText primary={ 'Open settings' } />
     </ListItem>
@@ -92,7 +100,7 @@ const MenuComponent = props => {
     </ListItem>
   </Fragment>
 
-  const renderTracks = () => {
+  const renderTracItems = () => {
     return props.tracks.map(track =>  {
       const { id, device } = track
       const start = moment(track.start)
@@ -109,7 +117,7 @@ const MenuComponent = props => {
     })
   }
 
-  const logInItem = () => <ListItem button key='login' onClick={ openLoginForm }>
+  const logInItem = () => <ListItem button key='login' onClick={ () => toggleModal(setLoginModal) }>
     <ListItemIcon><LockOpenIcon /></ListItemIcon>
     <ListItemText primary={ 'Log in' } secondary={ 'Log in to track dogs and view saved tracks '} />
   </ListItem>
@@ -150,7 +158,7 @@ const MenuComponent = props => {
   )
 
   return <Fragment>
-    { modalComponent() }
+    { modalComponents() }
     <Drawer open={ props.menuState } onClose={ () => props.toggleMenu() }>
       { navItems() }
     </Drawer>
