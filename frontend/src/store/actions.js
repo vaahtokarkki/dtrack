@@ -196,8 +196,11 @@ export const fetchUserDetails = () =>
     const resp = await api.get(`/user/${id}/`)
     if (!resp.ok)
       return dispatch(logOut())
-    const { name, email, first_name, last_name } = resp.data
-    dispatch(updateUserDetails({ id, name, email, firstName: first_name, lastName: last_name}))
+    const { name, email, first_name, last_name, refresh_interval } = resp.data
+    dispatch(updateUserDetails({
+      id, name, email,
+      firstName: first_name, lastName: last_name, refreshInterval: refresh_interval
+    }))
   }
 
 export const fetchAccessToken = () =>

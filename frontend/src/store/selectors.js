@@ -30,6 +30,7 @@ export const getUser = userState => ({
     name: userState.name,
     firstName: userState.firstName,
     lastName: userState.lastName,
+    refreshInterval: userState.refreshInterval,
 })
 export const getAccessToken = userState => userState.accessToken
 export const getRefreshToken = userState => userState.refreshToken

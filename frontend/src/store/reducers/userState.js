@@ -3,10 +3,10 @@ import { UPDATE_DETAILS, UPDATE_ACCESS_TOKEN, UPDATE_REFRESH_TOKEN, LOG_OUT } fr
 
 const initialState = {
     id: localStorage.getItem("userId"),
-    email: null,
+    email: "",
     name: null,
-    firstName: null,
-    lastName: null,
+    firstName: "",
+    lastName: "",
     refreshInterval: 60,  // seconds
     accessToken: localStorage.getItem("accessToken"),
     refreshToken: localStorage.getItem("refreshToken"),
