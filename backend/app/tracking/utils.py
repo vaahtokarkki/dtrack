@@ -64,7 +64,7 @@ def create_track(device):
     locations = get_track(device, active=False)
     points = [location.point for location in locations]
 
-    track = Track.objects.create(track=LineString(points))
+    track = Track.objects.create(track=LineString(points), device=device)
     Location.objects.filter(pk__in=locations.values_list("pk", flat=True)) \
         .update(track=track)
     return track
