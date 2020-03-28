@@ -24,6 +24,7 @@ class User(AbstractBaseUser):
     first_name = models.CharField('first name', max_length=30, blank=True)
     last_name = models.CharField('last name', max_length=30, blank=True)
     devices = models.ManyToManyField(Device, related_name='users')
+    refresh_interval = models.PositiveIntegerField(default=60)
 
     objects = CustomUserManager()
 
