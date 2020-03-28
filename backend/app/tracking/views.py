@@ -17,7 +17,8 @@ class CreateLocation(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         location = super().perform_create(serializer)
-        queue_create_track(location.device)
+        print(vars(location))
+        queue_create_track(location.device.pk)
         return location
 
 
