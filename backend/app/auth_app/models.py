@@ -1,5 +1,6 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import UserManager
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from tracking.models import Device
@@ -24,7 +25,9 @@ class User(AbstractBaseUser):
     first_name = models.CharField('first name', max_length=30, blank=True)
     last_name = models.CharField('last name', max_length=30, blank=True)
     devices = models.ManyToManyField(Device, related_name='users')
-    refresh_interval = models.PositiveIntegerField(default=60)
+    refresh_interval = models.PositiveIntegerField(
+        default=60, validators=[MinValueValidator(10), MaxValueValidator(300)]
+    )
 
     objects = CustomUserManager()
 
