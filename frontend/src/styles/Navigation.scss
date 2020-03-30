@@ -22,3 +22,21 @@
         padding-bottom: 0;
     }
 }
+
+.modal-content {
+    .modal-subtitle {
+        margin-left: 1rem;
+        margin-top: 1rem;
+        color: $text-muted;
+        font-size: 1.2rem;
+    }
+
+    .tab-wrapper {
+        width: 90%;
+        margin: auto;
+    }
+
+    .modal-header {
+        border: 0;
+    }
+}
