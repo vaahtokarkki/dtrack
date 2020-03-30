@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { connect, useDispatch } from 'react-redux'
 import PageVisibility from 'react-page-visibility'
 
@@ -9,7 +9,7 @@ import MapControls from './components/MapControls'
 import { LocationCards } from './components/Cards'
 
 import { setPosition, fetchLocations, addLocation, addDevice, addNotification, removeNotification, initApp, fetchAccessToken } from './store/actions'
-import { getUserLocation, getDevicesState, getSettingsState, getUserState, isLoggedIn } from './store/selectors'
+import { getUserLocation, getDevicesState, getSettingsState, getUserState, isLoggedIn, getUser } from './store/selectors'
 
 import './App.css';
 import './styles/Map.scss'
@@ -22,24 +22,39 @@ import './styles/Navigation.scss'
 const App = props => {
   const dispatch = useDispatch()
 
+  const [fetchLocationsInterval, setFetchLocationsInterval] = useState(false)
+  const [updateTokenInterval, setUpdateTokenInterval] = useState(false)
+
   useEffect(() => {
     const loginInfo = "Login to track dogs and view saved tracks"
-    if (!isLoggedIn(props.userState))
+    if (!isLoggedIn(props.userState)) {
       dispatch(addNotification("info", loginInfo, false))
-    else
+      clearIntervals()
+    }
+    else {
       dispatch(removeNotification("info", loginInfo))
+      initIntervals()
+    }
   }, [dispatch, props.userState])
 
   useEffect(() => {
-    dispatch(initApp())
+    props.initApp()
+    if (isLoggedIn(props.userState))
+      initIntervals()
+    return () => clearIntervals()
+  }, [])
 
-    const fetchLocationsInterval = setInterval(() => dispatch(fetchLocations()), 60000)
-    const updateTokenInterval = setInterval(() => dispatch(fetchAccessToken()), 240000) // 4min
-    return () => {
-      clearInterval(fetchLocationsInterval)
-      clearInterval(updateTokenInterval)
-    }
-  }, [dispatch])
+
+  const initIntervals = () => {
+    setFetchLocationsInterval(setInterval(() => props.fetchLocations(), props.user.refreshInterval * 1000))
+    setUpdateTokenInterval(setInterval(() => props.fetchAccessToken(), 240000)) // 4min
+  }
+
+  const clearIntervals = () => {
+    clearInterval(fetchLocationsInterval)
+    clearInterval(updateTokenInterval)
+  }
+
 
 
   const handleUserLocationChange = position => {
@@ -106,8 +121,9 @@ const App = props => {
 const mapStateToProps = state => {
   const devicesState = getDevicesState(state)
   const userState = getUserState(state)
+  const user = getUser(userState)
   const settingsState = getSettingsState(state)
-  return { devicesState, settingsState, userState }
+  return { devicesState, settingsState, userState, user }
 }
 
-export default connect(mapStateToProps, { setPosition })(App)
+export default connect(mapStateToProps, { setPosition, initApp, fetchLocations, fetchAccessToken })(App)
