@@ -34,6 +34,8 @@ class Track(models.Model):
 
     @property
     def length(self):
+        self.track.srid = 4326
+        self.track.transform(3857)
         return self.track.length
 
 
