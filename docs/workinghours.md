@@ -56,7 +56,15 @@
 | :----:|:-----| :-----|
 | 23.3. | 2    |Celeryn ja rediksen asentaminen (jälkien tallennus job queue)|
 | 26.3. | 6    |Celeryn taskien luonti ja säätö|
-| **yht.**| 8    | |
+| 26.3. | 7    |Setting viewin säätö fronttiin ja backendiin|
+| **yht.**| 15    | |
 
 
-### Yhteensä kaikki: 72h
+### Viikko 5
+| Päivä | Aika | Mitä tein  |
+| :----:|:-----| :-----|
+| 30.3. | 2    |Lisää asetuksia fronttiin|
+| 30.3. | 1    |Bugikorjailua frontissa ja backendissa|
+| **yht.**| 3    | |
+
+### Yhteensä kaikki: 88h
