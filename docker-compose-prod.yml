@@ -26,6 +26,13 @@ services:
       - traefik.http.routers.http_catchall.middlewares=https_redirect
       - traefik.http.middlewares.https_redirect.redirectscheme.scheme=https
       - traefik.http.middlewares.https_redirect.redirectscheme.permanent=true
+      - traefik.http.middlewares.www-redirect.redirectregex.regex=^https://www.helka.dog/(.*)
+      - traefik.http.middlewares.www-redirect.redirectregex.replacement=https://helka.dog/$${1}
+      - traefik.http.middlewares.www-redirect.redirectregex.permanent=true
+      - traefik.http.routers.http-catchallwww.middlewares=www-redirect
+      - traefik.http.routers.http-catchallwww.tls=true
+      - traefik.http.routers.http-catchallwww.tls.certresolver=le
+      - traefik.http.routers.http-catchallwww.rule=Host(`www.helka.dog`)
   db:
     image: kartoza/postgis
     volumes:
