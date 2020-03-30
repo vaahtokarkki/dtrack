@@ -84,7 +84,6 @@ def queue_create_track(device_pk):
                 if active_task["name"] == "save_track" and \
                         active_task["args"] == [device_pk]:
                     revoke(active_task["id"], terminate=True)
-    print("kj", device_pk)
     save_track.apply_async(args=(device_pk,))
 
 
