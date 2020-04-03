@@ -65,6 +65,9 @@
 | :----:|:-----| :-----|
 | 30.3. | 2    |Lisää asetuksia fronttiin|
 | 30.3. | 1    |Bugikorjailua frontissa ja backendissa|
+| 30.3. | 1    |Reverse proxyn säätöä (SSL)|
+| 3.3. | 5    |Tallennettujen jälkien hallintanäkymä|
+| 3.3. | 1    |Tallennetun jäljen pituus (lähes) oikeaksi|
 | **yht.**| 3    | |
 
 ### Yhteensä kaikki: 88h
