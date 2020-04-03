@@ -5,6 +5,7 @@ import moment from 'moment'
 
 import { LoginModal } from './LoginModal'
 import SettingsModal from './SettingsModal'
+import ManageTracksModal from './TracksModal'
 import { toggleMenu, logOut, toggleTrack } from '../store/actions'
 import { getSettingsState, getMenuState, getUserState, isLoggedIn, getTracks, getTracksState, getTracksOnMap } from '../store/selectors'
 
@@ -51,6 +52,7 @@ const MenuComponent = props => {
   const [recentTracksOpen, setRecentTracksOpen] = useState(false)
   const [loginModal, setLoginModal] = useState(false)
   const [settingsModal, setSettingsModal] = useState(false)
+  const [tracksModal, setTracksModal] = useState(false)
 
   const handleClick = () =>
     setRecentTracksOpen(!recentTracksOpen)
@@ -68,6 +70,8 @@ const MenuComponent = props => {
       setLoginModal(!loginModal)
     else if (modal === setSettingsModal)
       setSettingsModal(!settingsModal)
+    else if (modal === setTracksModal)
+      setTracksModal(!tracksModal)
   }
 
   const modalComponents = () =>
@@ -77,6 +81,10 @@ const MenuComponent = props => {
         visible={ settingsModal }
         toggleModal={ () => toggleModal(setSettingsModal) }
         closeModal={ () => toggleModal(setSettingsModal, false) } />
+      <ManageTracksModal
+        visible={ tracksModal }
+        toggleModal={ () => toggleModal(setTracksModal) }
+        closeModal={ () => toggleModal(setTracksModal, false) } />
     </Fragment>
 
   const loggedInItems = () => <Fragment>
@@ -94,7 +102,7 @@ const MenuComponent = props => {
       <ListItemIcon><SettingsIcon /></ListItemIcon>
       <ListItemText primary={ 'Open settings' } />
     </ListItem>
-    <ListItem button key={ 3 }>
+    <ListItem button key={ 3 } onClick={ () => toggleModal(setTracksModal) }>
       <ListItemIcon><StorageIcon /></ListItemIcon>
       <ListItemText primary={ 'Manage saved tracks' } />
     </ListItem>
