@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Fragment } from 'react';
-import { connect, useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 import PageVisibility from 'react-page-visibility'
 
 import NavMenu from './components/Navigation'
@@ -20,22 +20,20 @@ import './styles/Navigation.scss'
 
 
 const App = props => {
-  const dispatch = useDispatch()
-
   const [fetchLocationsInterval, setFetchLocationsInterval] = useState(false)
   const [updateTokenInterval, setUpdateTokenInterval] = useState(false)
 
   useEffect(() => {
     const loginInfo = "Login to track dogs and view saved tracks"
     if (!isLoggedIn(props.userState)) {
-      dispatch(addNotification("info", loginInfo, false))
+      props.addNotification("info", loginInfo, false)
       clearIntervals()
     }
     else {
-      dispatch(removeNotification("info", loginInfo))
+      props.removeNotification("info", loginInfo)
       initIntervals()
     }
-  }, [dispatch, props.userState])
+  }, [props.userState])
 
   useEffect(() => {
     props.initApp()
@@ -78,11 +76,11 @@ const App = props => {
     }
 
     if (!currentLocation) {
-      dispatch(addDevice({ ...device, locations: [location] }))
+      props.addDevice({ ...device, locations: [location] })
       return props.setPosition([ coords.latitude, coords.longitude ])
     }
 
-    dispatch(addLocation(device.id, [location]))
+    props.addLocation(device.id, [location])
   }
 
   const renderOverlay = () => {
@@ -94,13 +92,13 @@ const App = props => {
   const handleLocationError = error => {
     console.log('Location err', error)
     if (error && error.message)
-    dispatch(addNotification("danger", error.message))
+    props.addNotification("danger", error.message)
   }
 
   const handleVisibilityChange = visible => {
     if (visible && isLoggedIn(props.userState)) {
-      dispatch(fetchAccessToken())
-      dispatch(fetchLocations())
+      props.fetchAccessToken()
+      props.fetchLocations()
     }
   }
 
@@ -126,4 +124,4 @@ const mapStateToProps = state => {
   return { devicesState, settingsState, userState, user }
 }
 
-export default connect(mapStateToProps, { setPosition, initApp, fetchLocations, fetchAccessToken })(App)
+export default connect(mapStateToProps, { addDevice, addLocation, setPosition, initApp, fetchLocations, fetchAccessToken, addNotification, removeNotification })(App)
