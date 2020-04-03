@@ -30,3 +30,4 @@ export const LOG_OUT = "LOG_OUT"
 // Tracks
 export const ADD_TRACK = "ADD_TRACK"
 export const TOGGLE_TRACK = "TOGGLE_TRACK"
+export const REMOVE_TRACK = "REMOVE_TRACK"
