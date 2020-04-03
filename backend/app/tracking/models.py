@@ -1,4 +1,5 @@
 from django.contrib.gis.db import models
+from django.contrib.gis.geos import LineString
 
 
 class Device(models.Model):
@@ -34,9 +35,10 @@ class Track(models.Model):
 
     @property
     def length(self):
-        self.track.srid = 4326
-        self.track.transform(3857)
-        return self.track.length
+        line = LineString([location.point for location in self.locations.all()],
+                          srid=4326)
+        line.transform(3395)
+        return line.length / 1000
 
 
 class Location(models.Model):
