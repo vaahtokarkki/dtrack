@@ -1,10 +1,10 @@
-import React, { useState, useEffect, Fragment } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 
 import api from '../utils/api'
 
-import { removeTrack } from '../store/actions'
+import { removeTrack, setTrackVisibility } from '../store/actions'
 import { getTracksState, getTracks } from '../store/selectors'
 
 import Modal from 'react-bootstrap/Modal'
@@ -15,11 +15,27 @@ import DeleteIcon from '@material-ui/icons/Delete'
 
 
 const ManageTracks = props => {
-    const [loading, setLoading] = useState(false)
+    const getInitialValue = () =>
+        props.tracks.length ? props.tracks.map(track => ({ [track.id]: track.displayOnMap }))[0] : {}
+
+    const [checkedTracks, setCheckedTracks] = useState(getInitialValue())
+
+    const resetCheckBoxValues = useCallback(() => {
+        setCheckedTracks(getInitialValue())
+    }, [setCheckedTracks])
+
+    useEffect(() => {
+        resetCheckBoxValues()
+    }, [props.tracks, resetCheckBoxValues])
+
+    const handleChange = id =>
+        setCheckedTracks({...checkedTracks, [id] : !checkedTracks[id] })
 
     const addTracks = () => {
         props.closeModal()
-        return null
+        for (let key in checkedTracks) {
+            props.setTrackVisibility(key, checkedTracks[key])
+        }
     }
 
     const deleteTrack = async id => {
@@ -29,7 +45,6 @@ const ManageTracks = props => {
         props.removeTrack(id)
         return
     }
-
 
     const renderTracks = () => <Table bordered>
         <thead>
@@ -43,7 +58,7 @@ const ManageTracks = props => {
                 const end = moment(track.end)
                 const diff = end.diff(start, 'hours')
                 return <tr key={ track.id }>
-                    <td><input type="checkbox" /></td>
+                    <td><input type="checkbox" checked={ checkedTracks[track.id] || false } onChange={ () => handleChange(track.id) } /></td>
                     <td>{ track.device.name }</td>
                     <td>{ `${start.format("D.M.YYYY")}, ${diff}h (${Math.round(track.length)}km)`}</td>
                     <td><Button variant="danger" size="sm" onClick={ () => deleteTrack(track.id) }><DeleteIcon /></Button></td>
@@ -73,4 +88,4 @@ const mapStateToProps = state => {
     return { tracks }
 }
 
-export default connect(mapStateToProps, { removeTrack })(ManageTracks)
+export default connect(mapStateToProps, { removeTrack, setTrackVisibility })(ManageTracks)
