@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Fragment } from 'react';
-import { connect } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import PageVisibility from 'react-page-visibility'
 
 import NavMenu from './components/Navigation'
@@ -23,29 +23,14 @@ const App = props => {
   const [fetchLocationsInterval, setFetchLocationsInterval] = useState(false)
   const [updateTokenInterval, setUpdateTokenInterval] = useState(false)
 
-  useEffect(() => {
-    const loginInfo = "Login to track dogs and view saved tracks"
-    if (!isLoggedIn(props.userState)) {
-      props.addNotification("info", loginInfo, false)
-      clearIntervals()
-    }
-    else {
-      props.removeNotification("info", loginInfo)
-      initIntervals()
-    }
-  }, [props.userState])
-
-  useEffect(() => {
-    props.initApp()
-    if (isLoggedIn(props.userState))
-      initIntervals()
-    return () => clearIntervals()
-  }, [])
-
+  const dispatch = useDispatch()
 
   const initIntervals = () => {
-    setFetchLocationsInterval(setInterval(() => props.fetchLocations(), props.user.refreshInterval * 1000))
-    setUpdateTokenInterval(setInterval(() => props.fetchAccessToken(), 240000)) // 4min
+    if (!fetchLocationsInterval)
+      setFetchLocationsInterval(setInterval(() => props.fetchLocations(), props.user.refreshInterval * 1000))
+
+    if (!updateTokenInterval)
+      setUpdateTokenInterval(setInterval(() => props.fetchAccessToken(), 240000)) // 4min
   }
 
   const clearIntervals = () => {
@@ -53,14 +38,27 @@ const App = props => {
     clearInterval(updateTokenInterval)
   }
 
+  useEffect(() => {
+    const loginInfo = "Login to track dogs and view saved tracks"
+    if (!isLoggedIn(props.userState)) {
+      dispatch(addNotification("info", loginInfo, false))
+      clearIntervals()
+    }
+    else {
+      dispatch(removeNotification("info", loginInfo))
+      initIntervals()
+    }
+  }, [props.userState, dispatch])
 
+  useEffect(() => {
+    dispatch(initApp())
+  }, [dispatch])
 
   const handleUserLocationChange = position => {
     const currentLocation = getUserLocation(props.devicesState)
     const { coords } = position
     if (!coords || Number.isNaN(coords.latitude) || Number.isNaN(coords.longitude))
       return
-
 
     const location = {
       position: [ coords.latitude, coords.longitude ],
