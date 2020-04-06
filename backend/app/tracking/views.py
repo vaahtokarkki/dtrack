@@ -7,6 +7,7 @@ from .models import Device, Location, Track
 from .serializers import DeviceSerializer, DeviceTrackSerializer, \
     LocationCreateSerializer, TrackSerializer
 from .utils import queue_create_track
+from .permissions import HasAccessToTrack, HasAccessToDevice
 
 
 class CreateLocation(generics.CreateAPIView):
@@ -61,3 +62,15 @@ class ListTracks(generics.ListAPIView):
         if limit > 0:
             return queryset[:limit]
         return queryset
+
+
+class TrackDetailsView(generics.DestroyAPIView):
+    serializer_class = TrackSerializer
+    permission_classes = (HasAccessToTrack, )
+    queryset = Track.objects.all()
+
+
+class DeviceDetailsView(generics.DestroyAPIView):
+    serializer_class = DeviceSerializer
+    permission_classes = (HasAccessToDevice, )
+    queryset = Device.objects.all()
