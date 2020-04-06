@@ -65,7 +65,7 @@ const SettingsForm = props => {
         setFirstName(props.user.firstName)
         setLastName(props.user.lastName)
         setRefreshInterval(props.user.refreshInterval)
-    }, [props.user])
+    }, [props.user, setFirstName, setLastName, setRefreshInterval])
 
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
@@ -116,20 +116,12 @@ const SettingsForm = props => {
 }
 
 const DeviceSettings = props => {
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState("")
-
     const renderDevices = () =>
         props.devices.map(device => <tr key={ device.id }>
             <td>{ device.name }</td>
             <td>{ moment(device.last_seen).format("DD.MM.YYYY") }</td>
             <td>{ device.tracker_id }</td>
         </tr>)
-
-    const submit = async () => {
-        setLoading(true)
-        setError("")
-    }
 
     return <Fragment>
         <Modal.Body>
@@ -143,8 +135,8 @@ const DeviceSettings = props => {
             </Table>
         </Modal.Body>
         <Modal.Footer>
-            <Button variant="secondary" onClick={ props.toggleModal } disabled={ loading }>Cancel</Button>
-            <Button variant="success" onClick={ submit } disabled={ loading }>Save</Button>
+            <Button variant="secondary" onClick={ props.toggleModal }>Cancel</Button>
+            <Button variant="success">Close</Button>
         </Modal.Footer>
     </Fragment>
 }
