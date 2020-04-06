@@ -68,6 +68,14 @@
 | 30.3. | 1    |Reverse proxyn säätöä (SSL)|
 | 3.3. | 5    |Tallennettujen jälkien hallintanäkymä|
 | 3.3. | 1    |Tallennetun jäljen pituus (lähes) oikeaksi|
-| **yht.**| 3    | |
+| **yht.**| 10    | |
 
-### Yhteensä kaikki: 88h
+### Viikko 6
+| Päivä | Aika | Mitä tein  |
+| :----:|:-----| :-----|
+| 6.3. | 4    |Mahdollisuus lisätä jälkiä asetuksista (jälkienhallinta) kartalle|
+| 6.3. | 1    |Korjaa näkyville vain käyttäjän laitteet ja jäljet|
+| **yht.**| 5    | |
+
+
+### Yhteensä kaikki: 100h
