@@ -1,4 +1,4 @@
-import { ADD_TRACK, TOGGLE_TRACK, REMOVE_TRACK } from '../actiontypes'
+import { ADD_TRACK, TOGGLE_TRACK, REMOVE_TRACK, SET_TRACK_VISIBILTY } from '../actiontypes'
 
 const initialState = {
     tracks: [],
@@ -13,6 +13,13 @@ export default function(state = initialState, action) {
         }
         case REMOVE_TRACK : {
             const tracks = state.tracks.filter(track => track.id !== action.payload)
+            return { ...state, tracks }
+        }
+        case SET_TRACK_VISIBILTY: {
+            const { id, visibility } = action.payload
+            const trackToToggle = state.tracks.filter(track => track.id === id)[0]
+            const notAffectedTracks = state.tracks.filter(track => track.id !== id)
+            const tracks = notAffectedTracks.concat([{ ...trackToToggle, displayOnMap: visibility }])
             return { ...state, tracks }
         }
         case TOGGLE_TRACK: {
