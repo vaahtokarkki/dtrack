@@ -31,7 +31,8 @@ class ListDevices(generics.ListCreateAPIView):
 
 class ListDevicesActiveTrack(generics.GenericAPIView):
     def post(self, request):
-        queryset = Device.objects.all()
+        user = self.request.user
+        queryset = Device.objects.filter(pk__in=user.devices.values_list("pk", flat=True))
         request_data = json.loads(request.body.decode('utf-8'))
         devices = [row["device"] for row in request_data]
         if devices:
@@ -51,11 +52,11 @@ class ListDevicesActiveTrack(generics.GenericAPIView):
 
 class ListTracks(generics.ListAPIView):
     serializer_class = TrackSerializer
-    permission_classes = ()
-    authentication_classes = ()
 
     def get_queryset(self):
-        queryset = Track.objects.order_by("-created")
+        user = self.request.user
+        user_devices = user.devices.values_list("pk", flat=True)
+        queryset = Track.objects.filter(device__pk__in=user_devices).order_by("-created")
         limit = self.request.query_params.get("limit", 0)
         if limit > 0:
             return queryset[:limit]
