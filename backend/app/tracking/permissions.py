@@ -5,7 +5,7 @@ from .models import Device
 
 class HasAccessToDevice(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        return request.user == obj.user
+        return obj in request.user.devices.all()
 
 
 class HasAccessToTrack(permissions.BasePermission):

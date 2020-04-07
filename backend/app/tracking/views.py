@@ -70,7 +70,7 @@ class TrackDetailsView(generics.DestroyAPIView):
     queryset = Track.objects.all()
 
 
-class DeviceDetailsView(generics.DestroyAPIView):
+class DeviceDetailsView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DeviceSerializer
     permission_classes = (HasAccessToDevice, )
     queryset = Device.objects.all()

@@ -24,6 +24,7 @@ class DeviceSerializer(serializers.ModelSerializer):
             'locations': {'required': False},
             'last_seen': {'required': False}
         }
+        read_only_fields = ("tracker_id", )
 
 
 class SimpleDeviceSerializer(serializers.ModelSerializer):
