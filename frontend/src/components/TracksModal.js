@@ -46,7 +46,7 @@ const ManageTracks = props => {
         return
     }
 
-    const renderTracks = () => <Table bordered>
+    const renderTracks = () => <Table>
         <thead>
             <tr>
                 <td>Add</td><td>Device</td><td>Time</td><td>Delete</td>
