@@ -9,6 +9,7 @@ export const FIT_MAP = "FIT_MAP"
 export const ADD_DEVICE = "ADD_DEVICE"
 export const ADD_LOCATION = "ADD_LOCATION"
 export const CLEAR_DEVICES = "CLEAR_DEVICES"
+export const UPDATE_DEVICE = "UPDATE_DEVICE"
 
 // Settings
 export const SET_TRACKING = "SET_TRACKING"
