@@ -4,7 +4,7 @@ import moment from 'moment'
 
 import api from '../utils/api'
 
-import { updateUserDetails, addNotification } from '../store/actions'
+import { updateUserDetails, addNotification, updateDevice } from '../store/actions'
 import { getUserState, getUser, getDevicesState, getDevices } from '../store/selectors'
 
 import Alert from 'react-bootstrap/Alert'
@@ -15,6 +15,9 @@ import Spinner from 'react-bootstrap/Spinner'
 import Tab from 'react-bootstrap/Tab'
 import Tabs from 'react-bootstrap/Tabs'
 import Table from 'react-bootstrap/Table'
+
+import EditIcon from '@material-ui/icons/Edit'
+import CheckIcon from '@material-ui/icons/Check'
 
 
 const SettingsComponent = props => {
@@ -44,7 +47,6 @@ const SettingsComponent = props => {
         </div>
     </Modal>
 }
-
 
 
 const SettingsForm = props => {
@@ -116,18 +118,59 @@ const SettingsForm = props => {
 }
 
 const DeviceSettings = props => {
+    const [editing, setEditing] = useState(null)
+    const [name, setName] = useState("")
+    const [loading, setLoading] = useState(null) // Id of device
+
+    const toggleEdit = device => {
+        if (device.id === editing)
+            return setEditing(null)
+        setEditing(device.id)
+        setName(device.name)
+    }
+
+    const renderIcon = id => {
+        if (!editing)
+            return <EditIcon disabled={ loading }/>
+        return editing === id ? <CheckIcon /> : null
+    }
+
+    const renderButton = device =>
+        editing === device.id && loading === device.id ?
+            <Spinner animation="border" /> :
+            <Button variant="outline-success" size="sm" onClick={ () => editing === device.id ? submit() : toggleEdit(device) }>
+                { renderIcon(device.id) }
+            </Button>
+
+    const submit = async () => {
+        setLoading(editing)
+        const resp = await api.put(`/devices/${editing}/`, { name })
+        if (!resp.ok)
+            return setLoading(null)
+        setLoading(null)
+        setEditing(null)
+        props.updateDevice(resp.data)
+    }
+
     const renderDevices = () =>
         props.devices.map(device => <tr key={ device.id }>
-            <td>{ device.name }</td>
-            <td>{ moment(device.last_seen).format("DD.MM.YYYY") }</td>
-            <td>{ device.tracker_id }</td>
+            <td colSpan={ editing == device.id ? 3 : 1 }>
+                { editing == device.id ?
+                    <Form.Control type="text" value={ name } onChange={ (e) => setName(e.target.value) }/> :
+                    device.name }
+            </td>
+            { editing !== device.id && <Fragment>
+                <td>{ moment(device.last_seen).format("DD.MM.YYYY") }</td>
+                <td>{ device.tracker_id }</td>
+            </Fragment> }
+            <td>{ renderButton(device) }</td>
         </tr>)
 
     return <Fragment>
         <Modal.Body>
             <Table>
                 <thead>
-                    <tr><td>Device</td><td>Last seen</td><td>Tracker id</td></tr>
+                    <tr><td>Device</td><td>Last seen</td><td>Tracker id</td><td>Edit</td></tr>
                 </thead>
                 <tbody>
                     { renderDevices() }
@@ -136,7 +179,7 @@ const DeviceSettings = props => {
         </Modal.Body>
         <Modal.Footer>
             <Button variant="secondary" onClick={ props.toggleModal }>Cancel</Button>
-            <Button variant="success">Close</Button>
+            <Button variant="outline-success">Close</Button>
         </Modal.Footer>
     </Fragment>
 }
@@ -149,4 +192,4 @@ const mapStateToProps = state => {
     return { user, devices }
 }
 
-export default connect(mapStateToProps, { updateUserDetails, addNotification })(SettingsComponent)
+export default connect(mapStateToProps, { updateUserDetails, addNotification, updateDevice })(SettingsComponent)
