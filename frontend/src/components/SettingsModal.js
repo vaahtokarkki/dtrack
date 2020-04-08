@@ -160,15 +160,15 @@ const DeviceSettings = props => {
                     device.name }
             </td>
             { editing !== device.id && <Fragment>
-                <td>{ moment(device.last_seen).format("DD.MM.YYYY") }</td>
-                <td>{ device.tracker_id }</td>
+                <td>{ moment(device.last_seen).format("DD.MM.") }</td>
+                <td>{ renderTrackerId(device.tracker_id) }</td>
             </Fragment> }
             <td>{ renderButton(device) }</td>
         </tr>)
 
     return <Fragment>
         <Modal.Body>
-            <Table>
+            <Table size="sm">
                 <thead>
                     <tr><td>Device</td><td>Last seen</td><td>Tracker id</td><td>Edit</td></tr>
                 </thead>
@@ -179,10 +179,13 @@ const DeviceSettings = props => {
         </Modal.Body>
         <Modal.Footer>
             <Button variant="secondary" onClick={ props.toggleModal }>Cancel</Button>
-            <Button variant="outline-success">Close</Button>
+            <Button variant="outline-success" onClick={ props.closeModal }>Close</Button>
         </Modal.Footer>
     </Fragment>
 }
+
+const renderTrackerId = trackerId =>
+    trackerId.length > 5 ? `${trackerId.slice(0, 5)}...` : trackerId
 
 const mapStateToProps = state => {
     const userState = getUserState(state)

@@ -95,7 +95,7 @@ const MenuComponent = props => {
     </ListItem>
     <Collapse in={ recentTracksOpen } timeout="auto" unmountOnExit>
       <List component="div" disablePadding dense>
-        { renderTracItems() }
+        { renderTrackItems() }
       </List>
     </Collapse>
     <ListItem button key={ 2 } onClick={ () => toggleModal(setSettingsModal) }>
@@ -108,8 +108,10 @@ const MenuComponent = props => {
     </ListItem>
   </Fragment>
 
-  const renderTracItems = () => {
-    return props.tracks.map(track =>  {
+  const renderTrackItems = () => {
+    return props.tracks
+      .sort((a, b) => moment(b.start) - moment(a.start))
+      .map(track =>  {
       const { id, device } = track
       const start = moment(track.start)
       const end = moment(track.end)
