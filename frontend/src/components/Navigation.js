@@ -115,7 +115,7 @@ const MenuComponent = props => {
     const groupedTracks = groupBy(sortedTracks, getTrackMonth)
 
     return Object.keys(groupedTracks).map(key => {
-      return <Fragment>
+      return <Fragment key={ key }>
           <ListSubheader>{ key }</ListSubheader>
           { groupedTracks[key].map(track => {
           const { id, device } = track

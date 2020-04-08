@@ -154,8 +154,8 @@ const DeviceSettings = props => {
 
     const renderDevices = () =>
         props.devices.map(device => <tr key={ device.id }>
-            <td colSpan={ editing == device.id ? 3 : 1 }>
-                { editing == device.id ?
+            <td colSpan={ editing === device.id ? 3 : 1 }>
+                { editing === device.id ?
                     <Form.Control type="text" value={ name } onChange={ (e) => setName(e.target.value) }/> :
                     device.name }
             </td>
