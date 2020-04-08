@@ -2,6 +2,7 @@ import React, { useState, Fragment } from 'react'
 import { connect } from 'react-redux'
 
 import moment from 'moment'
+import groupBy from 'lodash/groupBy'
 
 import { LoginModal } from './LoginModal'
 import SettingsModal from './SettingsModal'
@@ -20,7 +21,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Collapse from '@material-ui/core/Collapse'
 import ExpandLess from '@material-ui/icons/ExpandLess'
 import ExpandMore from '@material-ui/icons/ExpandMore'
-//import ListSubheader from '@material-ui/core/ListSubheader'
+import ListSubheader from '@material-ui/core/ListSubheader'
 
 import SettingsIcon from '@material-ui/icons/Settings'
 import ArchiveIcon from '@material-ui/icons/Archive'
@@ -109,21 +110,28 @@ const MenuComponent = props => {
   </Fragment>
 
   const renderTrackItems = () => {
-    return props.tracks
+    const sortedTracks = props.tracks
       .sort((a, b) => moment(b.start) - moment(a.start))
-      .map(track =>  {
-      const { id, device } = track
-      const start = moment(track.start)
-      const end = moment(track.end)
-      const length = Math.round((track.length + Number.EPSILON) * 100) / 100
-      return <ListItem button className={ classes.nested } key={ id } onClick={ () => props.toggleTrack(id) }>
-        <ListItemIcon>
-          { props.visibleTracksOnMap.some(t => t.id === id) ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />  }
-        </ListItemIcon>
-        <ListItemText
-          primary={ `${device.name} ${start.format("D.M.YYYY")}` }
-          secondary={`${start.format("hh:mm")}-${end.format("hh:mm")} (${length}km)`} />
-      </ListItem>
+    const groupedTracks = groupBy(sortedTracks, getTrackMonth)
+
+    return Object.keys(groupedTracks).map(key => {
+      return <Fragment>
+          <ListSubheader>{ key }</ListSubheader>
+          { groupedTracks[key].map(track => {
+          const { id, device } = track
+          const start = moment(track.start)
+          const end = moment(track.end)
+          const length = Math.round((track.length + Number.EPSILON) * 100) / 100
+          return <ListItem button className={ classes.nested } key={ id } onClick={ () => props.toggleTrack(id) }>
+            <ListItemIcon>
+              { props.visibleTracksOnMap.some(t => t.id === id) ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />  }
+            </ListItemIcon>
+            <ListItemText
+              primary={ `${device.name} ${start.format("D.M.YYYY")}` }
+              secondary={`${start.format("hh:mm")}-${end.format("hh:mm")} (${length}km)`} />
+          </ListItem>
+          }) }
+      </Fragment>
     })
   }
 
@@ -174,6 +182,9 @@ const MenuComponent = props => {
     </Drawer>
   </Fragment>
 }
+
+const getTrackMonth = track =>
+  moment(track.start).format("MMMM YYYY")
 
 const mapStateToProps = state => {
   const settingsState = getSettingsState(state)
