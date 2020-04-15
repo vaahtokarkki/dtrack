@@ -118,6 +118,27 @@ const SettingsForm = props => {
 }
 
 const DeviceSettings = props => {
+    const [modalContent, setModalContent] = useState("edit-devices")
+
+    const toggleContent = () =>
+        modalContent === "edit-devices" ? setModalContent("add-device") : setModalContent("edit-devices")
+
+    return <Fragment>
+        <Modal.Body>
+            { modalContent === "edit-devices" ?
+                <EditDevicesForm { ...props } /> :
+                <AddDeviceForm { ...props } /> }
+        </Modal.Body>
+        <Modal.Footer>
+            <Button variant="outline-secondary" onClick={ props.closeModal }>Close</Button>
+            <Button variant="outline-success" onClick={ toggleContent }>
+                {modalContent === "edit-devices" ? 'Add new device' : 'Edit devices' }
+            </Button>
+        </Modal.Footer>
+    </Fragment>
+}
+
+const EditDevicesForm = props => {
     const [editing, setEditing] = useState(null)
     const [name, setName] = useState("")
     const [loading, setLoading] = useState(null) // Id of device
@@ -166,22 +187,18 @@ const DeviceSettings = props => {
             <td>{ renderButton(device) }</td>
         </tr>)
 
-    return <Fragment>
-        <Modal.Body>
-            <Table size="sm">
-                <thead>
-                    <tr><td>Device</td><td>Last seen</td><td>Tracker id</td><td>Edit</td></tr>
-                </thead>
-                <tbody>
-                    { renderDevices() }
-                </tbody>
-            </Table>
-        </Modal.Body>
-        <Modal.Footer>
-            <Button variant="secondary" onClick={ props.toggleModal }>Cancel</Button>
-            <Button variant="outline-success" onClick={ props.closeModal }>Close</Button>
-        </Modal.Footer>
-    </Fragment>
+    return <Table size="sm">
+        <thead>
+            <tr><td>Device</td><td>Last seen</td><td>Tracker id</td><td>Edit</td></tr>
+        </thead>
+        <tbody>
+            { renderDevices() }
+        </tbody>
+    </Table>
+}
+
+const AddDeviceForm = props => {
+    return null
 }
 
 const renderTrackerId = trackerId =>
