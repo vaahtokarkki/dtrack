@@ -72,13 +72,15 @@ const MenuComponent = props => {
       props.toggleMenu()
     switch (modal) {
       case setLoginModal:
-        setLoginModal(!loginModal)
+        return setLoginModal(!loginModal)
       case setSettingsModal:
-        setSettingsModal(!settingsModal)
+        return setSettingsModal(!settingsModal)
       case setTracksModal:
-        setTracksModal(!tracksModal)
+        return setTracksModal(!tracksModal)
       case setCreateTrack:
-        setCreateTrack(payload)
+        return setCreateTrack(payload)
+      default:
+        return
     }
   }
 
