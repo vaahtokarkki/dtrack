@@ -75,7 +75,17 @@
 | :----:|:-----| :-----|
 | 6.3. | 4    |Mahdollisuus lisätä jälkiä asetuksista (jälkienhallinta) kartalle|
 | 6.3. | 1    |Korjaa näkyville vain käyttäjän laitteet ja jäljet|
-| **yht.**| 5    | |
+| 6.3. | 1    |Lisää jälkien ja laitteiden poisto apiin|
+| 7.3. | 4    |Laitteiden muokkausnäkymä fronttiin ja backendiin|
+| 8.3. | 2    |Frontin pikku fiksauksia ja paranteluja|
+| **yht.**| 10    | |
+
+### Viikko 7
+| Päivä | Aika | Mitä tein  |
+| :----:|:-----| :-----|
+| 16.3. | 1    |Fronttiin uuden laitteen lisäyksen aloitus (WIP)|
+| 17.3. | 8    |Fronttiin ja backendiin toiminnallisuus käsin jäljen tallentamiseksi|
+| **yht.**| 9    | |
 
 
-### Yhteensä kaikki: 100h
+### Yhteensä kaikki: 114h
