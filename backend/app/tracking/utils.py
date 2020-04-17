@@ -77,14 +77,18 @@ def queue_create_track(device_pk):
     Args:
         device_pk (int): Primary key of device to create track for
     """
-    active_tasks = celery_app.control.inspect().active()
-    if active_tasks:
-        for queue, tasks in active_tasks.items():
-            for active_task in tasks:
-                if active_task["name"] == "save_track" and \
-                        active_task["args"] == [device_pk]:
-                    revoke(active_task["id"], terminate=True)
+    revoke_track_queue(device_pk)
     save_track.apply_async(args=(device_pk,))
+
+
+def revoke_track_queue(device_pk):
+    active_tasks = celery_app.control.inspect().active()
+    if not active_tasks:
+        return
+    for queue, tasks in active_tasks.items():
+        for active_task in tasks:
+            if active_task["name"] == "save_track" and active_task["args"] == [device_pk]:
+                revoke(active_task["id"], terminate=True)
 
 
 @task(name="save_track")
