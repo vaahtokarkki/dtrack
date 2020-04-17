@@ -1,12 +1,12 @@
 import json
 
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.response import Response
 
 from .models import Device, Location, Track
 from .serializers import DeviceSerializer, DeviceTrackSerializer, \
     LocationCreateSerializer, TrackSerializer
-from .utils import queue_create_track
+from .utils import queue_create_track, create_track, revoke_track_queue
 from .permissions import HasAccessToTrack, HasAccessToDevice
 
 
@@ -74,3 +74,14 @@ class DeviceDetailsView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DeviceSerializer
     permission_classes = (HasAccessToDevice, )
     queryset = Device.objects.all()
+
+
+class CreateTrackView(generics.GenericAPIView):
+    queryset = Device.objects.all()
+    serializer_class = TrackSerializer
+
+    def post(self, request, *args, **kwargs):
+        device = self.get_object()
+        revoke_track_queue(device.pk)
+        track = create_track(device)
+        return Response(TrackSerializer(track).data, status=status.HTTP_201_CREATED)
