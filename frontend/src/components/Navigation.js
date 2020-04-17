@@ -7,8 +7,9 @@ import groupBy from 'lodash/groupBy'
 import { LoginModal } from './LoginModal'
 import SettingsModal from './SettingsModal'
 import ManageTracksModal from './TracksModal'
+import CreateTrackModal from './CreateTrackModal'
 import { toggleMenu, logOut, toggleTrack } from '../store/actions'
-import { getSettingsState, getMenuState, getUserState, isLoggedIn, getTracks, getTracksState, getTracksOnMap } from '../store/selectors'
+import { getSettingsState, getMenuState, getUserState, isLoggedIn, getTracks, getTracksState, getTracksOnMap, getDevicesState, getDevices } from '../store/selectors'
 
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -29,6 +30,7 @@ import StorageIcon from '@material-ui/icons/Storage'
 import LockOpenIcon from '@material-ui/icons/LockOpen'
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
+import PetsIcon from '@material-ui/icons/Pets'
 
 import logo from '../assets/dog.png'
 
@@ -54,6 +56,7 @@ const MenuComponent = props => {
   const [loginModal, setLoginModal] = useState(false)
   const [settingsModal, setSettingsModal] = useState(false)
   const [tracksModal, setTracksModal] = useState(false)
+  const [createTrack, setCreateTrack] = useState(false) // Id of device
 
   const handleClick = () =>
     setRecentTracksOpen(!recentTracksOpen)
@@ -64,15 +67,19 @@ const MenuComponent = props => {
     props.toggleMenu()
   }
 
-  const toggleModal = (modal, toggleMenu = true) => {
+  const toggleModal = (modal, toggleMenu = true, payload = null) => {
     if (toggleMenu)
       props.toggleMenu()
-    if (modal === setLoginModal)
-      setLoginModal(!loginModal)
-    else if (modal === setSettingsModal)
-      setSettingsModal(!settingsModal)
-    else if (modal === setTracksModal)
-      setTracksModal(!tracksModal)
+    switch (modal) {
+      case setLoginModal:
+        setLoginModal(!loginModal)
+      case setSettingsModal:
+        setSettingsModal(!settingsModal)
+      case setTracksModal:
+        setTracksModal(!tracksModal)
+      case setCreateTrack:
+        setCreateTrack(payload)
+    }
   }
 
   const modalComponents = () =>
@@ -86,9 +93,14 @@ const MenuComponent = props => {
         visible={ tracksModal }
         toggleModal={ () => toggleModal(setTracksModal) }
         closeModal={ () => toggleModal(setTracksModal, false) } />
+      <CreateTrackModal
+        visible={ Boolean(createTrack) }
+        device={ createTrack }
+        toggleModal={ () => toggleModal(setCreateTrack) }
+        closeModal={ () => toggleModal(setCreateTrack, false) } />
     </Fragment>
 
-  const loggedInItems = () => <Fragment>
+  const renderLoggedInItems = () => <Fragment>
     <ListItem button key={ 1 } onClick={ handleClick }>
       <ListItemIcon><ArchiveIcon /></ListItemIcon>
       <ListItemText primary={ 'View recent tracks' } />
@@ -135,13 +147,43 @@ const MenuComponent = props => {
     })
   }
 
+  const renderDevices = () => {
+    const devicesOnline = props.devices
+      .filter(device => device.id !== "user")
+      .filter(device => device.locations.length)
+
+    if (!devicesOnline.length)
+      return null
+
+    return <Fragment>
+        <List
+          className="nav-list"
+          subheader={
+            <ListSubheader component="div" id="nested-list-subheader">
+              Create track for devices
+            </ListSubheader>
+          } >
+          { devicesOnline.map(device => {
+            return <ListItem button key={ device.id } onClick={ () => toggleModal(setCreateTrack, true, device) }>
+              <ListItemIcon><PetsIcon /></ListItemIcon>
+              <ListItemText primary={ device.name } secondary={ `Create track for ${device.name}` } />
+            </ListItem>
+          }) }
+      </List>
+      <Divider />
+    </Fragment>
+  }
+
   const logInItem = () => <ListItem button key='login' onClick={ () => toggleModal(setLoginModal) }>
     <ListItemIcon><LockOpenIcon /></ListItemIcon>
     <ListItemText primary={ 'Log in' } secondary={ 'Log in to track dogs and view saved tracks '} />
   </ListItem>
 
-  const getNavigationListItems = () =>
-    isLoggedIn(props.userState) ? loggedInItems() : logInItem()
+  const renderNavigationListItems = () =>
+    isLoggedIn(props.userState) ? renderLoggedInItems() : logInItem()
+
+  const renderCreateTrackItems = () =>
+    isLoggedIn(props.userState) && renderDevices()
 
   const handleLogOut = () => {
     props.logOut()
@@ -166,9 +208,9 @@ const MenuComponent = props => {
       </div>
       <Divider />
       <List className="nav-list">
-        { getNavigationListItems() }
+        { renderNavigationListItems() }
       </List>
-      <Divider />
+      { renderCreateTrackItems() }
       <List>
         { getUserItem() }
       </List>
@@ -188,12 +230,14 @@ const getTrackMonth = track =>
 
 const mapStateToProps = state => {
   const settingsState = getSettingsState(state)
+  const devicesState = getDevicesState(state)
   const userState = getUserState(state)
   const menuState = getMenuState(settingsState)
   const tracksState = getTracksState(state)
   const tracks = getTracks(tracksState)
+  const devices = getDevices(devicesState)
   const visibleTracksOnMap = getTracksOnMap(tracksState)
-  return { menuState, userState, tracks, visibleTracksOnMap }
+  return { menuState, userState, tracks, visibleTracksOnMap, devices }
 }
 
 export default connect(mapStateToProps, { toggleMenu, logOut, toggleTrack })(MenuComponent)
