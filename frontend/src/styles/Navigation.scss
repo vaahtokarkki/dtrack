@@ -39,4 +39,26 @@
     .modal-header {
         border: 0;
     }
+
+    .create-track-body {
+        margin: 0;
+        padding-top: .5rem;
+        padding-bottom: 2.5rem;
+
+        .form-group {
+            border: 1px #dadada solid;
+            border-radius: 5px;
+            padding: .5rem .5rem .5rem 1rem;
+            margin-bottom: .5rem;
+        }
+
+        .alert {
+            margin-bottom: 1.5rem;
+        }
+
+        small {
+            padding: 0 .5rem;
+        }
+    }
 }
+
