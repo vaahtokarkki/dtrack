@@ -48,7 +48,7 @@ def get_track(device, active=True):
         filtered_locations.append(current.pk)
         if index + 1 == len(locations) - 1:
             filtered_locations.append(next.pk)
-    return Location.objects.filter(pk__in=filtered_locations)
+    return Location.objects.filter(pk__in=filtered_locations, track=None)
 
 
 def create_track(device):
