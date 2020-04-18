@@ -27,6 +27,19 @@ class DeviceSerializer(serializers.ModelSerializer):
         read_only_fields = ("tracker_id", )
 
 
+class AddDeviceForUserSerializer(serializers.Serializer):
+    tracker_id = serializers.ChoiceField(choices=[])
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        user_devices = kwargs["request"].user.devices.values_list("pk", flat=True)
+        devices = Device.objects.exclude(pk__in=user_devices)
+        self.fields["tracker_id"].choices = [
+            (device.tracker_id, device.tracker_id)
+            for device in devices
+        ]
+
+
 class SimpleDeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Device

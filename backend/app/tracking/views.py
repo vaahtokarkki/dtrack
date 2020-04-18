@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from .models import Device, Location, Track
 from .serializers import DeviceSerializer, DeviceTrackSerializer, \
-    LocationCreateSerializer, TrackSerializer
+    LocationCreateSerializer, TrackSerializer, AddDeviceForUserSerializer
 from .utils import queue_create_track, create_track, revoke_track_queue
 from .permissions import HasAccessToTrack, HasAccessToDevice
 
@@ -23,11 +23,22 @@ class CreateLocation(generics.CreateAPIView):
 
 
 class ListDevices(generics.ListCreateAPIView):
-    serializer_class = DeviceSerializer
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            AddDeviceForUserSerializer
+        return DeviceSerializer
 
     def get_queryset(self):
+        if self.request.method == "POST":
+            return Device.objects.all()
         user = self.request.user
         return Device.objects.filter(pk__in=user.devices.values_list("pk", flat=True))
+
+    def perform_create(self, serializer):
+        tracker_id = serializer.data.get("tracker_id")
+        device = Device.objects.get(tracker_id=tracker_id)
+        self.request.user.devices.add(device)
+        return Response(DeviceSerializer(device).data, status=status.HTTP_201_CREATED)
 
 
 class ListDevicesActiveTrack(generics.GenericAPIView):
