@@ -4,7 +4,7 @@ import moment from 'moment'
 
 import api from '../utils/api'
 
-import { updateUserDetails, addNotification, updateDevice } from '../store/actions'
+import { updateUserDetails, addNotification, updateDevice, addDevice } from '../store/actions'
 import { getUserState, getUser, getDevicesState, getDevices } from '../store/selectors'
 
 import Alert from 'react-bootstrap/Alert'
@@ -31,17 +31,23 @@ const SettingsComponent = props => {
             <Tabs id="controlled-tab-example"
                 activeKey={ activeTab }
                 onSelect={ (k) => setActiveTab(k) } >
-                <Tab eventKey="user" title="User settings">
+                <Tab eventKey="user" title="User">
                     <Modal.Title className="modal-subtitle">
                         User settings
                     </Modal.Title>
                     <SettingsForm { ...props } />
                 </Tab>
-                <Tab eventKey="devices" title="Device settings">
+                <Tab eventKey="devices" title="Devices">
                     <Modal.Title className="modal-subtitle">
                         Device settings
                     </Modal.Title>
                     <DeviceSettings { ...props } />
+                </Tab>
+                <Tab eventKey="add-device" title="Add device">
+                    <Modal.Title className="modal-subtitle">
+                        Add new device
+                    </Modal.Title>
+                    <AddDeviceForm { ...props } />
                 </Tab>
             </Tabs>
         </div>
@@ -118,22 +124,13 @@ const SettingsForm = props => {
 }
 
 const DeviceSettings = props => {
-    const [modalContent, setModalContent] = useState("edit-devices")
-
-    const toggleContent = () =>
-        modalContent === "edit-devices" ? setModalContent("add-device") : setModalContent("edit-devices")
-
     return <Fragment>
         <Modal.Body>
-            { modalContent === "edit-devices" ?
-                <EditDevicesForm { ...props } /> :
-                <AddDeviceForm { ...props } /> }
+            <EditDevicesForm { ...props } />
         </Modal.Body>
         <Modal.Footer>
-            <Button variant="outline-secondary" onClick={ props.closeModal }>Close</Button>
-            <Button variant="outline-success" onClick={ toggleContent }>
-                {modalContent === "edit-devices" ? 'Add new device' : 'Edit devices' }
-            </Button>
+            <Button variant="outline-secondary" onClick={ props.toggleModal }>Cancel</Button>
+            <Button variant="outline-success" onClick={ props.closeModal }>Done</Button>
         </Modal.Footer>
     </Fragment>
 }
@@ -198,7 +195,62 @@ const EditDevicesForm = props => {
 }
 
 const AddDeviceForm = props => {
-    return null
+    const [trackerId, setTrackerId] = useState("")
+    const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
+
+    const renderError = () =>
+        error && <Alert variant='danger'>{ error }</Alert>
+
+    const submit = async () => {
+        setError("")
+        setLoading(true)
+        const resp = await api.post('/devices/', { tracker_id: trackerId })
+        setLoading(false)
+        if (!resp.ok)
+            return setError("Invalid tracker id") // TODO: Do better
+
+        const device = resp.data
+        device.locations = device.locations
+            .map(location => {
+                return {
+                    id: location.id,
+                    position: location.point.coordinates,
+                    speed: location.speed,
+                    timestamp: location.timestamp,
+                }
+            })
+        props.addDevice(device)
+        props.addNotification(`Device ${device.name} added successfully`)
+        props.closeModal()
+    }
+
+    const renderForm = () => <Modal.Body>
+        <Form>
+            <Form.Group controlId="trackerIdGroup">
+                <Form.Label>Tracker id</Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="Enter tracker id"
+                    value={ trackerId }
+                    onChange={ (e) => setTrackerId(e.target.value) } />
+                <Form.Text className="text-muted">
+                    This identifies the device. Ask tracker id from device owner or admin if the device is not added to any user.
+                </Form.Text>
+            </Form.Group>
+        </Form>
+    </Modal.Body>
+
+    return loading ?
+        <Spinner animation="border" /> :
+        <Fragment>
+            { renderError() }
+            { renderForm() }
+            <Modal.Footer>
+                <Button variant="outline-secondary" onClick={ props.toggleModal }>Cancel</Button>
+                <Button variant="outline-success" onClick={ submit }>Add device</Button>
+            </Modal.Footer>
+        </Fragment>
 }
 
 const renderTrackerId = trackerId =>
@@ -212,4 +264,4 @@ const mapStateToProps = state => {
     return { user, devices }
 }
 
-export default connect(mapStateToProps, { updateUserDetails, addNotification, updateDevice })(SettingsComponent)
+export default connect(mapStateToProps, { updateUserDetails, addNotification, updateDevice, addDevice })(SettingsComponent)
