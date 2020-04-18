@@ -34,7 +34,7 @@ export default function(state = initialState, action) {
     }
     case FIT_MAP: {
       return {
-        ...state, fitBounds: true,
+        ...state, fitBounds: action.payload,
       }
     }
     default:

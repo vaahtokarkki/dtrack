@@ -26,9 +26,9 @@ export const setPosition = position => ({
     payload: { position }
 })
 
-export const fitMap = () => ({
+export const fitMap = item => ({
   type: FIT_MAP,
-  payload: null,
+  payload: item,
 })
 
 // Device actions
