@@ -8,7 +8,7 @@ import { LoginModal } from './LoginModal'
 import SettingsModal from './SettingsModal'
 import ManageTracksModal from './TracksModal'
 import CreateTrackModal from './CreateTrackModal'
-import { toggleMenu, logOut, toggleTrack } from '../store/actions'
+import { toggleMenu, logOut, toggleTrack, fitMap } from '../store/actions'
 import { getSettingsState, getMenuState, getUserState, isLoggedIn, getTracks, getTracksState, getTracksOnMap, getDevicesState, getDevices } from '../store/selectors'
 
 import { makeStyles } from '@material-ui/core/styles'
@@ -123,6 +123,12 @@ const MenuComponent = props => {
     </ListItem>
   </Fragment>
 
+  const handleTrackToggle = track => {
+    props.toggleTrack(track.id)
+    if (!track.displayOnMap)
+      props.fitMap(track.id)
+  }
+
   const renderTrackItems = () => {
     const sortedTracks = props.tracks
       .sort((a, b) => moment(b.start) - moment(a.start))
@@ -136,7 +142,7 @@ const MenuComponent = props => {
           const start = moment(track.start)
           const end = moment(track.end)
           const length = Math.round((track.length + Number.EPSILON) * 100) / 100
-          return <ListItem button className={ classes.nested } key={ id } onClick={ () => props.toggleTrack(id) }>
+          return <ListItem button className={ classes.nested } key={ id } onClick={ () => handleTrackToggle(track) }>
             <ListItemIcon>
               { props.visibleTracksOnMap.some(t => t.id === id) ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />  }
             </ListItemIcon>
@@ -242,4 +248,4 @@ const mapStateToProps = state => {
   return { menuState, userState, tracks, visibleTracksOnMap, devices }
 }
 
-export default connect(mapStateToProps, { toggleMenu, logOut, toggleTrack })(MenuComponent)
+export default connect(mapStateToProps, { toggleMenu, logOut, toggleTrack, fitMap })(MenuComponent)

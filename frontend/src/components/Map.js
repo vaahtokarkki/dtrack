@@ -5,7 +5,7 @@ import L from 'leaflet'
 import { geolocated } from "react-geolocated"
 import { Map, Marker, TileLayer, Circle, CircleMarker, Polyline } from 'react-leaflet'
 
-import { getMapState, getUserLocation, getDevices, getDevicesState, getLatestLocationByDevice, getTracksOnMap, getTracksState } from '../store/selectors'
+import { getMapState, getUserLocation, getDevices, getDevicesState, getLatestLocationByDevice, getTracksOnMap, getTracksState, getTracks } from '../store/selectors'
 import { setZoom , setPosition} from '../store/actions'
 
 const ICON = new L.Icon({
@@ -15,6 +15,10 @@ const ICON = new L.Icon({
 })
 
 const MapComponent = props => {
+    const [markers, setMarkers] = useState("")
+    const [tracks, setTracks] = useState(null)
+    const [mapElement, setMapElement] = useState(null)
+
     const renderMarkers = () => {
       const devices = getDevices(props.devicesState).filter(device => device.name !== "user")
       return devices.map(device => {
@@ -25,12 +29,26 @@ const MapComponent = props => {
       })
     }
 
-    const [markers, setMarkers] = useState("")
-    const [mapElement, setMapElement] = useState(null)
+    const renderTracks = () => {
+      const devices = getDevices(props.devicesState).filter(device => device.name !== "user")
+      const activeTracks = devices.map(device => {
+        const locations = device.locations.map(location => location.position)
+        return <Polyline key={ device.id } positions={ locations } color={ 'red' } />
+      })
+      const savedTracksOnMap = props.visibleTracksOnMap.map(track => {
+        const locations = track.track.coordinates
+        return <Polyline key={ track.id } positions={ locations } color={ 'blue' } />
+      })
+      return activeTracks.concat(savedTracksOnMap)
+    }
 
     useEffect(() => {
       setMarkers(renderMarkers())
     }, [props.devicesState])
+
+    useEffect(() => {
+      setTracks(renderTracks())
+    }, [props.visibleTracksOnMap])
 
     const handleMapMove = () => {
       if (!mapElement)
@@ -63,23 +81,20 @@ const MapComponent = props => {
       </Fragment>
     }
 
-    const renderTracks = () => {
-      const devices = getDevices(props.devicesState).filter(device => device.name !== "user")
-      const activeTracks = devices.map(device => {
-        const locations = device.locations.map(location => location.position)
-        return <Polyline key={ device.id } positions={ locations } color={ 'red' } />
-      })
-      const savedTracksOnMap = props.visibleTracksOnMap.map(track => {
-        const locations = track.track.coordinates
-        return <Polyline key={ track.id } positions={ locations } color={ 'blue' } />
-      })
-      return activeTracks.concat(savedTracksOnMap)
-    }
 
     if (props.mapState && props.mapState.fitBounds) {
-      const markers = getDevices(props.devicesState)
-        .map(device => L.marker(getLatestLocationByDevice(props.devicesState, device.id).position))
-      mapElement.leafletElement.fitBounds(L.featureGroup(markers).getBounds())
+      if (props.mapState.fitBounds === "devices") {
+        const markers = getDevices(props.devicesState)
+          .map(device => L.marker(getLatestLocationByDevice(props.devicesState, device.id).position))
+        mapElement.leafletElement.fitBounds(L.featureGroup(markers).getBounds())
+      } else {
+        const trackToFit = getTracks(props.tracksState).filter(track => track.id === props.mapState.fitBounds)
+        if (trackToFit.length) {
+          // Hack to fit map on line
+          const markers = trackToFit[0].track.coordinates.map(location => L.marker(location))
+          mapElement.leafletElement.fitBounds(L.featureGroup(markers).getBounds())
+        }
+      }
     }
 
     let { position, zoom } = props.mapState
@@ -101,7 +116,7 @@ const MapComponent = props => {
           url='https://tiles.kartat.kapsi.fi/peruskartta/{z}/{x}/{y}.jpg' />
         { renderUserLocation() }
         { markers }
-        { renderTracks() }
+        { tracks }
     </Map>
   </div>
 }
@@ -111,7 +126,7 @@ const mapStateToProps = state => {
   const devicesState = getDevicesState(state)
   const tracksState = getTracksState(state)
   const visibleTracksOnMap = getTracksOnMap(tracksState)
-  return { mapState, devicesState, visibleTracksOnMap }
+  return { mapState, devicesState, visibleTracksOnMap, tracksState }
 }
 
 export default connect(mapStateToProps, { setZoom , setPosition })(geolocated({

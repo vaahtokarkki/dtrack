@@ -14,7 +14,7 @@ import FollowDropdown from './FollowDropdown'
 
 const MapControls = props => {
     const handleFitMap = () =>
-        props.devicesOnline && props.fitMap()
+        props.devicesOnline && props.fitMap("devices")
 
     return <div className="map-controls">
         <div className="map-controls-row">
