@@ -1,4 +1,5 @@
 from django.test import Client
+from django.views import View
 from rest_framework_simplejwt.tokens import AccessToken
 
 
@@ -12,3 +13,15 @@ class ApiTestClient(Client):
 
         print("kljfdlkdjf", extra, user)
         return super().generic(method, path, data, content_type, secure=secure, **extra)
+
+
+def json_content(func):
+    def decorate(self, *args, **kwargs):
+        kwargs.setdefault("content_type", "application/json")
+        return func(self, *args, **kwargs)
+
+    return decorate
+
+
+for method in View.http_method_names:
+    setattr(ApiTestClient, method, json_content(getattr(ApiTestClient, method)))
