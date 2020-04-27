@@ -1,7 +1,7 @@
 from django.urls import path
 
-from .views import CreateLocation, ListDevices, ListDevicesActiveTrack, ListTracks, \
-    TrackDetailsView, DeviceDetailsView, CreateTrackView
+from .views import CreateLocation, CreateTrackView, DeviceDetailsView, ListDevices, \
+    ListDevicesActiveTrack, ListTracks, TrackDetailsView
 
 
 urlpatterns = [

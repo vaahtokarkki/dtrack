@@ -4,10 +4,10 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 
 from .models import Device, Location, Track
-from .serializers import DeviceSerializer, DeviceTrackSerializer, \
-    LocationCreateSerializer, TrackSerializer, AddDeviceForUserSerializer
-from .utils import queue_create_track, create_track, revoke_track_queue
-from .permissions import HasAccessToTrack, HasAccessToDevice
+from .permissions import HasAccessToDevice, HasAccessToTrack
+from .serializers import AddDeviceForUserSerializer, DeviceSerializer, \
+    DeviceTrackSerializer, LocationCreateSerializer, TrackSerializer
+from .utils import create_track, queue_create_track, revoke_track_queue
 
 
 class CreateLocation(generics.CreateAPIView):
