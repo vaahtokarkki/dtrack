@@ -66,26 +66,38 @@
 | 30.3. | 2    |Lisää asetuksia fronttiin|
 | 30.3. | 1    |Bugikorjailua frontissa ja backendissa|
 | 30.3. | 1    |Reverse proxyn säätöä (SSL)|
-| 3.3. | 5    |Tallennettujen jälkien hallintanäkymä|
-| 3.3. | 1    |Tallennetun jäljen pituus (lähes) oikeaksi|
+| 3.4. | 5    |Tallennettujen jälkien hallintanäkymä|
+| 3.4. | 1    |Tallennetun jäljen pituus (lähes) oikeaksi|
 | **yht.**| 10    | |
 
 ### Viikko 6
 | Päivä | Aika | Mitä tein  |
 | :----:|:-----| :-----|
-| 6.3. | 4    |Mahdollisuus lisätä jälkiä asetuksista (jälkienhallinta) kartalle|
-| 6.3. | 1    |Korjaa näkyville vain käyttäjän laitteet ja jäljet|
-| 6.3. | 1    |Lisää jälkien ja laitteiden poisto apiin|
-| 7.3. | 4    |Laitteiden muokkausnäkymä fronttiin ja backendiin|
-| 8.3. | 2    |Frontin pikku fiksauksia ja paranteluja|
+| 6.4. | 4    |Mahdollisuus lisätä jälkiä asetuksista (jälkienhallinta) kartalle|
+| 6.4. | 1    |Korjaa näkyville vain käyttäjän laitteet ja jäljet|
+| 6.4. | 1    |Lisää jälkien ja laitteiden poisto apiin|
+| 7.4. | 4    |Laitteiden muokkausnäkymä fronttiin ja backendiin|
+| 8.4. | 2    |Frontin pikku fiksauksia ja paranteluja|
 | **yht.**| 10    | |
 
 ### Viikko 7
 | Päivä | Aika | Mitä tein  |
 | :----:|:-----| :-----|
-| 16.3. | 1    |Fronttiin uuden laitteen lisäyksen aloitus (WIP)|
-| 17.3. | 8    |Fronttiin ja backendiin toiminnallisuus käsin jäljen tallentamiseksi|
-| **yht.**| 9    | |
+| 16.4. | 1    |Fronttiin uuden laitteen lisäyksen aloitus (WIP)|
+| 17.4. | 8    |Fronttiin ja backendiin toiminnallisuus käsin jäljen tallentamiseksi|
+| 18.4. | 8    |Fronttiin ja backendiin toiminnallisuus uuden trackerin lisäämiseksi käyttäjälle|
+| 18.4. | 2    |Pientä fiksailua, käyetttävyys yms|
+| **yht.**| 19    | |
 
 
-### Yhteensä kaikki: 114h
+### Viikko 8
+N/A
+
+### Viikko 9
+| Päivä | Aika | Mitä tein  |
+| :----:|:-----| :-----|
+| 27.4. | 4    |Backendiin yksikkötestien setup ja säätö (ei varsinaisia testejä vielä)|
+| **yht.**| 4    | |
+
+
+### Yhteensä kaikki: 128h
