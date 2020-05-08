@@ -6,6 +6,7 @@ from celery.decorators import task
 from celery.task.control import revoke
 from django.contrib.gis.geos import LineString
 from django.utils import timezone
+from rest_framework.validators import ValidationError
 
 from conf.celery import app as celery_app
 
@@ -48,7 +49,8 @@ def get_track(device, active=True):
         filtered_locations.append(current.pk)
         if index + 1 == len(locations) - 1:
             filtered_locations.append(next.pk)
-    return Location.objects.filter(pk__in=filtered_locations, track=None)
+    return Location.objects.filter(pk__in=filtered_locations, track=None) \
+        .order_by("timestamp")
 
 
 def create_track(device):
@@ -79,6 +81,28 @@ def queue_create_track(device_pk):
     """
     revoke_track_queue(device_pk)
     save_track.apply_async(args=(device_pk,))
+
+
+def validate_latest_locations_data(data):
+    """
+    Validate data used to filter latest locations for devices. That is, data should be an
+    empty list, or list containing valid {'device': device.pk, 'location': location.pk}
+    objects. If data is not valid, raise a ValidationError.
+    Args:
+        data: List containing objects
+    Returns:
+        Validated data. If not valid, raises a ValidationError
+    """
+
+    for row in data:
+        try:
+            assert Device.objects.filter(pk=row["device"]).exists()
+            assert Location.objects.filter(pk=row["location"]).exists()
+            assert row["location"] in Device.objects.get(pk=row["device"]).locations \
+                .values_list("pk", flat=True)
+        except (AssertionError, Device.DoesNotExist, Location.DoesNotExist):
+            raise ValidationError(f"Given device or location not found")
+    return data
 
 
 def revoke_track_queue(device_pk):
