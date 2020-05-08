@@ -1,5 +1,6 @@
 import pytest
 
+from auth_app.factories import UserFactory
 from conf.testclients import ApiTestClient
 
 
@@ -11,3 +12,8 @@ def enable_db_access_for_all_tests(db):
 @pytest.fixture
 def test_client():
     return ApiTestClient()
+
+
+@pytest.fixture
+def user():
+    return UserFactory()
