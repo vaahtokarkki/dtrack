@@ -5,6 +5,8 @@ env
 .vscode
 /certs
 **/logs/
+**/htmlcov
+.coverage
 
 **/*.pyc
 **/*.swp
