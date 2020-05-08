@@ -7,7 +7,8 @@ from .models import Device, Location, Track
 from .permissions import HasAccessToDevice, HasAccessToTrack
 from .serializers import AddDeviceForUserSerializer, DeviceSerializer, \
     DeviceTrackSerializer, LocationCreateSerializer, TrackSerializer
-from .utils import create_track, queue_create_track, revoke_track_queue
+from .utils import create_track, queue_create_track, revoke_track_queue, \
+    validate_latest_locations_data
 
 
 class CreateLocation(generics.CreateAPIView):
@@ -25,12 +26,10 @@ class CreateLocation(generics.CreateAPIView):
 class ListDevices(generics.ListCreateAPIView):
     def get_serializer_class(self):
         if self.request.method == "POST":
-            AddDeviceForUserSerializer
+            return AddDeviceForUserSerializer
         return DeviceSerializer
 
     def get_queryset(self):
-        if self.request.method == "POST":
-            return Device.objects.all()
         user = self.request.user
         return Device.objects.filter(pk__in=user.devices.values_list("pk", flat=True))
 
@@ -46,7 +45,10 @@ class ListDevicesActiveTrack(generics.GenericAPIView):
         user = self.request.user
         queryset = Device.objects.filter(pk__in=user.devices.values_list("pk", flat=True))
         request_data = json.loads(request.body.decode('utf-8'))
+        validate_latest_locations_data(request_data)
+
         devices = [row["device"] for row in request_data]
+
         if devices:
             queryset = queryset.filter(pk__in=devices)
 
