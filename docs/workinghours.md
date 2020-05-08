@@ -93,11 +93,13 @@
 ### Viikko 8
 N/A
 
-### Viikko 9
+### Viikko 9 - n+1
 | Päivä | Aika | Mitä tein  |
 | :----:|:-----| :-----|
 | 27.4. | 4    |Backendiin yksikkötestien setup ja säätö (ei varsinaisia testejä vielä)|
-| **yht.**| 4    | |
+| 8.5. | 1    |Backendiin pytest säätö (coverage, factory boy yms)|
+| 8.5. | 12    |Backendiin yksikkötestit|
+| **yht.**|  17  | |
 
 
-### Yhteensä kaikki: 128h
+### Yhteensä kaikki: 141h
