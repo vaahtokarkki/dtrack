@@ -32,7 +32,7 @@ class AddDeviceForUserSerializer(serializers.Serializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        user_devices = kwargs["request"].user.devices.values_list("pk", flat=True)
+        user_devices = self.context["request"].user.devices.values_list("pk", flat=True)
         devices = Device.objects.exclude(pk__in=user_devices)
         self.fields["tracker_id"].choices = [
             (device.tracker_id, device.tracker_id)
