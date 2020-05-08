@@ -11,7 +11,6 @@ class ApiTestClient(Client):
             extra["HTTP_AUTHORIZATION"] = "Bearer " + \
                 str(AccessToken.for_user(user))
 
-        print("kljfdlkdjf", extra, user)
         return super().generic(method, path, data, content_type, secure=secure, **extra)
 
 
