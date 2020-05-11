@@ -3,7 +3,7 @@ Full stack course project
 
 # Dog tracker
 
-An app to track your dog with GPS-collar. Currently [TKSTAR TK-909](https://www.aliexpress.com/popular/tkstar-tk909.html) GPS-collar is supported. Background map on frontend is only in Finland.
+An app to track your dog with GPS-collar. Currently [TKSTAR TK-909](https://www.aliexpress.com/popular/tkstar-tk909.html) GPS-collar is supported. Background map on frontend is only in Finland. [Live demo](https://helka.dog)
 
 ## Quick start
 ```bash
