@@ -99,7 +99,9 @@ N/A
 | 27.4. | 4    |Backendiin yksikkötestien setup ja säätö (ei varsinaisia testejä vielä)|
 | 8.5. | 1    |Backendiin pytest säätö (coverage, factory boy yms)|
 | 8.5. | 12    |Backendiin yksikkötestit|
-| **yht.**|  17  | |
+| 11.5. | 2    |Backendiin management komennot käyttäjän ja laitteen luomiselle|
+| 11.5. | 8    |Dokumentaation kirjoittaminen|
+| **yht.**|  27  | |
 
 
-### Yhteensä kaikki: 141h
+### Yhteensä kaikki: 151h
