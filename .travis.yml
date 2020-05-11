@@ -5,4 +5,4 @@ script:
     - docker-compose up --build -d
     - docker-compose up -d backend
     - docker ps -a
-    - sleep 30 && docker exec dtrack_backend_1 pytest
+    - sleep 30 && docker-compose exec backend pytest
