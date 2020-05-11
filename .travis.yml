@@ -7,4 +7,4 @@ script:
     - docker ps -a
     - sleep 30 && docker exec backend pytest
 after_success:
-    - coveralls
+    - docker exec backend coveralls
