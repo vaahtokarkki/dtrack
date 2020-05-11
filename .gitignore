@@ -2,11 +2,12 @@
 
 env
 .env
-.vscode
+**/.vscode
 /certs
 **/logs/
 **/htmlcov
 .coverage
+traefik/acme.json
 
 **/*.pyc
 **/*.swp
