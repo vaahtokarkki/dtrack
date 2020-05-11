@@ -25,7 +25,7 @@ load_dotenv()
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", False)
 
-if not DEBUG:
+if not DEBUG and os.getenv("SENTRY_DSN", False):
     sentry_sdk.init(
         dsn=os.getenv("SENTRY_DSN"),
         integrations=[DjangoIntegration()],
@@ -44,7 +44,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.getenv("DJANGO_SECRET")
 
 ALLOWED_HOSTS = ['backend', 'localhost'] + \
-    [item for item in os.getenv("ALLOWED_HOSTS").split(" ")]
+    [item for item in os.getenv("ALLOWED_HOSTS", "").split(" ")]
 
 CELERY_IGNORE_RESULT = True
 BROKER_TRANSPORT = "redis"
