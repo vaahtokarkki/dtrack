@@ -2,5 +2,5 @@ services:
     - docker
 
 script:
-    - docker-compose up --build -d
+    - travis_wait 30 docker-compose up --build -d
     - docker exec dtrack_backend_1 pytest
