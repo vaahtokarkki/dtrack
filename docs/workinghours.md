@@ -101,7 +101,9 @@ N/A
 | 8.5. | 12    |Backendiin yksikkötestit|
 | 11.5. | 2    |Backendiin management komennot käyttäjän ja laitteen luomiselle|
 | 11.5. | 8    |Dokumentaation kirjoittaminen|
-| **yht.**|  27  | |
+| 11.5. | 2    |Travis, coveralls säätö|
+| 12.5. | 2    |Käyttöohjeen kirjoittaminen|
+| **yht.**|  31  | |
 
 
-### Yhteensä kaikki: 151h
+### Yhteensä kaikki: 155h
