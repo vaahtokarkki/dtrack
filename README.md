@@ -15,7 +15,7 @@ cd dtrack/
 See:
 * [frontend](./frontend)
 * [backend](./backend)
-* [GPS-server](.tracker-server)
+* [GPS-server](./tracker-server)
 
 documentation before first run.
 
