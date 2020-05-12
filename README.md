@@ -1,9 +1,11 @@
 Full stack course project
-[Tuntikirjanpito](./docs/workinghours.md)
+[Tuntikirjanpito](./docs/workinghours.md) [Käyttöohjeet](./docs/userguide.md)
 
 # Dog tracker
 
 An app to track your dog with GPS-collar. Currently [TKSTAR TK-909](https://www.aliexpress.com/popular/tkstar-tk909.html) GPS-collar is supported. Background map on frontend is only in Finland. [Live demo](https://helka.dog)
+
+[![Build Status](https://travis-ci.com/vaahtokarkki/dtrack.svg?branch=master)](https://travis-ci.com/vaahtokarkki/dtrack)
 
 ## Quick start
 ```bash
