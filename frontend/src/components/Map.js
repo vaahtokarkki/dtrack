@@ -111,7 +111,8 @@ const MapComponent = props => {
         zoom={zoom}
         zoomControl={false}
         onZoomEnd={ handleMapMove }
-        onMoveend= { handleMapMove } >
+        onMoveend= { handleMapMove }
+        maxZoom={ 19 }>
         <TileLayer
           url='https://tiles.kartat.kapsi.fi/peruskartta/{z}/{x}/{y}.jpg' />
         { renderUserLocation() }
