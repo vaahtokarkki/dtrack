@@ -5,8 +5,8 @@ env
 **/.vscode
 /certs
 **/logs/
-**/htmlcov
-.coverage
+**/htmlcov/
+**/.coverage
 traefik/acme.json
 
 **/*.pyc

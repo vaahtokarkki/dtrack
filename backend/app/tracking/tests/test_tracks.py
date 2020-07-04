@@ -24,6 +24,7 @@ def test_list_tracks(test_client, user, track, device_l):
     assert len(returned_track["track"]["coordinates"]) == device_l.locations.count()
     assert returned_track["device"]["id"] == device_l.pk
 
+
 def test_list_tracks_unauthenticated(test_client):
     resp = test_client.get("/api/tracks/")
     assert resp.status_code == 401

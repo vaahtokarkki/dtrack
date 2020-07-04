@@ -5,6 +5,8 @@ from django.db import models
 
 from tracking.models import Device
 
+from .utils import email_user_created
+
 
 class CustomUserManager(UserManager):
     def create_user(self, email=None, password=None, **extra_fields):
@@ -19,6 +21,16 @@ class CustomUserManager(UserManager):
         user.save(using=self._db)
         return user
 
+    def create_unverified_user(self, email):
+        if not email:
+            raise ValueError('The given email must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, is_active=False)
+        user.set_unusable_password()
+        user.save(using=self._db)
+        email_user_created(user)
+        return user
+
 
 class User(AbstractBaseUser):
     email = models.EmailField(blank=True, unique=True)
@@ -28,6 +40,7 @@ class User(AbstractBaseUser):
     refresh_interval = models.PositiveIntegerField(
         default=60, validators=[MinValueValidator(10), MaxValueValidator(300)]
     )
+    is_active = models.BooleanField(default=True)
 
     objects = CustomUserManager()
 

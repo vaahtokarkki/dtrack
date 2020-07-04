@@ -1,4 +1,4 @@
-import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, SET_TRACKING, ADD_DEVICE, ADD_LOCATION, TOGGLE_OVERLAY, FIT_MAP, ADD_NOTIFICATION, REMOVE_NOTIFICATION, TOGGLE_MENU, UPDATE_ACCESS_TOKEN, UPDATE_REFRESH_TOKEN, UPDATE_DETAILS, LOG_OUT, CLEAR_DEVICES, ADD_TRACK, TOGGLE_TRACK, REMOVE_TRACK, SET_TRACK_VISIBILTY, UPDATE_DEVICE } from "./actiontypes"
+import { ZOOM_IN, ZOOM_OUT, SET_POSITION, SET_ZOOM, SET_TRACKING, ADD_DEVICE, ADD_LOCATION, TOGGLE_OVERLAY, FIT_MAP, ADD_NOTIFICATION, REMOVE_NOTIFICATION, TOGGLE_MENU, UPDATE_ACCESS_TOKEN, UPDATE_REFRESH_TOKEN, UPDATE_DETAILS, LOG_OUT, CLEAR_DEVICES, ADD_TRACK, TOGGLE_TRACK, REMOVE_TRACK, SET_TRACK_VISIBILTY, UPDATE_DEVICE, SET_AUTH_ERROR } from "./actiontypes"
 import { getLatestLocationByDevice, isLoggedIn } from './selectors'
 import api, { updateApiToken } from '../utils/api'
 
@@ -164,7 +164,22 @@ export const removeNotification = (color, content) => ({
   payload: { color, content }
 })
 
+export const setAuthError = (content) => ({
+  type: SET_AUTH_ERROR,
+  payload: { content }
+})
+
 // User actions
+
+export const authenticate = (email, password) =>
+  async (dispatch, getState) => {
+    const resp = await api.post("/token/", { email, password })
+    if (!resp.ok) return dispatch(setAuthError("Wrong email or password!"))
+    const { access, refresh, user_id } = resp.data
+    dispatch(updateAccessToken(access, user_id))
+    dispatch(updateRefreshToken(refresh))
+    dispatch(initApp())
+  }
 
 export const updateAccessToken = (accessToken, id) => {
   updateApiToken(accessToken)

@@ -1,8 +1,8 @@
 import React, { useState, Fragment } from 'react'
 import { connect } from 'react-redux'
 
-import api from '../utils/api'
-import { fetchUserDetails, updateAccessToken, updateRefreshToken, initApp } from '../store/actions'
+import { authenticate } from '../store/actions'
+import { getNotificationsState, getAuthError } from '../store/selectors'
 
 import Alert from 'react-bootstrap/Alert'
 import Modal from 'react-bootstrap/Modal'
@@ -25,29 +25,21 @@ const LoginModalComponent = props => {
 
     const [email, emailInput, resetEmailInput] = useInput({ type: "email", placeholder: "Enter email" });
     const [password, passwordInput, resetPasswordInput] = useInput({ type: "password",placeholder: 'Password' });
-    const [error, setError] = useState("")
 
     const submit = async () => {
-        const response = await api.post("/token/", { email, password })
-
-        if (!response.ok)
-            return setError("Wrong email or password!")
-
+        await props.authenticate(email, password)
+        if (props.authError) return
         props.toggleModal()
-        props.updateAccessToken(response.data.access, response.data.user_id)
-        props.updateRefreshToken(response.data.refresh)
-        props.initApp()
         resetForm()
     }
 
     const resetForm = () => {
         resetEmailInput()
         resetPasswordInput()
-        setError("")
     }
 
     const renderError = () =>
-        error && <Alert variant={ 'danger' }>{ error }</Alert>
+        props.authError && <Alert variant={ 'danger' }>{ props.authError }</Alert>
 
     const renderForm = () => <Fragment>
         { renderError() }
@@ -79,4 +71,10 @@ const LoginModalComponent = props => {
     </Modal>
 }
 
-export const LoginModal = connect(null, { updateAccessToken, updateRefreshToken, fetchUserDetails, initApp })(LoginModalComponent)
+const mapStateToProps = state => {
+    const authError = getAuthError(getNotificationsState(state))
+    return { authError }
+}
+
+
+export const LoginModal = connect(mapStateToProps, { authenticate })(LoginModalComponent)

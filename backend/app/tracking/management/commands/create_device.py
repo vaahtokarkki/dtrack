@@ -1,4 +1,5 @@
 import djclick as click
+
 from tracking.models import Device
 
 
