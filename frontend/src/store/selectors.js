@@ -22,6 +22,7 @@ export const getMenuState = settingsState => settingsState.menuOpen
 
 export const getNotificationsState = store => store.notificationsState
 export const getNotifications = notificationsState => notificationsState.notifications
+export const getAuthError = notificationsState => notificationsState.authError
 
 export const getUserState = store => store.userState
 export const getUser = userState => ({

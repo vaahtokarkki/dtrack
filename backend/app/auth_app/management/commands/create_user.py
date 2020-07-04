@@ -1,4 +1,5 @@
 import djclick as click
+
 from auth_app.models import User
 
 

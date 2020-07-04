@@ -1,7 +1,8 @@
-import { ADD_NOTIFICATION, REMOVE_NOTIFICATION } from '../actiontypes'
+import { ADD_NOTIFICATION, REMOVE_NOTIFICATION, SET_AUTH_ERROR } from '../actiontypes'
 
 const initialState = {
-    notifications: []
+    notifications: [],
+    authError: null,
 }
 
 export default function(state = initialState, action) {
@@ -20,6 +21,10 @@ export default function(state = initialState, action) {
             const notifications = state.notifications
                 .filter(notification => notification.color !== color && notification.content !== content)
             return {...state, notifications }
+        }
+        case SET_AUTH_ERROR: {
+            const { content } = action.payload
+            return { ...state, authError: content }
         }
         default:
             return state

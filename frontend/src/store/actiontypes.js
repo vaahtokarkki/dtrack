@@ -19,6 +19,7 @@ export const TOGGLE_MENU = "TOGGLE_MENU"
 // Notifications
 export const ADD_NOTIFICATION = "ADD_NOTIFICATION"
 export const REMOVE_NOTIFICATION = "REMOVE_NOTIFICATION"
+export const SET_AUTH_ERROR = "SET_AUTH_ERROR"
 
 
 // User

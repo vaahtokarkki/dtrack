@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 
 import os
+import sys
 from datetime import timedelta
 from pathlib import Path
 
@@ -24,6 +25,8 @@ load_dotenv()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", False)
+
+TESTING = os.path.basename(sys.argv[0]) in ('pytest', 'py.test')
 
 if not DEBUG and os.getenv("SENTRY_DSN", False):
     sentry_sdk.init(
@@ -153,6 +156,13 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
 }
+
+PASSWORD_RESET_TIMEOUT_DAYS = 7
+
+EMAIL_BACKEND = 'django_ses.SESBackend'
+DEFAULT_FROM_EMAIL = 'info@helka.dog'
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID", None)
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY", None)
 
 LOGFILE_SIZE = 5 * 1024 * 1024
 LOGFILE_COUNT = 5

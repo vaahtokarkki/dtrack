@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState, Fragment, useEffect } from 'react'
 import { connect } from 'react-redux'
 
 import moment from 'moment'
@@ -8,6 +8,7 @@ import { LoginModal } from './LoginModal'
 import SettingsModal from './SettingsModal'
 import ManageTracksModal from './TracksModal'
 import CreateTrackModal from './CreateTrackModal'
+import SignUpModal from './SignUpModal'
 import { toggleMenu, logOut, toggleTrack, fitMap } from '../store/actions'
 import { getSettingsState, getMenuState, getUserState, isLoggedIn, getTracks, getTracksState, getTracksOnMap, getDevicesState, getDevices } from '../store/selectors'
 
@@ -31,6 +32,7 @@ import LockOpenIcon from '@material-ui/icons/LockOpen'
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
 import PetsIcon from '@material-ui/icons/Pets'
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 import logo from '../assets/dog.png'
 
@@ -54,6 +56,7 @@ const MenuComponent = props => {
 
   const [recentTracksOpen, setRecentTracksOpen] = useState(false)
   const [loginModal, setLoginModal] = useState(false)
+  const [signUpModal, setSignUpModal] = useState(false)
   const [settingsModal, setSettingsModal] = useState(false)
   const [tracksModal, setTracksModal] = useState(false)
   const [createTrack, setCreateTrack] = useState(false) // Id of device
@@ -79,14 +82,26 @@ const MenuComponent = props => {
         return setTracksModal(!tracksModal)
       case setCreateTrack:
         return setCreateTrack(payload)
+      case setSignUpModal:
+        return setSignUpModal(!signUpModal)
       default:
         return
     }
   }
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.has("token") && params.has("user") && window.location.pathname === '/signup/')
+      toggleModal(setSignUpModal, false)
+  }, [])
+
   const modalComponents = () =>
     <Fragment>
       <LoginModal visible={ loginModal } toggleModal={ () => toggleModal(setLoginModal, false) } />
+      <SignUpModal
+        visible={ signUpModal }
+        toggleModal={ () => toggleModal(setSignUpModal, false) }
+        closeModal={ () => toggleModal(setSignUpModal, false) } />
       <SettingsModal
         visible={ settingsModal }
         toggleModal={ () => toggleModal(setSettingsModal) }
@@ -182,13 +197,20 @@ const MenuComponent = props => {
     </Fragment>
   }
 
-  const logInItem = () => <ListItem button key='login' onClick={ () => toggleModal(setLoginModal) }>
-    <ListItemIcon><LockOpenIcon /></ListItemIcon>
-    <ListItemText primary={ 'Log in' } secondary={ 'Log in to track dogs and view saved tracks '} />
-  </ListItem>
+  const notLoggedInItems = () => <Fragment>
+    <ListItem button key='login' onClick={ () => toggleModal(setLoginModal) }>
+      <ListItemIcon><LockOpenIcon /></ListItemIcon>
+      <ListItemText primary={ 'Log in' } secondary={ 'Log in to track dogs and view saved tracks '} />
+    </ListItem>
+    <Divider />
+    <ListItem button key='signup' onClick={ () => toggleModal(setSignUpModal) }>
+      <ListItemIcon><PersonAddIcon /></ListItemIcon>
+      <ListItemText primary={ 'Sign up' } secondary={ 'If you don\'t have an account sign up here  '} />
+    </ListItem>
+  </Fragment>
 
   const renderNavigationListItems = () =>
-    isLoggedIn(props.userState) ? renderLoggedInItems() : logInItem()
+    isLoggedIn(props.userState) ? renderLoggedInItems() : notLoggedInItems()
 
   const renderCreateTrackItems = () =>
     isLoggedIn(props.userState) && renderDevices()

@@ -17,6 +17,7 @@ import './styles/Notifications.scss'
 import './styles/MapControls.scss'
 import './styles/Card.scss'
 import './styles/Navigation.scss'
+import './styles/Forms.scss'
 
 
 const App = props => {
