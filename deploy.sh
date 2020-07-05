@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ssh $USER@$IP <<EOF
+ssh -o StrictHostKeyChecking=no $USER@$IP <<EOF
     cd $DEPLOY_DIR
     git pull
     docker-compose -f docker-compose-prod.yml up --build -d
