@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 
 import L from 'leaflet'
 import { geolocated } from "react-geolocated"
-import { Map, Marker, TileLayer, Circle, CircleMarker, Polyline } from 'react-leaflet'
+import { Map, Marker, WMSTileLayer, Circle, CircleMarker, Polyline } from 'react-leaflet'
 
 import { getMapState, getUserLocation, getDevices, getDevicesState, getLatestLocationByDevice, getTracksOnMap, getTracksState, getTracks } from '../store/selectors'
 import { setZoom , setPosition} from '../store/actions'
@@ -98,12 +98,6 @@ const MapComponent = props => {
     }
 
     let { position, zoom } = props.mapState
-
-    //let { trackedPositions } = props.trackedState <-- array of positions
-    // if (props.settingsState.trackUserLocation)
-      // position = ...
-      //url='http://tanger.belectro.fi/tiles/mmltopo/v20200217/512/{z}/{x}/{y}.jpg'
-      //
     return <div className='map-wrapper'>
       <Map
         ref={(ref) => { setMapElement(ref) }}
@@ -113,8 +107,11 @@ const MapComponent = props => {
         onZoomEnd={ handleMapMove }
         onMoveend= { handleMapMove }
         maxZoom={ 19 }>
-        <TileLayer
-          url='https://tiles.kartat.kapsi.fi/peruskartta/{z}/{x}/{y}.jpg' />
+        <WMSTileLayer
+            layers="peruskartta"
+            url="https://tiles.kartat.kapsi.fi/peruskartta?"
+            detectRetina
+          />
         { renderUserLocation() }
         { markers }
         { tracks }
