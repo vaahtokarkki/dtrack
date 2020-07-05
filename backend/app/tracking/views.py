@@ -1,5 +1,6 @@
 import json
 
+from django.conf import settings
 from rest_framework import generics, status
 from rest_framework.response import Response
 
@@ -16,6 +17,13 @@ class CreateLocation(generics.CreateAPIView):
     authentication_classes = ()
     queryset = Location.objects.all()
     serializer_class = LocationCreateSerializer
+
+    def post(self, request):
+        body = json.loads(request.body)
+        api_key = body.get("api_key", None)
+        if settings.API_KEY and api_key != settings.API_KEY:
+            return Response("Invalid token", status=status.HTTP_401_UNAUTHORIZED)
+        return super().create(request)
 
     def perform_create(self, serializer):
         super().perform_create(serializer)

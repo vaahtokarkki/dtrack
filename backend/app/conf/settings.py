@@ -45,6 +45,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("DJANGO_SECRET")
+# Key for creating new locations
+API_KEY = os.getenv("API_KEY", None)
 
 ALLOWED_HOSTS = ['backend', 'localhost'] + \
     [item for item in os.getenv("ALLOWED_HOSTS", "").split(" ")]

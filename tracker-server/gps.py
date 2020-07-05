@@ -47,7 +47,8 @@ while True:
     except KeyboardInterrupt:
         break
 
-    thread = ConnProcessor(client, addr, config.get("backend", "url"))
+    thread = ConnProcessor(client, addr, config.get("backend", "url"),
+                           config.get("backend", "api_key"))
     thread.start()
 
 # Terminate threads

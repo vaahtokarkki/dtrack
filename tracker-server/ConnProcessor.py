@@ -13,11 +13,12 @@ class ConnProcessor(threading.Thread):
     """ A Thread is created with every incoming connection """
     id = None
 
-    def __init__(self, client, addr, backend_url):
+    def __init__(self, client, addr, backend_url, api_key):
         threading.Thread.__init__(self)
         self.client = client
         self.addr = addr
         self.backend_url = backend_url
+        self.api_key = api_key
         self.should_terminate = False
 
     def run(self):
@@ -50,6 +51,7 @@ class ConnProcessor(threading.Thread):
 
         tracker_id, longitude, latitude, speed = location
         response = requests.post(f'{self.backend_url}/api/locations/', {
+            'api_key': self.api_key,
             'tracker_id': tracker_id,
             'speed': speed,
             'point': f'POINT({latitude} {longitude})'
