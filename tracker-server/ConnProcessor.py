@@ -50,7 +50,7 @@ class ConnProcessor(threading.Thread):
             return
 
         tracker_id, longitude, latitude, speed = location
-        response = requests.post(f'{self.backend_url}/api/locations/', {
+        response = requests.post(f'{self.backend_url}/api/locations/', json={
             'api_key': self.api_key,
             'tracker_id': tracker_id,
             'speed': speed,
