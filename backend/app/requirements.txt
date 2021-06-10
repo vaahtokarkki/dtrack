@@ -9,7 +9,7 @@ chardet==3.0.4
 click==7.1.2
 coverage==5.1
 coveralls==2.0.0
-Django==3.0.7
+Django==3.1.12
 django-click==2.1.0
 django-cors-headers==3.2.1
 django-ses==0.8.14
