@@ -19,7 +19,7 @@
     "leaflet": "^1.6.0",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "proj4leaflet": "^1.0.2",
     "qs": "^6.9.1",
     "react": "^16.12.0",
